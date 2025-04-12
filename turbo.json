@@ -1,0 +1,56 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "globalDependencies": ["**/.env.production", "**/.env.development", "**/.env.local"],
+  "tasks": {
+    "deploy-commands": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:generate": {
+      "inputs": ["prisma/schema.prisma"],
+      "cache": false
+    },
+    "db:push": {
+      "inputs": ["prisma/schema.prisma"],
+      "cache": false
+    },
+    "db:migrate": {
+      "inputs": ["prisma/schema.prisma"],
+      "cache": false
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": []
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {},
+    "lint:fix": {},
+    "clean": {
+      "cache": false
+    },
+    "//#clean": {
+      "cache": false
+    },
+    "type-check": {
+      "dependsOn": ["^db:generate"],
+      "cache": false
+    }
+  },
+  "globalEnv": [
+    "CI",
+    "PORT",
+    "PREFIX",
+    "NODE_ENV",
+    "SKIP_ENV_VALIDATION",
+    "API_URL",
+    "API_PORT",
+    "DATABASE_URL",
+    "VERCEL_URL",
+    "WEB_URL"
+  ]
+}

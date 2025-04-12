@@ -1,0 +1,7 @@
+{
+  "name": "SP Starter Kit",
+  "description": "A starter kit for SP projects",
+  "icon": "🚀",
+  "categories": ["starter-kit", "template"],
+  "features": ["SP integration", "Modern architecture", "TypeScript support", "pnpm package manager"]
+}
