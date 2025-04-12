@@ -1,5 +1,5 @@
 {
-  "extends": "@discord-bot/typescript-config/internal-package.json",
+  "extends": "@lol-assistant/typescript-config/internal-package.json",
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "Bundler",

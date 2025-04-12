@@ -1,4 +1,4 @@
-import type { Account, User } from '@discord-bot/db';
+import type { Account, User } from '@lol-assistant/db';
 
 export enum Response {
   SUCCESS = 'SUCCESS',

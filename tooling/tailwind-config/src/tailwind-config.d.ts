@@ -1,4 +1,4 @@
-declare module '@discord-bot/tailwind-config' {
+declare module '@lol-assistant/tailwind-config' {
   import type { Config } from 'tailwindcss';
 
   const config: Config;

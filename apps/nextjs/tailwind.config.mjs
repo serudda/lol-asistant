@@ -1,9 +1,9 @@
-import basePreset from '@lol-assistant/tailwind-preset';
+import baseConfig from '@lol-assistant/tailwind-config';
 
 const config = {
   darkMode: ['class'],
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
-  presets: [basePreset],
+  presets: [baseConfig],
 };
 
 export default config;

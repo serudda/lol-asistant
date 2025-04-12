@@ -8,7 +8,7 @@
     "paths": {
       "~/*": ["./src/*"],
       "@lol-assistant/api": ["../../packages/api/src"],
-      "@lol-assistant/tailwind-preset": ["../../tooling/tailwind-preset/src"]
+      "@lol-assistant/tailwind-config": ["../../tooling/tailwind-config/src"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

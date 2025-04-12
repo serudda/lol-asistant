@@ -141,3 +141,34 @@ model Subscription {
 
     @@map("subscriptions")
 }
+
+model PatchNote {
+    id            String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    patchVersion  String
+    date          DateTime
+    summary       String
+    embedding     Unsupported("vector")?
+    isActive      Boolean                @default(true) @map("is_active")
+    createdAt     DateTime               @default(now())
+    updatedAt     DateTime               @updatedAt @map("updated_at")
+    champCounters ChampCounter[]
+
+    @@map("patch_notes")
+}
+
+model ChampCounter {
+    id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    source      String
+    rank        Int
+    champion    String
+    role        String?
+    winRate     Float
+    matches     Int
+    patchNote   PatchNote @relation(fields: [patchNoteId], references: [id])
+    patchNoteId String    @unique @map("patch_note_id") @db.Uuid
+    isActive    Boolean   @default(true) @map("is_active")
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt @map("updated_at")
+
+    @@map("champ_counters")
+}

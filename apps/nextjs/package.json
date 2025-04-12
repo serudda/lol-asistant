@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@lol-assistant/eslint-config": "workspace:*",
-    "@lol-assistant/tailwind-preset": "workspace:*",
+    "@lol-assistant/tailwind-config": "workspace:*",
     "@lol-assistant/typescript-config": "workspace:*",
     "@types/node": "^22.7.4",
     "@types/react": "^18.3.8",

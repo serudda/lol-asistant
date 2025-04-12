@@ -1,4 +1,4 @@
-import { type SubscriptionFrequency } from '@discord-bot/db';
+import { type SubscriptionFrequency } from '@lol-assistant/db';
 
 /**
  * Webhook response (Lemon Squeezy)

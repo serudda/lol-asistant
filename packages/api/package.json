@@ -1,5 +1,5 @@
 {
-  "name": "@discord-bot/api",
+  "name": "@lol-assistant/api",
   "version": "0.1.0",
   "license": "MIT",
   "author": "Indie Creators HQ",
@@ -14,7 +14,7 @@
     "with-env": "dotenv -e ../../.env.${NODE_ENV:-local} --"
   },
   "dependencies": {
-    "@discord-bot/db": "workspace:*",
+    "@lol-assistant/db": "workspace:*",
     "@trpc/client": "^10.45.2",
     "@trpc/server": "^10.45.2",
     "cors": "^2.8.5",
@@ -24,8 +24,8 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@discord-bot/eslint-config": "workspace:*",
-    "@discord-bot/typescript-config": "workspace:*",
+    "@lol-assistant/eslint-config": "workspace:*",
+    "@lol-assistant/typescript-config": "workspace:*",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "dotenv-cli": "^7.4.2",

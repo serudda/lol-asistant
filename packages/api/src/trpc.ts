@@ -10,7 +10,7 @@
  * are documented accordingly near the end.
  */
 
-import { prisma } from '@discord-bot/db';
+import { prisma } from '@lol-assistant/db';
 import { configService } from './services/configService';
 import type { inferAsyncReturnType } from '@trpc/server';
 import { initTRPC } from '@trpc/server';

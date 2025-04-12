@@ -1,5 +1,5 @@
 {
-  "name": "@discord-bot/tailwind-preset",
+  "name": "@lol-assistant/tailwind-config",
   "version": "0.0.1",
   "description": "Shared TailwindCSS config",
   "main": "./src/tailwind.config.ts",

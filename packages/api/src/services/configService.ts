@@ -1,4 +1,4 @@
-import { prisma } from '@discord-bot/db';
+import { prisma } from '@lol-assistant/db';
 
 class ConfigService {
   private globalConfigCache = new Map<string, string>();
