@@ -1,5 +1,5 @@
 {
-  "name": "@discord-bot/nextjs",
+  "name": "@lol-assistant/nextjs",
   "version": "0.0.1",
   "private": true,
   "author": "Serudda",
@@ -14,8 +14,8 @@
     "with-env": "dotenv -e ../../.env.${NODE_ENV:-local} --"
   },
   "dependencies": {
-    "@discord-bot/api": "workspace:*",
-    "@discord-bot/db": "workspace:*",
+    "@lol-assistant/api": "workspace:*",
+    "@lol-assistant/db": "workspace:*",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/postcss": "0.0.0-development.1",
     "@tanstack/react-query": "^4.36.1",
@@ -33,13 +33,13 @@
     "tailwind-merge": "^2.5.4"
   },
   "devDependencies": {
-    "@discord-bot/eslint-config": "workspace:*",
-    "@discord-bot/tailwind-preset": "workspace:*",
-    "@discord-bot/typescript-config": "workspace:*",
+    "@lol-assistant/eslint-config": "workspace:*",
+    "@lol-assistant/tailwind-preset": "workspace:*",
+    "@lol-assistant/typescript-config": "workspace:*",
     "@types/node": "^22.7.4",
     "@types/react": "^18.3.8",
     "@types/react-dom": "^18.3.0",
-    "autoprefixer": "^10.4.20",
+    "autoprefixer": "^10.4.21",
     "dotenv-cli": "^7.4.2",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "^5.2.1",

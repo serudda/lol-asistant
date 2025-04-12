@@ -1,4 +1,4 @@
-import { appRouter, createTRPCContext } from '@discord-bot/api';
+import { appRouter, createTRPCContext } from '@lol-assistant/api';
 import { createNextApiHandler } from '@trpc/server/adapters/next';
 
 // export API handler

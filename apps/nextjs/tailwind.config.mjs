@@ -1,4 +1,4 @@
-import basePreset from '@discord-bot/tailwind-preset';
+import basePreset from '@lol-assistant/tailwind-preset';
 
 const config = {
   darkMode: ['class'],

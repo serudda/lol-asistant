@@ -34,7 +34,7 @@ const config = {
   importOrder: [
     '',
     '^(react/(.*)$)|^(react$)|^(react-native(.*)$)',
-    '^@discord-bot/(.*)$',
+    '^@lol-assistant/(.*)$',
     '^~/components/(.*)$',
     '^~/styles/(.*)$',
     '^~/utils/(.*)$',

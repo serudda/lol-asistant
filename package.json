@@ -1,5 +1,5 @@
 {
-  "name": "discord-bot",
+  "name": "lol-assistant",
   "private": true,
   "packageManager": "pnpm@9.9.0",
   "engines": {
@@ -24,8 +24,8 @@
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@commitlint/types": "^19.5.0",
-    "@discord-bot/eslint-config": "workspace:*",
     "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
+    "@lol-assistant/eslint-config": "workspace:*",
     "@manypkg/cli": "^0.21.4",
     "@types/eslint": "^9.6.1",
     "@types/node": "^22.7.4",

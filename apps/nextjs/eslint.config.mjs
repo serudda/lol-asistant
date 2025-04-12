@@ -1,6 +1,6 @@
-import baseConfig, { restrictEnvAccess } from '@discord-bot/eslint-config';
-import nextjsConfig from '@discord-bot/eslint-config/nextjs';
-import reactConfig from '@discord-bot/eslint-config/react';
+import baseConfig, { restrictEnvAccess } from '@lol-assistant/eslint-config';
+import nextjsConfig from '@lol-assistant/eslint-config/nextjs';
+import reactConfig from '@lol-assistant/eslint-config/react';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 
 /** @type {import('typescript-eslint').Config} */

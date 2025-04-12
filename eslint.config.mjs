@@ -1,3 +1,3 @@
-import baseConfig from '@discord-bot/eslint-config';
+import baseConfig from '@lol-assistant/eslint-config';
 
 export default [...baseConfig];

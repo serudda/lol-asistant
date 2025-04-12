@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-properties */
 
-import { type AppRouter } from '@discord-bot/api';
+import { type AppRouter } from '@lol-assistant/api';
 import { httpBatchLink, loggerLink } from '@trpc/client';
 import { createTRPCNext } from '@trpc/next';
 import superjson from 'superjson';
@@ -30,6 +30,6 @@ export const api = createTRPCNext<AppRouter>({
   ssr: false,
 });
 
-export { type RouterInputs, type RouterOutputs } from '@discord-bot/api';
-export * from '@discord-bot/api/src/common';
-export * from '@discord-bot/db/common';
+export { type RouterInputs, type RouterOutputs } from '@lol-assistant/api';
+export * from '@lol-assistant/api/src/common';
+export * from '@lol-assistant/db/common';

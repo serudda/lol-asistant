@@ -1,5 +1,5 @@
 {
-  "extends": "@discord-bot/typescript-config/bot.json",
+  "extends": "@lol-assistant/typescript-config/bot.json",
   "compilerOptions": {
     "module": "esnext",
     "paths": {
