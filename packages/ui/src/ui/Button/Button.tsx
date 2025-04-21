@@ -38,7 +38,22 @@ const button = tv({
     {
       appearance: ButtonAppearance.contained,
       variant: ButtonVariant.primary,
-      className: ['border border-primary-400/20', 'bg-primary-500', 'text-white'],
+      className: ['border border-primary-400/20', 'bg-primary-500 hover:bg-primary-400', 'text-white'],
+    },
+    {
+      appearance: ButtonAppearance.contained,
+      variant: ButtonVariant.neutral,
+      className: ['border border-gray-700/20', 'bg-gray-800 hover:bg-gray-700', 'text-white'],
+    },
+    {
+      appearance: ButtonAppearance.ghost,
+      variant: ButtonVariant.primary,
+      className: ['hover:bg-primary-500', 'text-white'],
+    },
+    {
+      appearance: ButtonAppearance.ghost,
+      variant: ButtonVariant.neutral,
+      className: ['hover:bg-gray-800', 'text-white'],
     },
   ],
   defaultVariants: {
