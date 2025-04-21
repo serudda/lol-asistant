@@ -1,0 +1,5 @@
+{
+  "extends": "@lol-assistant/typescript-config/internal-package.json",
+  "include": ["src", ".storybook/*", "src/index.ts", "transformer.ts"],
+  "exclude": ["node_modules"]
+}

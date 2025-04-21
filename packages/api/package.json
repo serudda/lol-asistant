@@ -2,7 +2,7 @@
   "name": "@lol-assistant/api",
   "version": "0.1.0",
   "license": "MIT",
-  "author": "Indie Creators HQ",
+  "author": "Serudda",
   "type": "module",
   "types": "./src/index.ts",
   "scripts": {
