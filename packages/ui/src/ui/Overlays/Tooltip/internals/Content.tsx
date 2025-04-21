@@ -3,7 +3,12 @@ import { Content as RadixContent, Portal as RadixPortal } from '@radix-ui/react-
 import { tv } from 'tailwind-variants';
 
 const content = tv({
-  base: ['shadow-lg bg-neutral-900 rounded-md', 'outline-none z-50'],
+  base: [
+    'shadow-lg rounded',
+    'bg-zinc-900 border border-zinc-800 outline-none',
+    'text-white text-base text-center',
+    'transition duration-100 ease-out',
+  ],
 });
 
 export type ContentProps = React.ComponentPropsWithoutRef<typeof RadixContent> & {};

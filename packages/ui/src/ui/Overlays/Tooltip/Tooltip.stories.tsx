@@ -19,8 +19,7 @@ export const Default: Story = {
           <Button variant={ButtonVariant.primary}>Hover me</Button>
         </Tooltip.Trigger>
         <Tooltip.Content className="px-2 py-1" align="center" side="right">
-          <Tooltip.Arrow className="fill-neutral-900" />
-          <span className="text-sm leading-none text-white">Tooltip content</span>
+          <div className="text-xs text-white">Tooltip content</div>
         </Tooltip.Content>
       </Tooltip>
     </Tooltip.Provider>
