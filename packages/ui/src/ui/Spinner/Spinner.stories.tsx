@@ -2,7 +2,7 @@ import { Spinner, SpinnerSize, SpinnerVariant } from './Spinner';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta = {
-  title: 'Print UI Kit/Spinner',
+  title: 'UI Components/Spinner',
   component: Spinner,
   tags: ['autodocs'],
   argTypes: {

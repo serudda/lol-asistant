@@ -3,7 +3,7 @@ import { Tooltip } from './Tooltip';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta = {
-  title: 'Print UI Kit/Overlays/Tooltip',
+  title: 'UI Components/Overlays/Tooltip',
   component: Tooltip,
   tags: ['autodocs'],
 } satisfies Meta<typeof Tooltip>;

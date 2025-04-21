@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { tv } from 'tailwind-variants';
 
 const meta = {
-  title: 'Print UI Kit/Command',
+  title: 'UI Components/Command',
   component: Command,
   tags: ['autodocs'],
 } satisfies Meta<typeof Command>;
