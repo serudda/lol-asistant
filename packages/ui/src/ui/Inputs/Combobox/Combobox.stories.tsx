@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { Button } from '../../Button/Button';
 import { Combobox } from './Combobox';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Check } from 'lucide-react';
@@ -16,40 +17,40 @@ const check = tv({
 
 const modalities = [
   {
-    value: 'mri',
-    label: 'MRI - Resonancia Magnética',
+    value: 'garen',
+    label: 'Garen',
   },
   {
-    value: 'ct',
-    label: 'CT - Tomografía Computarizada',
+    value: 'katarina',
+    label: 'Katarina',
   },
   {
-    value: 'ultrasound',
-    label: 'Ultrasónido',
+    value: 'jinx',
+    label: 'Jinx',
   },
   {
-    value: 'radiography',
-    label: 'Radiografía',
+    value: 'lucian',
+    label: 'Lucian',
   },
   {
-    value: 'pet',
-    label: 'PET - Tomografía Computarizada por Emisión de Positrones',
+    value: 'kassadin',
+    label: 'Kassadin',
   },
   {
-    value: 'msct',
-    label: 'MSCT - Tomografía Computarizada multicapa',
+    value: 'gwen',
+    label: 'Gwen',
   },
   {
-    value: 'mammography',
-    label: 'Mamografía',
+    value: 'morgana',
+    label: 'Morgana',
   },
   {
-    value: 'ctre',
-    label: 'CTR - Tomografía Computarizada por Resonancia',
+    value: 'trundle',
+    label: 'Trundle',
   },
   {
-    value: 'tr',
-    label: 'TR - Tomografía por Reflexión',
+    value: 'thresh',
+    label: 'Thresh',
   },
 ];
 
@@ -75,28 +76,31 @@ export const Default: Story = {
     }, [value]);
 
     return (
-      <Combobox open={open} onOpenChange={setOpen}>
-        <Combobox.Trigger isActive={open} placeholder="Selecciona una Modalidad" value={getLabel} />
-        <Combobox.Content>
-          <Combobox.Search placeholder="Busca una Modalidad" />
-          <Combobox.List>
-            <Combobox.Empty>No se encontraron resultados</Combobox.Empty>
-            {modalities.map((modality) => (
-              <Combobox.Item
-                key={modality.value}
-                value={modality.value}
-                onSelect={(currentValue: string) => {
-                  setValue(currentValue === value ? '' : currentValue);
-                  setOpen(false);
-                }}
-              >
-                <Check className={check({ isSelected: value === modality.value })} />
-                {modality.label}
-              </Combobox.Item>
-            ))}
-          </Combobox.List>
-        </Combobox.Content>
-      </Combobox>
+      <div className="flex w-[500px] gap-2">
+        <Combobox open={open} onOpenChange={setOpen}>
+          <Combobox.Trigger placeholder="Select a champion" value={getLabel} />
+          <Combobox.Content>
+            <Combobox.Search placeholder="Search a champion" />
+            <Combobox.List>
+              <Combobox.Empty>No champions found</Combobox.Empty>
+              {modalities.map((modality) => (
+                <Combobox.Item
+                  key={modality.value}
+                  value={modality.value}
+                  onSelect={(currentValue: string) => {
+                    setValue(currentValue === value ? '' : currentValue);
+                    setOpen(false);
+                  }}
+                >
+                  <Check className={check({ isSelected: value === modality.value })} />
+                  {modality.label}
+                </Combobox.Item>
+              ))}
+            </Combobox.List>
+          </Combobox.Content>
+        </Combobox>
+        <Button>Save</Button>
+      </div>
     );
   },
 };

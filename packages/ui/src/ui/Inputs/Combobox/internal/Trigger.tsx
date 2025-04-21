@@ -1,22 +1,20 @@
 import { forwardRef } from 'react';
 import { Popover } from '../../../Overlays';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { tv } from 'tailwind-variants';
 
 const trigger = tv({
   base: [
-    'bg-gray-700',
-    'font-light text-base',
+    'px-3.5',
+    'border border-gray-700/60',
+    'hover:border-gray-700/20 hover:bg-gray-800',
+    'font-normal text-sm leading-normal',
     'flex items-center justify-between p-2',
-    'border rounded-lg appearance-none outline-none truncate',
-    'h-10',
+    'rounded appearance-none outline-none truncate',
+    'h-8',
     'w-full transition duration-100 ease-out',
   ],
   variants: {
-    isActive: {
-      true: 'border-primary-500',
-      false: 'border-gray-400',
-    },
     hasValue: {
       true: 'text-white',
       false: 'text-gray-300',
@@ -44,21 +42,15 @@ export interface TriggerProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
    * The placeholder of the button.
    */
   placeholder: string;
-
-  /**
-   * Whether the button is active.
-   */
-  isActive?: boolean;
 }
 
 /**
  * `Trigger` represents a trigger of the combobox.
  */
 export const Trigger = forwardRef<HTMLButtonElement, TriggerProps>(
-  ({ className, value, placeholder, isActive = true, ...props }, ref) => {
+  ({ className, value, placeholder, ...props }, ref) => {
     const classes = {
-      button: trigger({
-        isActive,
+      trigger: trigger({
         hasValue: !!value,
         className,
       }),
@@ -67,13 +59,9 @@ export const Trigger = forwardRef<HTMLButtonElement, TriggerProps>(
 
     return (
       <Popover.Trigger ref={ref} asChild>
-        <button {...props} className={classes.button}>
+        <button {...props} className={classes.trigger}>
           {value ?? placeholder}
-          {isActive ? (
-            <ChevronUp className={classes.icon} width={24} height={24} />
-          ) : (
-            <ChevronDown className={classes.icon} width={24} height={24} />
-          )}
+          <ChevronDown className={classes.icon} width={16} height={16} />
         </button>
       </Popover.Trigger>
     );
