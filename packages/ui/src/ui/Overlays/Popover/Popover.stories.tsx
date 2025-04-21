@@ -25,7 +25,7 @@ export const Default: Story = {
         <Popover.Content side="bottom">
           <div className="flex max-w-sm flex-col items-start gap-2 p-4">
             <div className="text-left text-lg">Title</div>
-            <div className="mb-3 text-left text-base">
+            <div className="text-left text-base">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
               dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.
             </div>

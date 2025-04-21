@@ -4,8 +4,8 @@ import { tv } from 'tailwind-variants';
 
 const content = tv({
   base: [
-    'shadow-lg bg-zinc-900 rounded-lg',
-    'border border-zinc-800 outline-none',
+    'shadow-lg rounded-lg',
+    'bg-zinc-900 border border-zinc-800 outline-none',
     'text-white text-base text-center',
     'transition duration-100 ease-out',
   ],
