@@ -18,6 +18,7 @@ Popover.Content = Content;
 Popover.displayName = 'Popover';
 
 export type { PopoverProps } from '@radix-ui/react-popover';
+export type { ContentProps } from './internals';
 
 /**
  * Reference:
