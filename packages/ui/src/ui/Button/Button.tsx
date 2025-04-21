@@ -6,12 +6,11 @@ import { tv, type VariantProps } from 'tailwind-variants';
 
 const button = tv({
   base: [
-    'flex items-center justify-center gap-2',
-    'relative overflow-hidden',
-    'text-center whitespace-nowrap',
-    'rounded-md',
-    'transition duration-100 ease-out',
-    'cursor-pointer select-none',
+    'inline-flex flex-shrink-0 items-center justify-center',
+    'relative',
+    'select-none',
+    'whitespace-nowrap font-normal leading-normal',
+    'transition-[border,background-color,color,opacity] duration-100 ease-out',
     'disabled:pointer-events-none disabled:opacity-50',
   ],
   variants: {
@@ -27,157 +26,31 @@ const button = tv({
       true: 'w-full',
     },
     size: {
-      [ButtonSize.sm]: 'py-2 px-3.5 text-xs font-normal h-6',
-      [ButtonSize.base]: 'py-3 px-4 text-sm font-normal h-8',
-      [ButtonSize.lg]: 'py-3 px-5 text-base font-normal h-9',
-      [ButtonSize.xl]: 'py-3 px-5 text-lg font-semibold h-9.5',
+      [ButtonSize.sm]: 'py-2 px-2 text-xs h-6 rounded',
+      [ButtonSize.base]: 'px-3.5 text-sm h-8 rounded',
     },
     variant: {
       [ButtonVariant.primary]: '',
-      [ButtonVariant.bull]: '',
-      [ButtonVariant.bear]: '',
       [ButtonVariant.neutral]: '',
     },
   },
   compoundVariants: [
     {
-      appearance: ButtonAppearance.outlined,
-      variant: ButtonVariant.bull,
-      className: 'bg-transparent ring-1 ring-bull-800/80 text-bull-500 hover:bg-bull-800/30',
-    },
-    {
-      appearance: ButtonAppearance.outlined,
-      variant: ButtonVariant.bull,
-      isActive: true,
-      className: 'bg-bull-800/30',
-    },
-    {
-      appearance: ButtonAppearance.outlined,
-      variant: ButtonVariant.bear,
-      className: 'bg-transparent ring-1 ring-bear-600/50 text-bear-500 hover:bg-bear-800/30',
-    },
-    {
-      appearance: ButtonAppearance.outlined,
-      variant: ButtonVariant.bear,
-      isActive: true,
-      className: 'bg-bear-800/30',
-    },
-    {
-      appearance: ButtonAppearance.outlined,
-      variant: ButtonVariant.primary,
-      className: 'bg-transparent ring-1 ring-primary text-primary hover:bg-neutral-600',
-    },
-    {
-      appearance: ButtonAppearance.outlined,
-      variant: ButtonVariant.primary,
-      isActive: true,
-      className: 'bg-neutral-600',
-    },
-    {
-      appearance: ButtonAppearance.outlined,
-      variant: ButtonVariant.neutral,
-      className: 'bg-transparent ring-1 ring-neutral-600 text-primary hover:bg-neutral-700',
-    },
-    {
-      appearance: ButtonAppearance.outlined,
-      variant: ButtonVariant.neutral,
-      isActive: true,
-      className: 'bg-neutral-700',
-    },
-    {
       appearance: ButtonAppearance.contained,
       variant: ButtonVariant.primary,
-      className: 'bg-primary text-black hover:bg-neutral-200',
-    },
-    {
-      appearance: ButtonAppearance.contained,
-      variant: ButtonVariant.primary,
-      isActive: true,
-      className: 'bg-neutral-200',
-    },
-    {
-      appearance: ButtonAppearance.contained,
-      variant: ButtonVariant.neutral,
-      className: 'bg-neutral-700 text-white hover:bg-neutral-500',
-    },
-    {
-      appearance: ButtonAppearance.contained,
-      variant: ButtonVariant.neutral,
-      isActive: true,
-      className: 'bg-neutral-500',
-    },
-    {
-      appearance: ButtonAppearance.contained,
-      variant: ButtonVariant.bear,
-      className: 'bg-bear-800/30 text-white ring-1 ring-bear-600/50 hover:bg-bear-800/50',
-    },
-    {
-      appearance: ButtonAppearance.contained,
-      variant: ButtonVariant.bear,
-      isActive: true,
-      className: 'bg-bear-800/50',
-    },
-    {
-      appearance: ButtonAppearance.contained,
-      variant: ButtonVariant.bull,
-      className: 'bg-bull-800/30 text-white ring-1 ring-bull-600/50 hover:bg-bull-800/60',
-    },
-    {
-      appearance: ButtonAppearance.contained,
-      variant: ButtonVariant.bull,
-      isActive: true,
-      className: 'bg-bull-800/60',
-    },
-    {
-      appearance: ButtonAppearance.ghost,
-      variant: ButtonVariant.primary,
-      className: 'bg-transparent text-primary hover:bg-primary/20',
-    },
-    {
-      appearance: ButtonAppearance.ghost,
-      variant: ButtonVariant.primary,
-      isActive: true,
-      className: 'bg-primary/20',
-    },
-    {
-      appearance: ButtonAppearance.ghost,
-      variant: ButtonVariant.neutral,
-      className: 'bg-transparent text-primary hover:bg-neutral-700',
-    },
-    {
-      appearance: ButtonAppearance.ghost,
-      variant: ButtonVariant.neutral,
-      isActive: true,
-      className: 'bg-neutral-700',
-    },
-    {
-      appearance: ButtonAppearance.ghost,
-      variant: ButtonVariant.bear,
-      className: 'bg-transparent text-bear-500 hover:bg-bear-800/30',
-    },
-    {
-      appearance: ButtonAppearance.ghost,
-      variant: ButtonVariant.bear,
-      isActive: true,
-      className: 'bg-bear-800/30',
-    },
-    {
-      appearance: ButtonAppearance.ghost,
-      variant: ButtonVariant.bull,
-      className: 'bg-transparent text-bull-500 hover:bg-bull-800/30',
-    },
-    {
-      appearance: ButtonAppearance.ghost,
-      variant: ButtonVariant.bull,
-      isActive: true,
-      className: 'bg-bull-800/30',
+      className: [
+        'ring-1 ring-[lch(53.751_61.636_288.421)]',
+        'shadow-[0_4px_4px_-1px_lch(0_0_0_/_0.06),_0_1px_1px_0_lch(0_0_0_/_0.12)]',
+        'bg-[lch(47.918_59.303_288.421)]',
+        'text-[lch(100_5_288.421)]',
+      ],
     },
   ],
   defaultVariants: {
-    appearance: ButtonAppearance.outlined,
+    appearance: ButtonAppearance.contained,
     isFullWidth: false,
     size: ButtonSize.base,
-    variant: ButtonVariant.bull,
+    variant: ButtonVariant.primary,
   },
 });
 
