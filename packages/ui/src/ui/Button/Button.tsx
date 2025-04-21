@@ -38,12 +38,7 @@ const button = tv({
     {
       appearance: ButtonAppearance.contained,
       variant: ButtonVariant.primary,
-      className: [
-        'ring-1 ring-[lch(53.751_61.636_288.421)]',
-        'shadow-[0_4px_4px_-1px_lch(0_0_0_/_0.06),_0_1px_1px_0_lch(0_0_0_/_0.12)]',
-        'bg-[lch(47.918_59.303_288.421)]',
-        'text-[lch(100_5_288.421)]',
-      ],
+      className: ['ring-1 ring-primary-500', 'bg-primary-900', 'text-white'],
     },
   ],
   defaultVariants: {
