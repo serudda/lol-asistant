@@ -38,12 +38,12 @@ const button = tv({
     {
       appearance: ButtonAppearance.contained,
       variant: ButtonVariant.primary,
-      className: ['border border-primary-400/20', 'bg-primary-500 hover:bg-primary-400', 'text-white'],
+      className: ['border border-primary-400/20', 'bg-primary-500 hover:bg-primary-400/70', 'text-white'],
     },
     {
       appearance: ButtonAppearance.contained,
       variant: ButtonVariant.neutral,
-      className: ['border border-gray-700/20', 'bg-gray-800 hover:bg-gray-700', 'text-white'],
+      className: ['border border-gray-700/20', 'bg-gray-800 hover:bg-gray-700/70', 'text-white'],
     },
     {
       appearance: ButtonAppearance.ghost,
