@@ -46,6 +46,16 @@ const button = tv({
       className: ['border border-gray-700/20', 'bg-gray-800 hover:bg-gray-700/70', 'text-white'],
     },
     {
+      appearance: ButtonAppearance.outlined,
+      variant: ButtonVariant.primary,
+      className: ['border border-primary-600/60', 'hover:border-primary-400/20 hover:bg-primary-500', 'text-white'],
+    },
+    {
+      appearance: ButtonAppearance.outlined,
+      variant: ButtonVariant.neutral,
+      className: ['border border-gray-700/60', 'hover:border-gray-700/20 hover:bg-gray-800', 'text-white'],
+    },
+    {
       appearance: ButtonAppearance.ghost,
       variant: ButtonVariant.primary,
       className: ['hover:bg-primary-500', 'text-white'],

@@ -24,7 +24,7 @@ export default meta;
 
 type Story = StoryObj<typeof Button>;
 
-export const Default: Story = {
+export const Appearance: Story = {
   args: {
     children: 'Click me',
     size: ButtonSize.sm,
@@ -33,10 +33,51 @@ export const Default: Story = {
   },
 
   render: function Render(args) {
-    return <Button {...args} />;
+    return (
+      <div className="flex gap-4">
+        <Button {...args} appearance={ButtonAppearance.contained}>
+          Contained
+        </Button>
+        <Button {...args} appearance={ButtonAppearance.outlined}>
+          Outlined
+        </Button>
+        <Button {...args} appearance={ButtonAppearance.ghost}>
+          Ghost
+        </Button>
+      </div>
+    );
   },
 };
 
+export const Size: Story = {
+  render: function Render(args) {
+    return (
+      <div className="flex gap-4">
+        <Button {...args} size={ButtonSize.sm}>
+          Small
+        </Button>
+        <Button {...args} size={ButtonSize.base}>
+          Base
+        </Button>
+      </div>
+    );
+  },
+};
+
+export const Variant: Story = {
+  render: function Render(args) {
+    return (
+      <div className="flex gap-4">
+        <Button {...args} variant={ButtonVariant.primary}>
+          Primary
+        </Button>
+        <Button {...args} variant={ButtonVariant.neutral}>
+          Neutral
+        </Button>
+      </div>
+    );
+  },
+};
 export const Loading: Story = {
   render: function Render() {
     return (
@@ -56,14 +97,11 @@ export const LoadingVariants: Story = {
   render: function Render() {
     return (
       <div className="flex gap-4">
-        <LoadingButton isLoading={true} appearance={ButtonAppearance.contained} variant={ButtonVariant.bull}>
-          Bull Loading
+        <LoadingButton isLoading={true} appearance={ButtonAppearance.contained} variant={ButtonVariant.primary}>
+          Primary Loading
         </LoadingButton>
-        <LoadingButton isLoading={true} appearance={ButtonAppearance.contained} variant={ButtonVariant.bear}>
-          Bear Loading
-        </LoadingButton>
-        <LoadingButton isLoading={true} appearance={ButtonAppearance.outlined} variant={ButtonVariant.primary}>
-          Outlined Loading
+        <LoadingButton isLoading={true} appearance={ButtonAppearance.contained} variant={ButtonVariant.neutral}>
+          Neutral Loading
         </LoadingButton>
       </div>
     );
