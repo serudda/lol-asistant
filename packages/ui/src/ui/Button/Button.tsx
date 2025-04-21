@@ -126,7 +126,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     {
       className,
       appearance,
-      size,
+      size = ButtonSize.base,
       variant = ButtonVariant.primary,
       isFullWidth,
       asChild = false,
