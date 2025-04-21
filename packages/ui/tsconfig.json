@@ -1,5 +1,11 @@
 {
-  "extends": "@lol-assistant/typescript-config/internal-package.json",
-  "include": ["src", ".storybook/*", "src/index.ts", "transformer.ts"],
+  "extends": "@lol-assistant/typescript-config/react.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@common": ["src/common"]
+    }
+  },
+  "include": ["src/**/*", ".storybook/**/*", "vite.config.ts"],
   "exclude": ["node_modules"]
 }
