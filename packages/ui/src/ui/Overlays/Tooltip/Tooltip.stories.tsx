@@ -1,4 +1,4 @@
-import { Button, ButtonSize, ButtonVariant } from '../Button/Button';
+import { Button, ButtonVariant } from '../../Button/Button';
 import { Tooltip } from './Tooltip';
 import type { Meta, StoryObj } from '@storybook/react';
 
@@ -16,13 +16,10 @@ export const Default: Story = {
     <Tooltip.Provider>
       <Tooltip>
         <Tooltip.Trigger asChild>
-          <Button variant={ButtonVariant.bull} size={ButtonSize.sm}>
-            Hover me
-          </Button>
+          <Button variant={ButtonVariant.primary}>Hover me</Button>
         </Tooltip.Trigger>
         <Tooltip.Content className="px-2 py-1" align="center" side="right">
-          <Tooltip.Arrow className="fill-neutral-900" />
-          <span className="text-sm leading-none text-white">Tooltip content</span>
+          <div className="text-xs text-white">Tooltip content</div>
         </Tooltip.Content>
       </Tooltip>
     </Tooltip.Provider>
