@@ -5,12 +5,16 @@ import { Root } from '@radix-ui/react-avatar';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const root = tv({
-  base: ['relative flex shrink-0 overflow-hidden rounded-full'],
+  base: ['relative flex shrink-0 overflow-hidden'],
   variants: {
     size: {
       [AvatarSize.sm]: ['h-6 w-6 text-xs'],
       [AvatarSize.base]: ['h-8 w-8 text-sm'],
       [AvatarSize.lg]: ['h-10 w-10 text-lg'],
+    },
+    rounded: {
+      true: ['rounded-full'],
+      false: ['rounded'],
     },
   },
 });
@@ -20,6 +24,11 @@ export interface AvatarProps extends RadixAvatarProps, VariantProps<typeof root>
    * The class name of the avatar root element.
    */
   size?: AvatarSizeType;
+
+  /**
+   * Whether is a rounded avatar or not.
+   */
+  isRounded?: boolean;
 }
 
 /**
@@ -28,8 +37,8 @@ export interface AvatarProps extends RadixAvatarProps, VariantProps<typeof root>
  *
  * @see https://www.uiguideline.com/components/avatar
  */
-export const Avatar = ({ size = AvatarSize.base, ...props }: AvatarProps) => {
-  const classes = root({ size });
+export const Avatar = ({ size = AvatarSize.base, isRounded = true, ...props }: AvatarProps) => {
+  const classes = root({ size, rounded: isRounded });
   return <Root {...props} className={classes} />;
 };
 
