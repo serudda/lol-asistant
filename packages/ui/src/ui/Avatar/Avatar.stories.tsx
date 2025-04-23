@@ -21,15 +21,36 @@ export const Size: Story = {
     return (
       <div className="flex gap-4">
         <Avatar {...args} size={AvatarSize.sm}>
-          <Avatar.Image src="https://ddragon.leagueoflegends.com/cdn/15.8.1/img/spell/SummonerFlas.png" />
+          <Avatar.Image src="https://ddragon.leagueoflegends.com/cdn/15.8.1/img/spell/SummonerFlash.png" />
           <Avatar.Fallback>AT</Avatar.Fallback>
         </Avatar>
         <Avatar {...args} size={AvatarSize.base}>
-          <Avatar.Image src="https://ddragon.leagueoflegends.com/cdn/15.8.1/img/item/100.png" />
+          <Avatar.Image src="https://ddragon.leagueoflegends.com/cdn/15.8.1/img/item/1001.png" />
           <Avatar.Fallback>AM</Avatar.Fallback>
         </Avatar>
         <Avatar {...args} size={AvatarSize.lg}>
-          <Avatar.Image src="https://ddragon.leagueoflegends.com/cdn/15.8.1/img/spell/FashFrost.png" />
+          <Avatar.Image src="https://ddragon.leagueoflegends.com/cdn/15.8.1/img/spell/FlashFrost.png" />
+          <Avatar.Fallback>WA</Avatar.Fallback>
+        </Avatar>
+      </div>
+    );
+  },
+};
+
+export const Fallback: Story = {
+  render: function Render(args) {
+    return (
+      <div className="flex gap-4">
+        <Avatar {...args} size={AvatarSize.sm}>
+          <Avatar.Image src="" />
+          <Avatar.Fallback>AT</Avatar.Fallback>
+        </Avatar>
+        <Avatar {...args} size={AvatarSize.base}>
+          <Avatar.Image src="" />
+          <Avatar.Fallback>AM</Avatar.Fallback>
+        </Avatar>
+        <Avatar {...args} size={AvatarSize.lg}>
+          <Avatar.Image src="" />
           <Avatar.Fallback>WA</Avatar.Fallback>
         </Avatar>
       </div>
