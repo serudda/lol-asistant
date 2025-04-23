@@ -1,16 +1,16 @@
+import { Fallback, Image } from './internal';
 import { AvatarSize, type AvatarSizeType } from './types';
-import type { AvatarProps as RadixAvatarProps} from '@radix-ui/react-avatar';
-import { Fallback, Image, Root } from '@radix-ui/react-avatar';
-import type { VariantProps } from 'tailwind-variants';
-import { tv } from 'tailwind-variants';
+import type { AvatarProps as RadixAvatarProps } from '@radix-ui/react-avatar';
+import { Root } from '@radix-ui/react-avatar';
+import { tv, type VariantProps } from 'tailwind-variants';
 
 const root = tv({
   base: ['relative flex shrink-0 overflow-hidden rounded-full'],
   variants: {
     size: {
-      [AvatarSize.sm]: ['h-6 w-6'],
-      [AvatarSize.base]: ['h-8 w-8'],
-      [AvatarSize.lg]: ['h-10 w-10'],
+      [AvatarSize.sm]: ['h-6 w-6 text-xs'],
+      [AvatarSize.base]: ['h-8 w-8 text-sm'],
+      [AvatarSize.lg]: ['h-10 w-10 text-lg'],
     },
   },
 });
@@ -36,7 +36,7 @@ export const Avatar = ({ size = AvatarSize.base, ...props }: AvatarProps) => {
 Avatar.Image = Image;
 Avatar.Fallback = Fallback;
 
-Avatar.displayName = 'Avatar';
+Avatar.displayName = Root.displayName;
 
 /**
  * Reference:
