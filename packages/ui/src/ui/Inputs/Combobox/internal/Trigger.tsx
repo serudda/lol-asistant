@@ -67,3 +67,5 @@ export const Trigger = forwardRef<HTMLButtonElement, TriggerProps>(
     );
   },
 );
+
+Trigger.displayName = 'Trigger';

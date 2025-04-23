@@ -31,3 +31,5 @@ export const Loading = ({ className, children, ...props }: LoadingProps) => {
     </Command.Loading>
   );
 };
+
+Loading.displayName = 'Loading';

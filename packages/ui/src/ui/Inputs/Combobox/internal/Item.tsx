@@ -37,3 +37,5 @@ export const Item = ({ className, children, ...props }: ItemProps) => {
     </Command.Item>
   );
 };
+
+Item.displayName = 'Item';

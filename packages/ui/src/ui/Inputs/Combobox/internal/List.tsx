@@ -31,3 +31,5 @@ export const List = ({ className, children, ...props }: ListProps) => {
     </Command.List>
   );
 };
+
+List.displayName = 'List';
