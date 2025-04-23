@@ -7,6 +7,14 @@ export interface ComboboxProps extends PopoverProps {
   children: React.ReactNode;
 }
 
+/**
+ * Similar to the Select (Dropdown) but allowing the user to
+ * edit the input field in order to sort through the list of
+ * options.
+ *
+ * @see https://www.uiguideline.com/components/combobox
+ */
+
 export const Combobox = ({ ...props }: ComboboxProps) => <Popover {...props} />;
 
 Combobox.Content = Content;
