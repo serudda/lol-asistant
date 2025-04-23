@@ -1,4 +1,4 @@
-import type { ComponentProps} from 'react';
+import type { ComponentProps } from 'react';
 import { forwardRef } from 'react';
 import { Command } from '../../../Command/Command';
 import { Search as SearchIcon } from 'lucide-react';
@@ -45,3 +45,5 @@ export const Search = forwardRef<HTMLInputElement, SearchProps>(({ className, ..
     </div>
   );
 });
+
+Search.displayName = 'Search';

@@ -24,3 +24,5 @@ Combobox.List = List;
 Combobox.Loading = Loading;
 Combobox.Search = Search;
 Combobox.Trigger = Trigger;
+
+Combobox.displayName = 'Combobox';

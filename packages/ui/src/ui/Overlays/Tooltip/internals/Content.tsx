@@ -13,6 +13,10 @@ const content = tv({
 
 export type ContentProps = React.ComponentPropsWithoutRef<typeof RadixContent> & {};
 
+/**
+ * The `Content` component is used to display the container
+ * with the content of a Tooltip.
+ */
 export const Content = React.forwardRef<React.ElementRef<typeof RadixContent>, ContentProps>(
   ({ className, align = 'center', sideOffset = 10, ...props }, ref) => {
     const classes = content({ className });

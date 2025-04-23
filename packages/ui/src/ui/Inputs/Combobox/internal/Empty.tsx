@@ -31,3 +31,5 @@ export const Empty = ({ className, children, ...props }: EmptyProps) => {
     </Command.Empty>
   );
 };
+
+Empty.displayName = 'Empty';

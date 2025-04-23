@@ -81,3 +81,5 @@ export const Content = forwardRef<HTMLDivElement, ContentProps>(
     );
   },
 );
+
+Content.displayName = 'Content';
