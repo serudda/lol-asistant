@@ -1,0 +1,44 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Monorepo Architecture Guide
+
+This project follows a monorepo architecture using Turborepo and PNPM workspaces.
+
+## Workspace Structure
+
+The project is organized into separate packages to maintain clear separation of concerns:
+
+```
+lol-assistant/
+├── apps/               # Frontend applications
+│   ├── web/            # Vite-based web app
+│   └── nextjs/         # Next.js application
+├── packages/           # Shared libraries & modules
+│   ├── api/            # API integrations
+│   ├── db/             # Database layer (Prisma)
+│   ├── ui/             # Shared UI components
+│   ├── cron-scripts/   # Background tasks  
+│   └── ...
+│
+└── api/                # Serverless functions (for Vercel)
+    └── crons/          # Cron job endpoints
+```
+
+## Package Dependencies
+
+- Packages can depend on each other using the workspace protocol: `"@lol-assistant/ui": "workspace:*"`
+- Always use the same version of shared dependencies across packages
+
+## Scripts Execution
+
+- From the root: `pnpm dev` - Start all apps in development mode
+- For specific packages: `pnpm --filter @lol-assistant/web dev`
+- For cron scripts: `pnpm --filter @lol-assistant/cron-scripts run start sample-script`
+
+## Deployment
+
+- Frontend apps are deployed separately
+- Cron jobs use Vercel Serverless Functions with endpoints in `api/crons/`

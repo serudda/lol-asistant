@@ -1,0 +1,38 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Scratchpad Workflow
+
+This project uses a scratchpad-based workflow to track progress using a multi-agent approach.
+
+## Scratchpad Location
+
+- [.cursor/scratchpad.md](mdc:.cursor/scratchpad.md) - The central file for tracking project progress
+
+## Workflow Roles
+
+The project uses two main roles in development:
+
+1. **Planner** - Responsible for high-level analysis, task breakdown, and defining success criteria
+2. **Executor** - Handles implementation details, executing tasks from the scratchpad
+
+## Scratchpad Sections
+
+The scratchpad is organized into these key sections:
+
+- **Background and Motivation** - Project context and goals
+- **Key Challenges and Analysis** - Major challenges and analysis
+- **High-Level Task Breakdown** - Step-by-step implementation plan
+- **Project Status Board** - Task tracking checklist
+- **Executor Comments or Assistance Requests** - Implementation notes
+- **Lessons** - Reusable knowledge and error solutions
+
+## Development Process
+
+1. New tasks are first analyzed by the Planner
+2. Tasks are broken down into small steps with clear success criteria
+3. The Executor implements one task at a time
+4. Progress is reported in the scratchpad
+5. The Planner reviews completed work before proceeding
