@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Combobox } from '@lol-assistant/ui';
+import React, { useMemo, useState } from 'react';
+import { Combobox, TriggerSize } from '@lol-assistant/ui';
 
 const champions = [
   { value: 'Aatrox', label: 'Aatrox' },
@@ -12,11 +12,15 @@ export const PickChampPage: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
 
+  const getLabel = useMemo(() => {
+    return champions.find((champ) => champ.value === value)?.label;
+  }, [value]);
+
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col items-center">
       <h1 className="text-4xl font-bold text-center mb-8">Pick a Champ</h1>
       <Combobox open={open} onOpenChange={setOpen}>
-        <Combobox.Trigger placeholder="Select a champion" value={value} />
+        <Combobox.Trigger placeholder="Select a champion" value={getLabel} size={TriggerSize.lg} />
         <Combobox.Content>
           <Combobox.Search placeholder="Search a champion" />
           <Combobox.List>
