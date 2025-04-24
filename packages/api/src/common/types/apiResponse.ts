@@ -1,4 +1,4 @@
-import type { Account, User } from '@lol-assistant/db';
+import type { Account, Champion, User } from '@lol-assistant/db';
 
 export enum Response {
   SUCCESS = 'SUCCESS',
@@ -41,3 +41,7 @@ export type AccountsResponse = ApiResponse<{ accounts: Array<Account> }>;
 
 // User
 export type UserResponse = ApiResponse<{ user: User }>;
+
+// Champion
+export type ChampionResponse = ApiResponse<{ champion: Champion }>;
+export type ChampionsResponse = ApiResponse<{ champions: Array<Champion> }>;
