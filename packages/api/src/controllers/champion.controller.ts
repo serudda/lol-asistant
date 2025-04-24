@@ -54,6 +54,7 @@ export const getChampionByIdHandler = async ({
       });
     }
 
+    console.log('***** INTERNAL_SERVER_ERROR *****', error);
     throw new TRPCError({
       code: TRPCErrorCode.INTERNAL_SERVER_ERROR,
       message: ErrorMessages.Common.Unknown,

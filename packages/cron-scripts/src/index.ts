@@ -6,6 +6,7 @@
 
 // Script exports for use in cron jobs
 export { default as sampleScript } from './scripts/sample-script';
+export { default as testChampionEndpoint } from './scripts/test-champion-endpoint';
 
 // Add more exports as needed when creating new scripts
 // export { default as anotherScript } from './scripts/another-script';
