@@ -2,7 +2,7 @@
   "name": "@lol-assistant/tailwind-config",
   "version": "0.0.1",
   "description": "Shared TailwindCSS config",
-  "main": "./src/tailwind.config.ts",
+  "main": "./src/base-presets.ts",
   "type": "module",
   "scripts": {
     "clean": "git clean -xdf .turbo node_modules dist"
