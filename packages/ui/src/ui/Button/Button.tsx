@@ -28,6 +28,7 @@ const button = tv({
     size: {
       [ButtonSize.sm]: 'py-2 px-2 text-xs h-6 rounded',
       [ButtonSize.base]: 'px-3.5 text-sm h-8 rounded',
+      [ButtonSize.lg]: 'px-4 text-base h-10 rounded',
     },
     variant: {
       [ButtonVariant.primary]: '',

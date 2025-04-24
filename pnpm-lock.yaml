@@ -168,6 +168,9 @@ importers:
       '@lol-assistant/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@lol-assistant/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@tanstack/react-query':
         specifier: ^4.36.1
         version: 4.36.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -177,6 +180,9 @@ importers:
       '@trpc/react-query':
         specifier: ^10.45.2
         version: 10.45.2(@tanstack/react-query@4.36.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      lucide-react:
+        specifier: ^0.503.0
+        version: 0.503.0(react@18.3.1)
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -196,6 +202,9 @@ importers:
       '@lol-assistant/eslint-config':
         specifier: workspace:*
         version: link:../../tooling/eslint-config
+      '@lol-assistant/tailwind-config':
+        specifier: workspace:*
+        version: link:../../tooling/tailwind-config
       '@lol-assistant/typescript-config':
         specifier: workspace:*
         version: link:../../tooling/typescript-config
@@ -346,6 +355,9 @@ importers:
       '@lol-assistant/eslint-config':
         specifier: workspace:*
         version: link:../../tooling/eslint-config
+      '@lol-assistant/tailwind-config':
+        specifier: workspace:*
+        version: link:../../tooling/tailwind-config
       '@lol-assistant/typescript-config':
         specifier: workspace:*
         version: link:../../tooling/typescript-config

@@ -1,23 +1,27 @@
 import { forwardRef } from 'react';
 import { Popover } from '../../../Overlays';
+import type { TriggerSizeType } from '../types';
+import { TriggerSize } from '../types';
 import { ChevronDown } from 'lucide-react';
 import { tv } from 'tailwind-variants';
 
 const trigger = tv({
   base: [
-    'px-3.5',
     'border border-gray-700/60',
     'hover:border-gray-700/20 hover:bg-gray-800',
-    'font-normal text-sm leading-normal',
+    'font-normal leading-normal',
     'flex items-center justify-between p-2',
     'rounded appearance-none outline-none truncate',
-    'h-8',
     'w-full transition duration-100 ease-out',
   ],
   variants: {
     hasValue: {
       true: 'text-white',
       false: 'text-gray-300',
+    },
+    size: {
+      [TriggerSize.base]: 'h-8 px-3.5 text-sm',
+      [TriggerSize.lg]: 'h-10 px-3.5 text-base',
     },
   },
 });
@@ -39,6 +43,11 @@ export interface TriggerProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
   value?: string;
 
   /**
+   * The size of the button.
+   */
+  size?: TriggerSizeType;
+
+  /**
    * The placeholder of the button.
    */
   placeholder: string;
@@ -48,10 +57,11 @@ export interface TriggerProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
  * `Trigger` represents a trigger of the combobox.
  */
 export const Trigger = forwardRef<HTMLButtonElement, TriggerProps>(
-  ({ className, value, placeholder, ...props }, ref) => {
+  ({ className, value, placeholder, size = TriggerSize.base, ...props }, ref) => {
     const classes = {
       trigger: trigger({
         hasValue: !!value,
+        size,
         className,
       }),
       icon: icon(),
