@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import { Button } from '../../Button/Button';
-import { Combobox } from './Combobox';
+import { Button, ButtonSize } from '../../Button/Button';
+import { Combobox, TriggerSize } from './Combobox';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Check } from 'lucide-react';
 import { tv } from 'tailwind-variants';
@@ -78,7 +78,7 @@ export const Default: Story = {
     return (
       <div className="flex w-[500px] gap-2">
         <Combobox open={open} onOpenChange={setOpen}>
-          <Combobox.Trigger placeholder="Select a champion" value={getLabel} />
+          <Combobox.Trigger placeholder="Select a champion" value={getLabel} size={TriggerSize.lg} />
           <Combobox.Content>
             <Combobox.Search placeholder="Search a champion" />
             <Combobox.List>
@@ -99,7 +99,7 @@ export const Default: Story = {
             </Combobox.List>
           </Combobox.Content>
         </Combobox>
-        <Button>Save</Button>
+        <Button size={ButtonSize.lg}>Save</Button>
       </div>
     );
   },

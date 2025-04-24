@@ -2,6 +2,7 @@ import React from 'react';
 import type { PopoverProps } from '../../Overlays';
 import { Popover } from '../../Overlays';
 import { Content, Empty, Item, List, Loading, Search, Trigger } from './internal';
+import { TriggerSize, type TriggerSizeType } from './types';
 
 export interface ComboboxProps extends PopoverProps {
   children: React.ReactNode;
@@ -26,3 +27,5 @@ Combobox.Search = Search;
 Combobox.Trigger = Trigger;
 
 Combobox.displayName = 'Combobox';
+
+export { TriggerSize, type TriggerSizeType };
