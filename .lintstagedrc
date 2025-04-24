@@ -1,13 +1,17 @@
 {
-  "apps/bot/**/*.{js,ts,jsx,tsx,json}": [
-    "eslint --config ./apps/bot/eslint.config.mjs --fix",
+  "apps/web/**/*.{js,ts,jsx,tsx,json}": [
+    "eslint --config ./apps/web/eslint.config.mjs --fix",
     "prettier --write --ignore-unknown"
   ],
   "apps/next/**/*.{js,ts,jsx,tsx,json}": [
     "eslint --config ./apps/next/eslint.config.mjs --fix",
     "prettier --write --ignore-unknown"
   ],
-  "packages/**/*.{js,ts,jsx,tsx,json}": ["prettier --write --ignore-unknown", "eslint --fix"],
+  "packages/cron-scripts/**/*.{js,ts,jsx,tsx,json}": [
+    "eslint --config ./packages/cron-scripts/eslint.config.mjs --fix",
+    "prettier --write --ignore-unknown"
+  ],
+  "packages/!(cron-scripts)/**/*.{js,ts,jsx,tsx,json}": ["prettier --write --ignore-unknown", "eslint --fix"],
   "tooling/**/*.{js,ts,jsx,tsx,json}": ["prettier --write --ignore-unknown", "eslint --fix"],
   "package.json": ["manypkg fix"]
 }

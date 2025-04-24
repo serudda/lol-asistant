@@ -1,0 +1,46 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Project Structure Overview
+
+This is a monorepo for the League of Legends Assistant application structured with Turborepo.
+
+## Main Directories
+
+- [apps/](mdc:apps) - Contains frontend applications:
+  - [apps/web/](mdc:apps/web) - Main web application
+  - [apps/nextjs/](mdc:apps/nextjs) - Next.js frontend
+
+- [packages/](mdc:packages) - Shared packages and libraries:
+  - [packages/api/](mdc:packages/api) - API integration and services
+  - [packages/db/](mdc:packages/db) - Database layer with Prisma
+  - [packages/ui/](mdc:packages/ui) - Shared UI components
+  - [packages/cron-scripts/](mdc:packages/cron-scripts) - Background tasks and cron jobs
+
+- [tooling/](mdc:tooling) - Global shared configurations:
+  - [tooling/eslint-config/](mdc:tooling/eslint-config) - ESLint configuration
+  - [tooling/typescript-config/](mdc:tooling/typescript-config) - TypeScript configuration
+  - [tooling/tailwind-config/](mdc:tooling/tailwind-config) - Tailwind CSS configuration
+
+## Configuration Management
+
+IMPORTANT: When working with configurations (ESLint, TypeScript, Tailwind CSS, etc.):
+1. Always check if the configuration already exists in the `/tooling` directory
+2. If the configuration exists, use or extend it rather than creating duplicates
+3. Extend configurations from `/tooling` in package-specific settings where needed
+4. Only create new configurations outside of `/tooling` if absolutely necessary
+5. Consider adding new reusable configurations to `/tooling` if they might be used by multiple packages
+
+## Key Configuration Files
+
+- [package.json](mdc:package.json) - Root project configuration
+- [pnpm-workspace.yaml](mdc:pnpm-workspace.yaml) - PNPM workspace configuration
+- [turbo.json](mdc:turbo.json) - Turborepo configuration
+
+## Development Workflow
+
+- Use `pnpm dev` to start all applications in development mode
+- Use `pnpm build` to build all applications
+- Use `pnpm --filter <package> <command>` to run commands for specific packages

@@ -1,0 +1,28 @@
+{
+  "name": "@lol-assistant/cron-scripts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint . --ext .ts",
+    "clean": "rm -rf dist",
+    "start": "NODE_OPTIONS=--experimental-specifier-resolution=node node --loader ts-node/esm src/run.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "@lol-assistant/eslint-config": "workspace:*",
+    "@lol-assistant/typescript-config": "workspace:*",
+    "@types/node": "^22.7.4",
+    "eslint": "^9.11.1",
+    "globals": "^15.15.0",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "8.7.0"
+  },
+  "dependencies": {
+    "ts-node": "^10.9.2"
+  }
+}
