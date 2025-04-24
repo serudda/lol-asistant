@@ -59,6 +59,9 @@ export const Size: Story = {
         <Button {...args} size={ButtonSize.base}>
           Base
         </Button>
+        <Button {...args} size={ButtonSize.lg}>
+          Large button
+        </Button>
       </div>
     );
   },

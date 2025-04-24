@@ -1,6 +1,7 @@
 export const ButtonSize = {
   sm: 'sm',
   base: 'base',
+  lg: 'lg',
 } as const;
 export type ButtonSizeType = (typeof ButtonSize)[keyof typeof ButtonSize];
 
