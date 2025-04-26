@@ -12,6 +12,7 @@
     "db:generate": "turbo db:generate",
     "db:push": "turbo db:push db:generate",
     "db:migrate": "turbo db:migrate",
+    "script:run": "pnpm --filter @lol-assistant/cron-scripts run script:run",
     "deploy-commands": "turbo deploy-commands",
     "dev": "turbo dev",
     "lint": "turbo lint && manypkg check",
