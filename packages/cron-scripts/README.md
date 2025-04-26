@@ -10,16 +10,30 @@ Package for managing and executing scheduled scripts, both locally and through V
 
 ## Running Scripts Locally
 
-You can run any script using the following command:
+You can run any script using one of the following methods:
+
+### From the Root Directory
 
 ```bash
-pnpm --filter @lol-assistant/cron-scripts run start <script-name>
+pnpm script:run <script-name>
 ```
 
 For example, to run the sample script:
 
 ```bash
-pnpm --filter @lol-assistant/cron-scripts run start sample-script
+pnpm script:run sample-script
+```
+
+### From Within the Package
+
+```bash
+pnpm --filter @lol-assistant/cron-scripts run script:run <script-name>
+```
+
+For example, to run the sample script:
+
+```bash
+pnpm --filter @lol-assistant/cron-scripts run script:run sample-script
 ```
 
 ### Passing Parameters to Scripts
@@ -27,13 +41,13 @@ pnpm --filter @lol-assistant/cron-scripts run start sample-script
 You can pass parameters using the `key=value` format:
 
 ```bash
-pnpm --filter @lol-assistant/cron-scripts run start sample-script timestamp=true message="Custom message"
+pnpm script:run sample-script timestamp=true message="Custom message"
 ```
 
 For boolean parameters, numbers, or other JSON data types, use JSON format:
 
 ```bash
-pnpm --filter @lol-assistant/cron-scripts run start sample-script active=true count=42 data='{"key":"value"}'
+pnpm script:run sample-script active=true count=42 data='{"key":"value"}'
 ```
 
 ### Viewing Available Scripts
@@ -41,7 +55,7 @@ pnpm --filter @lol-assistant/cron-scripts run start sample-script active=true co
 If you run the command without specifying a script, you'll see a list of available scripts:
 
 ```bash
-pnpm --filter @lol-assistant/cron-scripts run start
+pnpm script:run
 ```
 
 ## Creating a New Script
