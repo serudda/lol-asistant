@@ -1,12 +1,4 @@
-/**
- * Test script for the champion getById endpoint. This
- * script demonstrates how to use the API from a cron
- * script.
- */
-
-import { type AppRouter } from '@lol-assistant/api';
-import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
-import superjson from 'superjson';
+import { createClient } from '../utils/trpc-client';
 
 type TestChampionOptions = {
   championId?: string;
@@ -27,15 +19,8 @@ export default async function testChampionEndpoint(
   console.log(`[TEST CHAMPION] Testing champion endpoint with ID: ${championId}`);
 
   try {
-    // Create a TRPC client to connect to the API
-    const client = createTRPCProxyClient<AppRouter>({
-      transformer: superjson,
-      links: [
-        httpBatchLink({
-          url: process.env.API_URL ?? 'http://localhost:4000/api/trpc',
-        }),
-      ],
-    });
+    // Use the centralized TRPC client
+    const client = createClient();
 
     // Call the getById endpoint
     console.log(`[TEST CHAMPION] Calling champion.getById endpoint...`);
@@ -55,11 +40,4 @@ export default async function testChampionEndpoint(
       result: error instanceof Error ? error.message : String(error),
     };
   }
-}
-
-// This allows the script to be run directly
-if (process.argv[1] === import.meta.url) {
-  testChampionEndpoint()
-    .then((result) => console.log(result))
-    .catch((err) => console.error('Error running script:', err));
 }
