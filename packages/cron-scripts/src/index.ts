@@ -5,8 +5,10 @@
  */
 
 // Script exports for use in cron jobs
+export { default as createChampion } from './scripts/createChampion';
 export { default as getChampionById } from './scripts/getChampionById';
 export { default as sampleScript } from './scripts/sampleScript';
+export { default as updateChampion } from './scripts/updateChampion';
 
 // Add more exports as needed when creating new scripts
 // export { default as anotherScript } from './scripts/another-script';
