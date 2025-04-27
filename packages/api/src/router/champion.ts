@@ -1,9 +1,21 @@
-import { getChampionByIdHandler } from '../controllers/champion.controller';
-import { getChampionByIdInput } from '../schemas/champion.schema';
+import {
+  createChampionHandler,
+  getChampionByIdHandler,
+  updateChampionHandler,
+} from '../controllers/champion.controller';
+import { createChampionInput, getChampionByIdInput, updateChampionInput } from '../schemas/champion.schema';
 import { createTRPCRouter, publicProcedure } from '../trpc';
 
 export const championRouter = createTRPCRouter({
   getById: publicProcedure
     .input(getChampionByIdInput)
     .query(({ ctx, input }) => getChampionByIdHandler({ ctx, input })),
+
+  createChampion: publicProcedure
+    .input(createChampionInput)
+    .mutation(({ ctx, input }) => createChampionHandler({ ctx, input })),
+
+  updateChampion: publicProcedure
+    .input(updateChampionInput)
+    .mutation(({ ctx, input }) => updateChampionHandler({ ctx, input })),
 });

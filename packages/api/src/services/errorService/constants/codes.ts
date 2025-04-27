@@ -6,9 +6,8 @@ export const ErrorCodes = {
   Champion: {
     NoChampion: 'NoChampion',
     NoChampions: 'NoChampions',
-    NoChampionsByRarety: 'NoChampionsByRarety',
-    NoChampionsBySeason: 'NoChampionsBySeason',
-    NoChampionsByPackId: 'NoChampionsByPackId',
+    NotCreated: 'NotCreated',
+    NotUpdated: 'NotUpdated',
   },
   Common: {
     ConfigNotFound: 'ConfigNotFound',
