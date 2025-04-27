@@ -14,7 +14,7 @@ export type UpdateChampionOptions = {
 const scriptId = 'updateChampion';
 
 /**
- * Script to test the updateChampion endpoint.
+ * Script to update a champion in the database.
  */
 export default async function updateChampion(options: UpdateChampionOptions): Promise<{ status: string; result: any }> {
   console.log(`[${scriptId}] Updating champion with data:`, options);

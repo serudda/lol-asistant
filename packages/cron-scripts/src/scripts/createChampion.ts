@@ -12,7 +12,7 @@ type CreateChampionOptions = {
 const scriptId = 'createChampion';
 
 /**
- * Script to test the createChampion endpoint.
+ * Script to create a champion in the database.
  */
 export default async function createChampion(options: CreateChampionOptions): Promise<{ status: string; result: any }> {
   const { name, slug, imageUrl, stats, spells, passive } = options;
