@@ -9,14 +9,14 @@ import { TRPCError } from '@trpc/server';
  * @param domain Domain where the error occurred.
  * @param handlerId Handler ID.
  * @param error TRPC error.
- * @throws TRPCError transformed if necessary.
+ * @returns A transformed TRPCError if needed.
  */
-export const handleTRPCError = (domain: string, handlerId: string, error: TRPCError): never => {
+export const handleTRPCError = (domain: string, handlerId: string, error: TRPCError): TRPCError => {
   console.error(`[${domain}][${handlerId}] TRPC Error: Code=${error.code}, Message=${error.message}`, error.cause);
 
   // Transform specific errors if necessary
   if (error.code === TRPCErrorCode.UNAUTHORIZED) {
-    throw new TRPCError({
+    return new TRPCError({
       code: TRPCErrorCode.UNAUTHORIZED,
       message: ErrorMessages.User.UnAuthorized,
       cause: error,
@@ -24,5 +24,5 @@ export const handleTRPCError = (domain: string, handlerId: string, error: TRPCEr
   }
 
   // For other TRPC errors, simply forward them
-  throw error;
+  return error;
 };

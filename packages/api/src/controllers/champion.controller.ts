@@ -1,8 +1,6 @@
-import { Response, TRPCErrorCode, type ChampionResponse, type Params } from '../common';
+import { Response, type ChampionResponse, type Params } from '../common';
 import type { GetChampionByIdInputType } from '../schemas/champion.schema';
-import { ErrorCodes, ErrorMessages, errorResponse } from '../services';
-import { TRPCError } from '@trpc/server';
-import { z } from 'zod';
+import { ErrorCodes, ErrorMessages, errorResponse, handleError } from '../services';
 
 // Id domain to handle errors
 const domain = 'CHAMPION';
@@ -18,8 +16,8 @@ export const getChampionByIdHandler = async ({
   ctx,
   input,
 }: Params<GetChampionByIdInputType>): Promise<ChampionResponse> => {
+  const handlerId = 'getChampionByIdHandler';
   try {
-    const handlerId = 'getChampionByIdHandler';
     const { id } = input;
     const champion = await ctx.prisma.champion.findUnique({ where: { id } });
 
@@ -33,31 +31,6 @@ export const getChampionByIdHandler = async ({
       },
     };
   } catch (error: unknown) {
-    if (error instanceof z.ZodError) {
-      throw new TRPCError({
-        code: TRPCErrorCode.BAD_REQUEST,
-        message: ErrorMessages.Common.InvalidInput,
-      });
-    }
-
-    if (error instanceof TRPCError) {
-      if (error.code === TRPCErrorCode.UNAUTHORIZED) {
-        throw new TRPCError({
-          code: TRPCErrorCode.UNAUTHORIZED,
-          message: ErrorMessages.User.UnAuthorized,
-        });
-      }
-
-      throw new TRPCError({
-        code: TRPCErrorCode.INTERNAL_SERVER_ERROR,
-        message: error.message,
-      });
-    }
-
-    console.log('***** INTERNAL_SERVER_ERROR *****', error);
-    throw new TRPCError({
-      code: TRPCErrorCode.INTERNAL_SERVER_ERROR,
-      message: ErrorMessages.Common.Unknown,
-    });
+    throw handleError(domain, handlerId, error);
   }
 };
