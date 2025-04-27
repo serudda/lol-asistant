@@ -42,7 +42,7 @@ export default async function createChampion(options: CreateChampionOptions): Pr
 
 /*
   Run the script
-  `pnpm script:run createChampion name="Ahri" slug="ahri" imageUrl="https://ddragon.leagueoflegends.com/cdn/15.8.1/img/champion/Ahri.png"
+  `pnpm script:run createChampion name="Ahri" slug="ahri" imageUrl="https://ddragon.leagueoflegends.com/cdn/15.8.1/img/champion/Ahri.png" \
   stats="{}" spells="{}" passive="{}"`
  
   This script creates a champion in the database.
