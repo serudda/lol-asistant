@@ -57,6 +57,18 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
     - Configurar `CRON_SECRET` en Vercel.
     - Desplegar.
     - _Criterio de Éxito:_ Cron visible en Vercel, se ejecuta, logs OK.
+7.  **Implementar Endpoints CRUD Campeones en `packages/api`:**
+    - Definir rutas y handlers para `createChampion` (POST) y `updateChampion` (PUT/PATCH, por ID/key) en `packages/api`.
+    - Incluir validación de payloads para ambos endpoints.
+    - Conectar con `packages/db` para crear/actualizar registros.
+    - _Criterio de Éxito:_ Ambos endpoints existen, son llamables, y realizan la operación correcta (crear o actualizar) en la BD.
+8.  **Crear Script `updateChampionData` en `packages/cron-scripts`:**
+    - Crear `src/scripts/updateChampionData.ts`.
+    - El script debe obtener los datos de campeones (ej. API Riot).
+    - Para cada campeón, verificar si existe en nuestra BD (quizás con un endpoint `getChampion` o una consulta directa si la lógica está en el script).
+    - Llamar a `createChampion` si no existe, o a `updateChampion` si existe.
+    - Manejar respuestas y errores.
+    - _Criterio de Éxito:_ `pnpm --filter @lol-assistant/cron-scripts run start updateChampionData` ejecuta el script, sincroniza los datos llamando al endpoint apropiado (create o update) para cada campeón, y reporta el resultado.
 
 ## Tablero de Estado del Proyecto
 
@@ -66,6 +78,8 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
 - [x] Implementar Runner de Scripts Locales en `packages/cron-scripts`
 - [ ] Implementar Endpoint API Serverless Específico
 - [ ] Configurar Vercel Cron Job
+- [ ] Implementar Endpoints CRUD Campeones en `packages/api`
+- [ ] Crear Script `updateChampionData` en `packages/cron-scripts`
 
 ## Comentarios o Solicitudes de Asistencia del Executor
 
