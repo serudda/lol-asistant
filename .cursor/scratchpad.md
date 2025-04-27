@@ -78,14 +78,15 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
 - [x] Implementar Runner de Scripts Locales en `packages/cron-scripts`
 - [ ] Implementar Endpoint API Serverless Específico
 - [ ] Configurar Vercel Cron Job
-- [ ] Implementar Endpoints CRUD Campeones en `packages/api`
-- [ ] Crear Script `updateChampionData` en `packages/cron-scripts`
+- [x] Implementar Endpoints CRUD Campeones en `packages/api`
+- [x] Crear Script `updateChampionData` en `packages/cron-scripts`
 
 ## Comentarios o Solicitudes de Asistencia del Executor
 
 - **Tarea 1:** Verificado `pnpm-workspace.yaml`. Incluye `packages/*` y `apps/*`. Ejecutado `pnpm install` con éxito. Configuración del monorepo lista para los nuevos paquetes/directorios.
 - **Tarea 2:** Creado paquete `packages/cron-scripts` con estructura base (package.json, tsconfig.json). Añadido script de ejemplo `sample-script.ts` e implementado `index.ts` para exportación. Corregidas dependencias para usar las mismas versiones del monorepo existente. Actualizado `tsconfig.json` para extender de `@lol-assistant/typescript-config/internal-package.json` y usar la misma configuración de módulos que otros paquetes (`moduleResolution: "Bundler"`). Compilación exitosa con `pnpm --filter @lol-assistant/cron-scripts run build`.
 - **Tarea 4:** Implementado y probado el runner de scripts locales. Corregidos problemas de resolución de módulos para `ts-node` utilizando `--experimental-specifier-resolution=node`. Verificado el funcionamiento con `pnpm --filter @lol-assistant/cron-scripts run start sample-script` y la capacidad de pasar parámetros como `timestamp=true message="Prueba personalizada"`.
+- **Tarea 7 y 8:** Implementados endpoints CRUD para campeones y script de actualización. El script `updateChampion` permite actualizar campos específicos de un campeón sin sobrescribir valores existentes no proporcionados. Verificado el funcionamiento con `pnpm script:run updateChampion id="<champion-id>" name="New Name"`.
 
 ## Lecciones
 
