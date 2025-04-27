@@ -32,10 +32,10 @@ export const updateChampionInput = z.object({
   id: z.string(),
   name: z.string().optional(),
   slug: z.string().optional(),
-  imageUrl: z.string().default(''),
-  stats: z.record(z.string(), z.any()).default({}),
-  spells: z.record(z.string(), z.any()).default({}),
-  passive: z.record(z.string(), z.any()).default({}),
+  imageUrl: z.string().optional(),
+  stats: z.record(z.string(), z.any()).optional(),
+  spells: z.record(z.string(), z.any()).optional(),
+  passive: z.record(z.string(), z.any()).optional(),
   isActive: z.boolean().optional(),
 });
 export type UpdateChampionInputType = TypeOf<typeof updateChampionInput>;
