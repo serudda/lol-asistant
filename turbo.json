@@ -19,6 +19,9 @@
       "inputs": ["prisma/schema.prisma"],
       "cache": false
     },
+    "script:run": {
+      "cache": false
+    },
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],

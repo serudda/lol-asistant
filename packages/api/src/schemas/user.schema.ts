@@ -28,8 +28,6 @@ export const createUserInput = z.object({
   username: z.string(),
   email: z.string().optional(),
   image: z.string().default(''),
-  coins: z.number().default(0),
-  gems: z.number().default(0),
 });
 export type CreateUserInputType = TypeOf<typeof createUserInput>;
 

@@ -39,10 +39,3 @@ export default async function sampleScript(
     message: `Script executed successfully: ${message}`,
   };
 }
-
-// This allows the script to be run directly if needed
-if (process.argv[1] === import.meta.url) {
-  sampleScript({ timestamp: true })
-    .then((result) => console.log(result))
-    .catch((err) => console.error('Error running script:', err));
-}
