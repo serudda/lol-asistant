@@ -16,7 +16,7 @@ const scriptId = 'updateChampion';
 /**
  * Script to update a champion in the database.
  */
-export default async function updateChampion(options: UpdateChampionOptions): Promise<{ status: string; result: any }> {
+const updateChampion = async (options: UpdateChampionOptions): Promise<{ status: string; result: any }> => {
   console.log(`[${scriptId}] Updating champion with data:`, options);
   const client = createClient();
 
@@ -28,7 +28,9 @@ export default async function updateChampion(options: UpdateChampionOptions): Pr
     console.error(`[${scriptId}] Error updating champion:`, error);
     return { status: 'error', result: error instanceof Error ? error.message : String(error) };
   }
-}
+};
+
+export default updateChampion;
 
 /*
   Run the script

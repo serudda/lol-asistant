@@ -14,7 +14,7 @@ const scriptId = 'createChampion';
 /**
  * Script to create a champion in the database.
  */
-export default async function createChampion(options: CreateChampionOptions): Promise<{ status: string; result: any }> {
+const createChampion = async (options: CreateChampionOptions): Promise<{ status: string; result: any }> => {
   const { name, slug, imageUrl, stats, spells, passive } = options;
 
   // Provide default values if not specified
@@ -38,7 +38,9 @@ export default async function createChampion(options: CreateChampionOptions): Pr
     console.error(`[${scriptId}] Error creating champion:`, error);
     return { status: 'error', result: error instanceof Error ? error.message : String(error) };
   }
-}
+};
+
+export default createChampion;
 
 /*
   Run the script
