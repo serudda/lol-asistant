@@ -1,11 +1,14 @@
 import { createClient } from '../../../utils/trpc-client';
 import { OpenAIEmbeddings } from '@langchain/openai';
-import { config } from 'dotenv';
 
-config();
+// Retrieve API key from environment (loaded by run.ts)
+const apiKey = process.env.OPENAI_API_KEY;
+if (!apiKey) {
+  throw new Error('OPENAI_API_KEY is not defined in environment variables');
+}
 
 const embeddings = new OpenAIEmbeddings({
-  openAIApiKey: process.env.OPENAI_API_KEY,
+  openAIApiKey: apiKey,
 });
 
 export const saveNewPatch = async (summary: string, patchVersion: string, publishedDate: string): Promise<void> => {

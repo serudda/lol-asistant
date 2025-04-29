@@ -9,7 +9,7 @@
     "build": "tsc",
     "lint": "eslint . --ext .ts",
     "clean": "rm -rf dist",
-    "script:run": "NODE_OPTIONS=--experimental-specifier-resolution=node node --loader ts-node/esm src/run.ts"
+    "script:run": "DOTENV_CONFIG_PATH=../../.env.local node --require dotenv/config --experimental-specifier-resolution=node --loader ts-node/esm src/run.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

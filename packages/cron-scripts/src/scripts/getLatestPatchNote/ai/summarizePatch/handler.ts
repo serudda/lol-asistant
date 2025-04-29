@@ -12,20 +12,12 @@ import { ChatOpenAI } from '@langchain/openai';
  */
 export const summarizePatchHandler = async (text: string): Promise<string> => {
   const temperature = defaultTemperature;
-  const apiKey = process.env.OPENAI_API_KEY;
-
-  if (!apiKey) {
-    throw new Error('OPENAI_API_KEY is not defined in environment variables');
-  }
-
-  console.log('[summarizePatch] - API Key:', apiKey ? '***' : 'undefined');
 
   const model = new ChatOpenAI({
     modelName,
     temperature,
     frequencyPenalty: 0,
     presencePenalty: 0,
-    apiKey,
   });
 
   const prompt = ChatPromptTemplate.fromMessages([
