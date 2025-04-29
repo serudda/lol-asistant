@@ -3,14 +3,20 @@ import * as cheerio from 'cheerio';
 
 const BASE_URL = 'https://www.leagueoflegends.com';
 
+interface ScrapLatestPatchNotesResponse {
+  url: string;
+  textOnly: string;
+  patchVersion: string;
+  publishedDate: string;
+}
+
 /**
- * Scrap latest patch notes.
+ * Scrap latest patch notes from the official website of
+ * League of Legends.
  *
  * @returns Patch notes data object.
  */
-export const scrapLatestPatchNotes = async (
-  url: string,
-): Promise<{ url: string; textOnly: string; patchVersion: string } | undefined> => {
+export const scrapLatestPatchNotes = async (url: string): Promise<ScrapLatestPatchNotesResponse | undefined> => {
   try {
     const { data: listHTML } = await axios.get(url);
     const $ = cheerio.load(listHTML as string);
@@ -30,6 +36,16 @@ export const scrapLatestPatchNotes = async (
 
     const { data: patchHTML } = await axios.get(fullPatchURL);
     const $$ = cheerio.load(patchHTML as string);
+
+    // Extract the published date
+    const metadataContainer = $$('.metadata-with-links');
+    const publishedDate = metadataContainer.find('time').first().attr('datetime');
+    console.log(`[Scraping] Published date: ${publishedDate}`);
+
+    if (!publishedDate) {
+      console.error('We were not able to find the published date');
+      return;
+    }
 
     // Extract the main content
     const patchContent = $$('#patch-notes-container');
@@ -52,6 +68,7 @@ export const scrapLatestPatchNotes = async (
       url: fullPatchURL,
       textOnly: formattedText,
       patchVersion,
+      publishedDate,
     };
   } catch (error) {
     console.error(`Error fetching patch notes:`, error);
