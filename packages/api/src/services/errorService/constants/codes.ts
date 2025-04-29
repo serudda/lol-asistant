@@ -9,6 +9,9 @@ export const ErrorCodes = {
     NotCreated: 'NotCreated',
     NotUpdated: 'NotUpdated',
   },
+  PatchNote: {
+    NotCreated: 'NotCreated',
+  },
   Common: {
     ConfigNotFound: 'ConfigNotFound',
     InvalidInput: 'InvalidInput',

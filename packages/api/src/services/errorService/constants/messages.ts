@@ -36,4 +36,7 @@ export const ErrorMessages: ErrorMessageType = {
     NotCreated: 'Algo ha sucedido, no pudimos crear al campeón',
     NotUpdated: 'Algo ha sucedido, no pudimos actualizar al campeón',
   },
+  PatchNote: {
+    NotCreated: 'Algo ha sucedido, no pudimos crear la nota de parche',
+  },
 };
