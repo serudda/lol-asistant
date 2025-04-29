@@ -45,14 +45,15 @@
     }
   },
   "globalEnv": [
+    "API_PORT",
+    "API_URL",
     "CI",
+    "DATABASE_URL",
+    "NODE_ENV",
+    "OPENAI_API_KEY",
     "PORT",
     "PREFIX",
-    "NODE_ENV",
     "SKIP_ENV_VALIDATION",
-    "API_URL",
-    "API_PORT",
-    "DATABASE_URL",
     "VERCEL_URL",
     "WEB_URL"
   ]
