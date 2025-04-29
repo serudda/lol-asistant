@@ -145,7 +145,7 @@ model Subscription {
 model PatchNote {
     id            String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     patchVersion  String
-    date          DateTime
+    publishedDate String
     summary       String
     embedding     Unsupported("vector")?
     isActive      Boolean                @default(true) @map("is_active")
