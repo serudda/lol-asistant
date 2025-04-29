@@ -1,4 +1,4 @@
-import type { PatchNoteResponse} from '../common';
+import type { PatchNoteResponse } from '../common';
 import { Response, type Params } from '../common';
 import type { CreatePatchNoteInputType, GetLatestPatchNoteInputType } from '../schemas/patchNote.schema';
 import { ErrorCodes, ErrorMessages, errorResponse, handleError } from '../services';
@@ -18,7 +18,7 @@ export const getLatestPatchNoteHandler = async ({
   const handlerId = 'getLatestPatchNoteHandler';
   try {
     const patchNote = await ctx.prisma.patchNote.findFirst({
-      orderBy: { date: 'desc' },
+      orderBy: { publishedDate: 'desc' },
     });
 
     if (!patchNote)
@@ -43,12 +43,31 @@ export const createPatchNoteHandler = async ({
 }: Params<CreatePatchNoteInputType>): Promise<PatchNoteResponse> => {
   const handlerId = 'createPatchNoteHandler';
   try {
-    const patchNote = await ctx.prisma.patchNote.create({ data: input });
+    const { summary, patchVersion, publishedDate, embedding } = input;
 
-    if (!patchNote)
-      return errorResponse(domain, handlerId, ErrorCodes.PatchNote.NotCreated, ErrorMessages.PatchNote.NotCreated);
+    // Start transaction
+    return await ctx.prisma.$transaction(async (tx) => {
+      // Create patch note
+      const patchNote = await tx.patchNote.create({
+        data: {
+          summary,
+          patchVersion,
+          publishedDate,
+        },
+      });
 
-    return { result: { status: Response.SUCCESS, patchNote } };
+      if (!patchNote)
+        return errorResponse(domain, handlerId, ErrorCodes.PatchNote.NotCreated, ErrorMessages.PatchNote.NotCreated);
+
+      // Update embedding
+      await tx.$executeRaw`
+        UPDATE patch_notes 
+        SET embedding = ${embedding}::vector
+        WHERE id = ${patchNote.id}::uuid
+      `;
+
+      return { result: { status: Response.SUCCESS, patchNote } };
+    });
   } catch (error: unknown) {
     throw handleError(domain, handlerId, error);
   }

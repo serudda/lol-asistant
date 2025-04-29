@@ -10,7 +10,7 @@ export type GetLatestPatchNoteInputType = TypeOf<typeof getLatestPatchNoteInput>
 export const createPatchNoteInput = z.object({
   summary: z.string(),
   patchVersion: z.string(),
-  date: z.string(),
+  publishedDate: z.string(),
   embedding: z.array(z.number()),
 });
 

@@ -1,6 +1,7 @@
 import { accountRouter } from './router/account';
 import { championRouter } from './router/champion';
 import { configRouter } from './router/config';
+import { patchNoteRouter } from './router/patchNote';
 import { userRouter } from './router/user';
 import { createTRPCRouter } from './trpc';
 
@@ -9,6 +10,7 @@ export const appRouter = createTRPCRouter({
   champion: championRouter,
   config: configRouter,
   user: userRouter,
+  patchNote: patchNoteRouter,
 });
 
 // export type definition of API
