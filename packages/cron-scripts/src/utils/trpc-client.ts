@@ -7,7 +7,7 @@ import superjson from 'superjson';
  *
  * @returns TRPC client instance.
  */
-export function createClient() {
+export const createClient = () => {
   return createTRPCProxyClient<AppRouter>({
     transformer: superjson,
     links: [
@@ -16,4 +16,4 @@ export function createClient() {
       }),
     ],
   });
-}
+};
