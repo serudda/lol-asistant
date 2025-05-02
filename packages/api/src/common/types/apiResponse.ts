@@ -1,9 +1,5 @@
 import type { Account, Champion, PatchNote, User } from '@lol-assistant/db';
-
-export enum ResponseStatus {
-  SUCCESS = 'SUCCESS',
-  ERROR = 'ERROR',
-}
+import type { ResponseStatus } from '../constants';
 
 export interface BaseResponse {
   status: ResponseStatus;
