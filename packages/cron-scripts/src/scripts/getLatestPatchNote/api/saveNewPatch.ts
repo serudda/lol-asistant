@@ -18,9 +18,8 @@ export const saveNewPatch = async (summary: string, patchVersion: string, publis
     });
 
     console.log('[Saving] - Patch inserted correctly with embedding.');
-    process.exit(0);
   } catch (error) {
     console.error('[Saving] - Error inserting patch:', error);
-    process.exit(1);
+    throw error;
   }
 };

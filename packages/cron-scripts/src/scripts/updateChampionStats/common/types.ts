@@ -1,4 +1,4 @@
-// Types related to the Data Dragon API responses and parsed data
+import type { Champion } from '@lol-assistant/db';
 
 /**
  * Represents the structure of the stats object within
@@ -107,3 +107,9 @@ export interface DDragonChampionData {
   passive: DDragonPassive;
   recommended?: any; // Structure varies, often unused
 }
+
+/**
+ * Represents the structure of a champion input for the
+ * champion service.
+ */
+export type ChampionSaveInput = Omit<Champion, 'id' | 'isActive' | 'createdAt' | 'updatedAt'>;

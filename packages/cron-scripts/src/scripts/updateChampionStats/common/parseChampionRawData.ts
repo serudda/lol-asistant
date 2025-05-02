@@ -1,6 +1,5 @@
 import { DATA_DRAGON_BASE_URL } from './constants';
-import type { DDragonChampionData } from './types';
-import type { Champion } from '@prisma/client';
+import type { ChampionSaveInput, DDragonChampionData } from './types';
 
 /**
  * Parse and structure relevant stats from raw champion
@@ -11,7 +10,7 @@ import type { Champion } from '@prisma/client';
  * @returns Structured champion stats object ready for DB
  *   insertion/update.
  */
-export const parseChampionRawData = (championData: DDragonChampionData, patchVersion: string): Partial<Champion> => {
+export const parseChampionRawData = (championData: DDragonChampionData, patchVersion: string): ChampionSaveInput => {
   // Note: championData here is already response.data.data[championId]
   const champion = championData;
 
