@@ -1,10 +1,8 @@
 import { summarizePatchHandler } from './getLatestPatchNote/ai/summarizePatch/handler';
 import { saveNewPatch } from './getLatestPatchNote/api/saveNewPatch';
+import { PATCH_TAG_URL } from './getLatestPatchNote/common/constants';
 import { scrapLatestPatchNotes } from './getLatestPatchNote/common/scrapLatestPatchNote';
 
-// Configuration constants
-const BASE_URL = 'https://www.leagueoflegends.com';
-const PATCH_TAG_URL = `${BASE_URL}/en-us/news/tags/patch-notes/`;
 const scriptId = '🛠️  getLatestPatchNote';
 
 /**
