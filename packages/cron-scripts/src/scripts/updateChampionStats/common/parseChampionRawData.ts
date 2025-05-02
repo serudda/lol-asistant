@@ -1,5 +1,5 @@
 import { DATA_DRAGON_BASE_URL } from './constants';
-import type { ChampionSaveInput, DDragonChampionData } from './types';
+import type { ChampionSaveInput, DDragonChampionData, DDragonSpell } from './types';
 
 /**
  * Parse and structure relevant stats from raw champion
@@ -45,7 +45,7 @@ export const parseChampionRawData = (championData: DDragonChampionData, patchVer
     };
 
     // Extract active abilities (spells) with key data
-    const spells = champion.spells.map((spell: any) => ({
+    const spells = champion.spells.map((spell: DDragonSpell) => ({
       id: spell.id, // e.g., "AatroxQ"
       name: spell.name,
       description: spell.description,
