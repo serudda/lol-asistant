@@ -112,4 +112,7 @@ export interface DDragonChampionData {
  * Represents the structure of a champion input for the
  * champion service.
  */
-export type ChampionSaveInput = Omit<Champion, 'id' | 'isActive' | 'createdAt' | 'updatedAt'>;
+export type ChampionSaveInput = Omit<Champion, 'id' | 'isActive' | 'createdAt' | 'updatedAt' | 'spells'> & {
+  // Note: spells is an array of objects, but the type is not defined in the Champion interface
+  spells: Record<string, any>[];
+};
