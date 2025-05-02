@@ -1,6 +1,5 @@
-import { Response } from '@lol-assistant/api';
+import { ResponseStatus } from '@lol-assistant/api';
 import { createClient } from '../../../utils/trpc-client';
-import { transformJsonValue } from '../common/transformJSONValue';
 import type { ChampionSaveInput } from '../common/types';
 
 export const saveChampion = async (champion: ChampionSaveInput, patchVersion: string): Promise<void> => {
@@ -17,14 +16,14 @@ export const saveChampion = async (champion: ChampionSaveInput, patchVersion: st
       name: champion.name,
       slug: champion.slug,
       imageUrl: champion.imageUrl ?? '',
-      stats: transformJsonValue(champion.stats),
-      spells: transformJsonValue(champion.spells),
-      passive: transformJsonValue(champion.passive),
+      stats: champion.stats as Record<string, any>,
+      spells: champion.spells as unknown as Record<string, any>[],
+      passive: champion.passive as Record<string, any>,
       lastPatchVersion: patchVersion,
     };
 
     // If the champion already exists, update it
-    if (existingChampion.result.status === Response.SUCCESS && existingChampion.result.champion) {
+    if (existingChampion.result.status === ResponseStatus.SUCCESS && existingChampion.result.champion) {
       console.log(`[Saving] - Updating existing champion ${champion.slug}...`);
       await client.champion.updateChampion.mutate({
         id: existingChampion.result.champion.id,
