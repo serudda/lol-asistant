@@ -69,18 +69,58 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
     - Llamar a `createChampion` si no existe, o a `updateChampion` si existe.
     - Manejar respuestas y errores.
     - _Criterio de Éxito:_ `pnpm --filter @lol-assistant/cron-scripts run start updateChampionData` ejecuta el script, sincroniza los datos llamando al endpoint apropiado (create o update) para cada campeón, y reporta el resultado.
-9.  **Adaptar Script de Webscrapping**
-    - Mover script existente a `packages/cron-scripts/src/scripts/check-patch-notes.ts`
-    - Adaptar para usar el modelo `PatchNote` existente
-    - _Criterio de Éxito:_ Script ejecutable localmente
-10. **Crear Endpoint para Cronjob**
+9.  **Adaptar Script de Webscrapping (`getLatestPatchNote`)**
+    - Adaptar `packages/cron-scripts/src/scripts/getLatestPatchNote.ts` para usar el modelo `PatchNote` de la BD (Supabase) y la lógica de guardado/actualización implementada en `packages/api` (si procede, o usar Supabase client directamente si es más simple).
+    - Refinar la estructura interna siguiendo el ejemplo de `api/`, `common/`, `ai/` dentro del script.
+    - _Criterio de Éxito:_ Script `getLatestPatchNote` ejecutable localmente (`pnpm script:run getLatestPatchNote`), obtiene, procesa (resume) y guarda correctamente el último parche en Supabase.
+10. **Crear Endpoint para Cronjob (`check-patch-notes`)**
     - Implementar en `api/crons/check-patch-notes.ts`
-    - Integrar con el script de webscrapping
-    - _Criterio de Éxito:_ Endpoint accesible y funcional
-11. **Configurar Cronjob en Vercel**
-    - Añadir configuración en `vercel.json`
-    - Establecer frecuencia de ejecución
-    - _Criterio de Éxito:_ Cronjob configurado y programado
+    - Integrar con el script `getLatestPatchNote` (importar y ejecutar).
+    - Añadir validación de secret.
+    - _Criterio de Éxito:_ Endpoint desplegado accesible, ejecuta `getLatestPatchNote` y devuelve estado.
+11. **Configurar Cronjob en Vercel (`check-patch-notes`)**
+    - Añadir configuración en `vercel.json`.
+    - Establecer frecuencia de ejecución.
+    - Configurar `CRON_SECRET`.
+    - _Criterio de Éxito:_ Cronjob configurado, programado y ejecutándose correctamente en Vercel.
+
+### Nueva Tarea: Sincronizar Datos de Campeones desde DDragon
+
+12. **Refactorizar Script `updateChampionStats.ts`:**
+    - Mover a `packages/cron-scripts/src/scripts/`.
+    - Reestructurar internamente con subdirectorios (`common/` para fetching/parsing DDragon, `api/` para interacción Supabase).
+    - Modificar para aceptar la versión del juego (`version`) como parámetro de entrada.
+    - _Criterio de Éxito:_ Script reubicado, estructura interna modularizada, acepta `version` como argumento CLI.
+13. **Implementar Obtención de Lista Maestra de Campeones (DDragon):**
+    - Crear función en `common/` (dentro de `updateChampionStats/`) para obtener el archivo `champion.json` de DDragon para la `version` especificada (ej. `https://ddragon.leagueoflegends.com/cdn/{VERSION}/data/en_US/champion.json`).
+    - Extraer la lista de IDs (que usaremos como `slug`) de todos los campeones del objeto `data` de la respuesta.
+    - Manejar error si `champion.json` no se puede obtener (log + exit).
+    - _Criterio de Éxito:_ Función devuelve array de slugs (IDs) de campeones para la versión dada.
+14. **Implementar Bucle de Procesamiento y Obtención Detallada:**
+    - Modificar el script principal para iterar sobre la lista de `slugs` obtenida en Tarea 13.
+    - Para cada `slug`:
+      - Llamar a función en `common/` para obtener datos detallados del campeón desde DDragon (ej. `.../{VERSION}/data/en_US/champion/{slug}.json`).
+      - Llamar a función en `common/` para parsear/extraer los datos relevantes (`extractChampionStats` refactorizada).
+      - Implementar manejo de errores para esta iteración: si falla el fetch o parseo para un campeón, registrar el error (con `slug` y `version`) y **continuar con el siguiente campeón**.
+    - _Criterio de Éxito:_ Script itera sobre todos los slugs, obtiene y parsea datos para cada uno. Logs confirman procesamiento y manejo de errores individuales sin detener el bucle.
+15. **Implementar Lógica de Guardado Upsert con Prisma:**
+    - Crear función en `api/` (dentro de la estructura de `updateChampionStats`, e.g., `saveChampionDataToDb`) que reciba los datos parseados del campeón.
+    - Importar y utilizar el cliente Prisma configurado desde `@lol-assistant/db`.
+    - Usar la operación `prisma.champion.upsert`:
+      - `where`: `{ slug: championSlug }` (utilizando el `slug` del campeón como identificador único).
+      - `create`: Proporcionar los datos parseados necesarios para crear un nuevo registro `Champion`.
+      - `update`: Proporcionar los datos parseados para actualizar un registro `Champion` existente.
+    - La función encapsulará la llamada a Prisma.
+    - _Criterio de Éxito:_ Función realiza `upsert` correctamente usando Prisma: crea un nuevo campeón si el `slug` no existe, o actualiza los datos si el `slug` ya existe. Verificación manual en BD.
+16. **Integrar Guardado en Bucle Principal y Logging Final:**
+    - Dentro del bucle de la Tarea 14, después de parsear exitosamente un campeón, llamar a la función `saveChampionDataToDb` (Tarea 15) con los datos parseados.
+    - Añadir manejo de errores específico para la operación de guardado: si falla, registrar el error (con `slug`) y continuar con el siguiente campeón.
+    - Al final del script, añadir un resumen en los logs: número total de campeones procesados, número de éxitos, número de fallos (fetch/parse), número de fallos (guardado).
+    - _Criterio de Éxito:_ Script completo (`pnpm script:run updateChampionStats version=<version>`) se ejecuta, procesa todos los campeones de DDragon para la versión, intenta guardarlos/actualizarlos en Supabase via `upsert` usando el `slug`, maneja errores individuales, y reporta un resumen final. Verificación en BD de datos creados/actualizados.
+17. **(Opcional) Crear Endpoint y Cronjob Vercel:**
+    - Si se desea automatizar, crear endpoint en `api/crons/update-champion-stats.ts`.
+    - Configurar cronjob en `vercel.json`.
+    - _Criterio de Éxito:_ Cronjob automatizado funciona.
 
 ## Tablero de Estado del Proyecto
 
@@ -88,17 +128,22 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
 - [x] Crear Paquete `packages/cron-scripts`
 - [ ] Crear Directorio y Función Base para API Crons
 - [x] Implementar Runner de Scripts Locales en `packages/cron-scripts`
-- [ ] Implementar Endpoint API Serverless Específico
-- [ ] Configurar Vercel Cron Job
+- [ ] Implementar Endpoint API Serverless Específico (para `sample-cron`)
+- [ ] Configurar Vercel Cron Job (para `sample-cron`)
 - [x] Implementar Endpoints CRUD Campeones en `packages/api`
-- [x] Crear Script `updateChampionData` en `packages/cron-scripts`
+- [x] Crear Script `updateChampionData` en `packages/cron-scripts` (versión inicial, necesita refactor)
 - [x] Crear Schema para Patch Notes
 - [x] Implementar Endpoints Básicos de Patch Notes
-  - [x] Create Patch Note
-  - [x] Get Latest Patch Note
-- [ ] Adaptar Script de Webscrapping
-- [ ] Crear Endpoint para Cronjob
-- [ ] Configurar Cronjob en Vercel
+- [x] Adaptar Script de Webscrapping (`getLatestPatchNote`)
+- [ ] Crear Endpoint para Cronjob (`check-patch-notes`)
+- [ ] Configurar Cronjob en Vercel (`check-patch-notes`)
+- **Nueva Tarea: Sincronizar Datos de Campeones desde DDragon**
+  - [x] Refactorizar Script `updateChampionStats.ts`
+  - [ ] Implementar Obtención de Lista Maestra de Campeones (DDragon)
+  - [ ] Implementar Bucle de Procesamiento y Obtención Detallada
+  - [ ] Implementar Lógica de Guardado Upsert con Prisma
+  - [ ] Integrar Guardado en Bucle Principal y Logging Final
+  - [ ] (Opcional) Crear Endpoint y Cronjob Vercel
 
 ## Comentarios o Solicitudes de Asistencia del Executor
 
