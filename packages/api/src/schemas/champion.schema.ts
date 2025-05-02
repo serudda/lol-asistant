@@ -21,7 +21,7 @@ export const createChampionInput = z.object({
   slug: z.string(),
   imageUrl: z.string().default(''),
   stats: z.record(z.string(), z.any()).default({}),
-  spells: z.record(z.string(), z.any()).default({}),
+  spells: z.array(z.record(z.string(), z.any())).default([]),
   passive: z.record(z.string(), z.any()).default({}),
   lastPatchVersion: z.string(),
 });
@@ -35,7 +35,7 @@ export const updateChampionInput = z.object({
   slug: z.string().optional(),
   imageUrl: z.string().optional(),
   stats: z.record(z.string(), z.any()).optional(),
-  spells: z.record(z.string(), z.any()).optional(),
+  spells: z.array(z.record(z.string(), z.any())).optional(),
   passive: z.record(z.string(), z.any()).optional(),
   isActive: z.boolean().optional(),
   lastPatchVersion: z.string().optional(),
