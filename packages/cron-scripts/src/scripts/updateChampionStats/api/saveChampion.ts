@@ -1,12 +1,7 @@
 import { Response } from '@lol-assistant/api';
 import { createClient } from '../../../utils/trpc-client';
+import { transformJsonValue } from '../common/transformJSONValue';
 import type { ChampionSaveInput } from '../common/types';
-import type { JsonValue } from '@prisma/client/runtime/library';
-
-const transformJsonValue = (value: JsonValue | null): Record<string, any> | undefined => {
-  if (value === null) return undefined;
-  return value as Record<string, any>;
-};
 
 export const saveChampion = async (champion: ChampionSaveInput, patchVersion: string): Promise<void> => {
   try {
