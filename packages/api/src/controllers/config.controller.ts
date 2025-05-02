@@ -1,8 +1,8 @@
-import { TRPCError } from '@trpc/server';
-import { z } from 'zod';
-import { Response, TRPCErrorCode, type Params } from '../common';
+import { ResponseStatus, TRPCErrorCode, type Params } from '../common';
 import type { GetConfigInputType } from '../schemas/config.schema';
 import { ErrorCodes, ErrorMessages, errorResponse } from '../services';
+import { TRPCError } from '@trpc/server';
+import { z } from 'zod';
 
 // Id domain to handle errors
 const domain = 'CONFIG';
@@ -22,16 +22,11 @@ export const getConfigHandler = async ({ ctx }: Params<GetConfigInputType>) => {
 
     // Check if configuration was found
     if (!config || config.length === 0)
-      return errorResponse(
-        domain,
-        handlerId,
-        ErrorCodes.Common.ConfigNotFound,
-        ErrorMessages.Common.ConfigNotFound,
-      );
+      return errorResponse(domain, handlerId, ErrorCodes.Common.ConfigNotFound, ErrorMessages.Common.ConfigNotFound);
 
     return {
       result: {
-        status: Response.SUCCESS,
+        status: ResponseStatus.SUCCESS,
         config,
       },
     };

@@ -1,4 +1,4 @@
-import { Response, type ChampionResponse, type Params } from '../common';
+import { ResponseStatus, type ChampionResponse, type Params } from '../common';
 import type {
   CreateChampionInputType,
   GetChampionByIdInputType,
@@ -31,7 +31,7 @@ export const getChampionByIdHandler = async ({
 
     return {
       result: {
-        status: Response.SUCCESS,
+        status: ResponseStatus.SUCCESS,
         champion,
       },
     };
@@ -62,7 +62,7 @@ export const getChampionBySlugHandler = async ({
 
     return {
       result: {
-        status: Response.SUCCESS,
+        status: ResponseStatus.SUCCESS,
         champion,
       },
     };
@@ -100,7 +100,7 @@ export const createChampionHandler = async ({
     if (!champion)
       return errorResponse(domain, handlerId, ErrorCodes.Champion.NotCreated, ErrorMessages.Champion.NotCreated);
 
-    return { result: { status: Response.SUCCESS, champion } };
+    return { result: { status: ResponseStatus.SUCCESS, champion } };
   } catch (error: unknown) {
     throw handleError(domain, handlerId, error);
   }
@@ -138,7 +138,7 @@ export const updateChampionHandler = async ({
     if (!updatedChampion)
       return errorResponse(domain, handlerId, ErrorCodes.Champion.NotUpdated, ErrorMessages.Champion.NotUpdated);
 
-    return { result: { status: Response.SUCCESS, champion: updatedChampion } };
+    return { result: { status: ResponseStatus.SUCCESS, champion: updatedChampion } };
   } catch (error: unknown) {
     throw handleError(domain, handlerId, error);
   }

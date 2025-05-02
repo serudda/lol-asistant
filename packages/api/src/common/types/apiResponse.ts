@@ -1,16 +1,16 @@
 import type { Account, Champion, PatchNote, User } from '@lol-assistant/db';
 
-export enum Response {
+export enum ResponseStatus {
   SUCCESS = 'SUCCESS',
   ERROR = 'ERROR',
 }
 
 export interface BaseResponse {
-  status: Response;
+  status: ResponseStatus;
 }
 
 export type SuccessResponse<T> = BaseResponse & {
-  status: Response.SUCCESS;
+  status: ResponseStatus.SUCCESS;
 } & T;
 
 export interface ErrorDetail {
@@ -21,14 +21,14 @@ export interface ErrorDetail {
 }
 
 export type ErrorResponse = BaseResponse & {
-  status: Response.ERROR;
+  status: ResponseStatus.ERROR;
   error: ErrorDetail;
 };
 
 // Modificamos ApiResponse para que muestre todas las propiedades posibles
 export type ApiResponse<T> = {
   result: {
-    status: Response;
+    status: ResponseStatus;
     error?: ErrorDetail;
   } & Partial<T>;
 };
