@@ -192,3 +192,4 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
   - ✅ Logging detallado de progreso y resultados
   - ✅ Resumen final con estadísticas de éxito/fallo
   - ✅ Verificado funcionamiento con pruebas locales
+  - ✅ Confirmado funcionamiento tanto para creación como actualización de campeones
