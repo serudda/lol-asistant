@@ -151,13 +151,23 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
 - **Tarea 2:** Creado paquete `packages/cron-scripts` con estructura base (package.json, tsconfig.json). Añadido script de ejemplo `sample-script.ts` e implementado `index.ts` para exportación. Corregidas dependencias para usar las mismas versiones del monorepo existente. Actualizado `tsconfig.json` para extender de `@lol-assistant/typescript-config/internal-package.json` y usar la misma configuración de módulos que otros paquetes (`moduleResolution: "Bundler"`). Compilación exitosa con `pnpm --filter @lol-assistant/cron-scripts run build`.
 - **Tarea 4:** Implementado y probado el runner de scripts locales. Corregidos problemas de resolución de módulos para `ts-node` utilizando `--experimental-specifier-resolution=node`. Verificado el funcionamiento con `pnpm --filter @lol-assistant/cron-scripts run start sample-script` y la capacidad de pasar parámetros como `timestamp=true message="Prueba personalizada"`.
 - **Tarea 7 y 8:** Implementados endpoints CRUD para campeones y script de actualización. El script `updateChampion` permite actualizar campos específicos de un campeón sin sobrescribir valores existentes no proporcionados. Verificado el funcionamiento con `pnpm script:run updateChampion id="<champion-id>" name="New Name"`.
-- **Tarea 9 (Patch Notes):**
-  - ✅ Creado schema de validación en `packages/api/src/schemas/patchNote.schema.ts`
-  - ✅ Implementado controlador en `packages/api/src/controllers/patchNote.controller.ts`
-  - ✅ Implementados endpoints básicos:
-    - ✅ Create Patch Note
-    - ✅ Get Latest Patch Note (usando campo date para ordenamiento)
+- **Tarea 9:**
+  - Creado schema de validación en `packages/api/src/schemas/patchNote.schema.ts`
+  - Implementado controlador en `packages/api/src/controllers/patchNote.controller.ts`
+  - Implementados endpoints básicos:
+    - Create Patch Note
+    - Get Latest Patch Note (usando campo date para ordenamiento)
   - ⏳ Pendientes:
-    - Adaptar script de webscrapping
     - Crear endpoint para cronjob
     - Configurar cronjob en Vercel
+- **Tarea 10:** Refactorizado `updateChampionStats.ts`.
+  - ✅ Movida lógica de DDragon a `common/getChampionRawData.ts` y `common/parseChampionRawData.ts`.
+  - ✅ Criterio de Éxito: Script reubicado, estructura modularizada, acepta `patchVersion`.
+- **Tarea 11:**
+  - ✅ Actualizado schema de champion para incluir `lastPatchVersion`
+  - ✅ Mejorado controlador de champion con:
+    - ✅ Validación de duplicados (nombre/slug)
+    - ✅ Manejo explícito de `lastPatchVersion`
+    - ✅ Mejor manejo de errores
+  - ✅ Implementada lógica de upsert para actualizaciones
+  - ✅ Verificado funcionamiento con pruebas locales
