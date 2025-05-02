@@ -51,9 +51,9 @@ export const updateChampionStats = async ({ patchVersion, championSlug }: Update
 export default updateChampionStats;
 
 /*
-  Run the script `pnpm script:run updateChampionStats version=<game_version> championSlug=<champion_slug>`
+  Run the script `pnpm script:run updateChampionStats patchVersion=<game_version> championSlug=<champion_slug>`
  
-  Example: `pnpm script:run updateChampionStats version=14.1.1 championSlug=ahri`
+  Example: `pnpm script:run updateChampionStats patchVersion=14.1.1 championSlug=ahri`
  
   This script fetches champion data from the League of
   Legends Data Dragon API for a specific version, processes
