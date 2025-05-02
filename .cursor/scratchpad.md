@@ -106,7 +106,7 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
     - Dentro de `syncAllChampions.ts` (o un helper que llame), implementar la lógica para obtener el archivo `champion.json` de DDragon para la `patchVersion` especificada.
     - Extraer la lista de `slugs` de campeones del objeto `data`.
     - Manejar errores si `champion.json` no se puede obtener (log + posiblemente detener el script si la lista es necesaria para continuar).
-    - _Criterio de Éxito:_ `syncAllChampions.ts` puede obtener y loguear la lista de slugs para la versión dada. **(Pendiente)**
+    - _Criterio de Éxito:_ `syncAllChampions.ts` puede obtener y loguear la lista de slugs para la versión dada. **(Completado)**
 
 15. **Implementar Bucle de Procesamiento (en `syncAllChampions.ts`):**
 
@@ -114,19 +114,19 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
     - Para cada `slug`:
       - Importar y llamar a el script `updateChampionStats` para obtener y parsear los datos del campeón específico.
       - Implementar manejo de errores para esta iteración: si falla el fetch o parseo para un campeón, registrar el error (con `slug` y `version`) y **continuar con el siguiente campeón**.
-    - _Criterio de Éxito:_ `syncAllChampions.ts` itera sobre todos los slugs, intenta obtener y parsear datos para cada uno, loguea progreso/errores individuales y continúa. **(Pendiente)**
+    - _Criterio de Éxito:_ `syncAllChampions.ts` itera sobre todos los slugs, intenta obtener y parsear datos para cada uno, loguea progreso/errores individuales y continúa. **(Completado)**
 
 16. **Implementar Lógica de Guardado Upsert con Prisma (Ya existe, integrar en `syncAllChampions.ts`):**
 
     - La función `saveChampion` (o similar usando Prisma `upsert`) existe en `updateChampionStats/api/`. Debe ser llamada desde el bucle de `syncAllChampions.ts`.
-    - _Criterio de Éxito:_ La función `saveChampion` se llama correctamente dentro del bucle para los campeones procesados con éxito. **(Pendiente - Integración)**
+    - _Criterio de Éxito:_ La función `saveChampion` se llama correctamente dentro del bucle para los campeones procesados con éxito. **(Completado - Integrado en el bucle)**
 
 17. **Integrar Guardado en Bucle y Logging Final (en `syncAllChampions.ts`):**
 
     - Dentro del bucle de `syncAllChampions.ts` (Tarea 15), después de parsear exitosamente un campeón, llamar a la función `saveChampion` (Tarea 16) con los datos parseados y `patchVersion`.
     - Añadir manejo de errores específico para la operación de guardado: si falla, registrar el error (con `slug`) y continuar con el siguiente campeón.
     - Al final de `syncAllChampions.ts`, añadir un resumen en los logs: número total de campeones intentados, número de éxitos (fetch, parse, save), número de fallos por categoría (fetch/parse, guardado).
-    - _Criterio de Éxito:_ Script `syncAllChampions.ts` completo se ejecuta, procesa todos los campeones, intenta guardarlos/actualizarlos, maneja errores individuales, y reporta un resumen final. Verificación en BD. **(Pendiente)**
+    - _Criterio de Éxito:_ Script `syncAllChampions.ts` completo se ejecuta, procesa todos los campeones, intenta guardarlos/actualizarlos, maneja errores individuales, y reporta un resumen final. Verificación en BD. **(Completado)**
 
 18. **(Opcional) Crear Endpoint y Cronjob Vercel para `syncAllChampions`:**
     - Si se desea automatizar, crear endpoint en `api/crons/sync-all-champions.ts`.
@@ -152,10 +152,10 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
 - **Nueva Tarea: Sincronizar Datos de Campeones desde DDragon**
   - [x] Refactorizar Script `updateChampionStats.ts` (Tarea 12 - Rol aclarado)
   - [x] Crear Script Orquestador `syncAllChampions.ts` (Tarea 13)
-  - [ ] Implementar Obtención de Lista Maestra (en `syncAllChampions.ts`) (Tarea 14)
-  - [ ] Implementar Bucle de Procesamiento (en `syncAllChampions.ts`) (Tarea 15)
-  - [x] Implementar Lógica de Guardado Upsert con Prisma (Tarea 16 - Lógica existe, pendiente integración)
-  - [ ] Integrar Guardado en Bucle y Logging Final (en `syncAllChampions.ts`) (Tarea 17)
+  - [x] Implementar Obtención de Lista Maestra (en `syncAllChampions.ts`) (Tarea 14)
+  - [x] Implementar Bucle de Procesamiento (en `syncAllChampions.ts`) (Tarea 15)
+  - [x] Implementar Lógica de Guardado Upsert con Prisma (Tarea 16 - Integrado en el bucle)
+  - [x] Integrar Guardado en Bucle y Logging Final (en `syncAllChampions.ts`) (Tarea 17)
   - [ ] (Opcional) Crear Endpoint y Cronjob Vercel (Tarea 18)
 
 ## Comentarios o Solicitudes de Asistencia del Executor
@@ -185,3 +185,10 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
   - ✅ Implementada lógica de upsert para actualizaciones
   - ✅ Verificado funcionamiento con pruebas locales
 - **Tarea 13:** Creado script `packages/cron-scripts/src/scripts/syncAllChampions.ts`. Exportada y utilizada la función `parseArgs` desde `run.ts` para manejar el argumento `patchVersion`. Script ejecutable a través de `pnpm script:run syncAllChampions patchVersion=<version>`.
+- **Tarea 14-17:** Implementado script `syncAllChampions.ts` completo:
+  - ✅ Obtención de lista de campeones desde DDragon
+  - ✅ Bucle de procesamiento con reintentos (3 intentos por campeón)
+  - ✅ Manejo de errores individuales sin detener el proceso
+  - ✅ Logging detallado de progreso y resultados
+  - ✅ Resumen final con estadísticas de éxito/fallo
+  - ✅ Verificado funcionamiento con pruebas locales
