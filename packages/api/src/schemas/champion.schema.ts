@@ -23,6 +23,7 @@ export const createChampionInput = z.object({
   stats: z.record(z.string(), z.any()).default({}),
   spells: z.record(z.string(), z.any()).default({}),
   passive: z.record(z.string(), z.any()).default({}),
+  lastPatchVersion: z.string(),
 });
 export type CreateChampionInputType = TypeOf<typeof createChampionInput>;
 
@@ -37,6 +38,7 @@ export const updateChampionInput = z.object({
   spells: z.record(z.string(), z.any()).optional(),
   passive: z.record(z.string(), z.any()).optional(),
   isActive: z.boolean().optional(),
+  lastPatchVersion: z.string().optional(),
 });
 export type UpdateChampionInputType = TypeOf<typeof updateChampionInput>;
 

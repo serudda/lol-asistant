@@ -2,6 +2,7 @@ import { Response, type ChampionResponse, type Params } from '../common';
 import type {
   CreateChampionInputType,
   GetChampionByIdInputType,
+  GetChampionBySlugInputType,
   UpdateChampionInputType,
 } from '../schemas/champion.schema';
 import { ErrorCodes, ErrorMessages, errorResponse, handleError } from '../services';
@@ -40,6 +41,37 @@ export const getChampionByIdHandler = async ({
 };
 
 /**
+ * Get champion by slug.
+ *
+ * @param ctx Ctx.
+ * @param input GetChampionBySlugInputType.
+ * @returns Champion.
+ */
+export const getChampionBySlugHandler = async ({
+  ctx,
+  input,
+}: Params<GetChampionBySlugInputType>): Promise<ChampionResponse> => {
+  const handlerId = 'getChampionBySlugHandler';
+  try {
+    const { slug } = input;
+    const champion = await ctx.prisma.champion.findUnique({ where: { slug } });
+
+    // If the champion does not exist, return an error
+    if (!champion)
+      return errorResponse(domain, handlerId, ErrorCodes.Champion.NoChampion, ErrorMessages.Champion.NoChampion);
+
+    return {
+      result: {
+        status: Response.SUCCESS,
+        champion,
+      },
+    };
+  } catch (error: unknown) {
+    throw handleError(domain, handlerId, error);
+  }
+};
+
+/**
  * Create a new champion.
  *
  * @param ctx - Context with Prisma client.
@@ -52,7 +84,18 @@ export const createChampionHandler = async ({
 }: Params<CreateChampionInputType>): Promise<ChampionResponse> => {
   const handlerId = 'createChampionHandler';
   try {
-    const champion = await ctx.prisma.champion.create({ data: input });
+    // Check if the champion already exists
+    const existingChampion = await getChampionBySlugHandler({ ctx, input: { slug: input.slug } });
+    if (existingChampion.result.champion) {
+      return errorResponse(domain, handlerId, ErrorCodes.Champion.AlreadyExists, ErrorMessages.Champion.AlreadyExists);
+    }
+
+    // Create the champion
+    const champion = await ctx.prisma.champion.create({
+      data: {
+        ...input,
+      },
+    });
 
     if (!champion)
       return errorResponse(domain, handlerId, ErrorCodes.Champion.NotCreated, ErrorMessages.Champion.NotCreated);
@@ -77,12 +120,25 @@ export const updateChampionHandler = async ({
   const handlerId = 'updateChampionHandler';
   try {
     const { id, ...data } = input;
-    const champion = await ctx.prisma.champion.update({ where: { id }, data });
 
-    if (!champion)
+    // Check if champion exists
+    const existingChampion = await getChampionByIdHandler({ ctx, input: { id } });
+    if (!existingChampion.result.champion) {
+      return errorResponse(domain, handlerId, ErrorCodes.Champion.NoChampion, ErrorMessages.Champion.NoChampion);
+    }
+
+    // Update the champion
+    const updatedChampion = await ctx.prisma.champion.update({
+      where: { id: existingChampion.result.champion.id },
+      data: {
+        ...data,
+      },
+    });
+
+    if (!updatedChampion)
       return errorResponse(domain, handlerId, ErrorCodes.Champion.NotUpdated, ErrorMessages.Champion.NotUpdated);
 
-    return { result: { status: Response.SUCCESS, champion } };
+    return { result: { status: Response.SUCCESS, champion: updatedChampion } };
   } catch (error: unknown) {
     throw handleError(domain, handlerId, error);
   }
