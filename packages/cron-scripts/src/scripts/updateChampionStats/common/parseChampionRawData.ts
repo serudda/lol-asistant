@@ -1,4 +1,4 @@
-import { DATA_DRAGON_BASE_URL } from './constants';
+import { DATA_DRAGON_BASE_URL } from '../../../common/constants/ddragon';
 import type { ChampionSaveInput, DDragonChampionData, DDragonSpell } from './types';
 
 /**

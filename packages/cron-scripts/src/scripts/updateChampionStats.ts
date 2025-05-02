@@ -43,9 +43,7 @@ export const updateChampionStats = async ({ patchVersion, championSlug }: Update
     process.exit(1);
   }
 
-  console.log(
-    `[${scriptId}] Finished update process for version: ${patchVersion}. (Note: Currently only processes one champion)`,
-  );
+  console.log(`[${scriptId}] Finished update process for version: ${patchVersion}`);
 };
 
 export default updateChampionStats;
