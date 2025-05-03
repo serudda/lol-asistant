@@ -179,7 +179,7 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
   - [ ] (Opcional) Crear Endpoint y Cronjob Vercel (Tarea 18)
 - **Nueva Tarea: Integrar Campeones en Combobox (PickChampPage)**
   - [x] Backend: Crear Endpoint `getAllBasic` (Tarea 19)
-  - [ ] Frontend: Consumir Endpoint en `PickChampPage` (Tarea 20)
+  - [x] Frontend: Consumir Endpoint en `PickChampPage` (Tarea 20)
 
 ## Comentarios o Solicitudes de Asistencia del Executor
 
@@ -225,3 +225,10 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
 - Se corrigieron los tipos para evitar errores de tipado en la respuesta parcial.
 - Se documentó la convención para endpoints de info básica (`getAllBasic`, `getBasicById`).
 - Listo para consumir desde el frontend.
+
+### Cierre Feature: Dynamic Champion Combobox
+
+- Se creó el componente `ChampionCombobox` que encapsula la lógica de fetching, mapeo y selección de campeones usando el endpoint `getAllBasic`.
+- Se integró el componente en la UI, reemplazando la data hardcodeada.
+- Se documentaron mejoras futuras (skeleton loader, error message) como issues en Linear.
+- El feature está listo para PR y revisión.
