@@ -1,6 +1,7 @@
-import { ResponseStatus, type ChampionResponse, type Params } from '../common';
+import { ResponseStatus, type BasicChampionsResponse, type ChampionResponse, type Params } from '../common';
 import type {
   CreateChampionInputType,
+  GetAllBasicChampionsInputType,
   GetChampionByIdInputType,
   GetChampionBySlugInputType,
   UpdateChampionInputType,
@@ -64,6 +65,41 @@ export const getChampionBySlugHandler = async ({
       result: {
         status: ResponseStatus.SUCCESS,
         champion,
+      },
+    };
+  } catch (error: unknown) {
+    throw handleError(domain, handlerId, error);
+  }
+};
+
+/**
+ * Get all champions (basic info).
+ *
+ * @param ctx Ctx.
+ * @returns List of champions (id, name, slug, imageUrl).
+ */
+export const getAllBasicChampionsHandler = async ({
+  ctx,
+}: Params<GetAllBasicChampionsInputType>): Promise<BasicChampionsResponse> => {
+  const handlerId = 'getAllBasicChampionsHandler';
+  try {
+    const champions = await ctx.prisma.champion.findMany({
+      orderBy: { name: 'asc' },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        imageUrl: true,
+      },
+    });
+
+    if (!champions)
+      return errorResponse(domain, handlerId, ErrorCodes.Champion.NoChampions, ErrorMessages.Champion.NoChampions);
+
+    return {
+      result: {
+        status: ResponseStatus.SUCCESS,
+        champions,
       },
     };
   } catch (error: unknown) {

@@ -141,11 +141,12 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
 
 ### Nueva Tarea: Integrar Campeones en Combobox (PickChampPage)
 
-19. **Backend (`packages/api`): Crear Endpoint `getAllChampions`:**
-    - Crear handler `getAllChampionsHandler` en `champion.controller.ts` usando `prisma.champion.findMany()` (ordenado por nombre, seleccionando solo `id`, `name`, `slug`, `imageUrl`).
-    - Definir schema de input `getAllChampionsInput` (puede ser vacío).
-    - Añadir `publicProcedure` `getAll` a `championRouter`.
-    - _Criterio de Éxito:_ Endpoint `champion.getAll` funcional, devuelve la lista de campeones activos con los campos necesarios.
+19. **Backend (`packages/api`): Crear Endpoint `getAllBasic`:**
+    - Crear handler `getAllBasicChampionsHandler` en `champion.controller.ts` usando `prisma.champion.findMany()` (ordenado por nombre, seleccionando solo `id`, `name`, `slug`, `imageUrl`).
+    - Definir schema de input `getAllBasicChampionsInput` (puede ser vacío).
+    - Añadir `publicProcedure` `getAllBasic` a `championRouter`.
+    - _Criterio de Éxito:_ Endpoint `champion.getAllBasic` funcional, devuelve la lista de campeones con los campos mínimos necesarios para UI/selects.
+    - **Convención:** Los endpoints `getAllBasic` y `getBasicById` se reservan para obtener solo la información mínima necesaria de los modelos, optimizados para listas y selects.
 20. **Frontend (`apps/web`): Consumir Endpoint en `PickChampPage`:**
     - Usar hook `trpc.champion.getAll.useQuery()` en `PickChampPage.tsx`.
     - Mapear la respuesta al formato `{ value: slug, label: name }` para el `Combobox`.
@@ -177,7 +178,7 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
   - [x] Integrar Guardado en Bucle y Logging Final (en `syncAllChampions.ts`) (Tarea 17)
   - [ ] (Opcional) Crear Endpoint y Cronjob Vercel (Tarea 18)
 - **Nueva Tarea: Integrar Campeones en Combobox (PickChampPage)**
-  - [ ] Backend: Crear Endpoint `getAllChampions` (Tarea 19)
+  - [x] Backend: Crear Endpoint `getAllBasic` (Tarea 19)
   - [ ] Frontend: Consumir Endpoint en `PickChampPage` (Tarea 20)
 
 ## Comentarios o Solicitudes de Asistencia del Executor
@@ -215,3 +216,12 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
   - ✅ Resumen final con estadísticas de éxito/fallo
   - ✅ Verificado funcionamiento con pruebas locales
   - ✅ Confirmado funcionamiento tanto para creación como actualización de campeones
+
+### Progreso Tarea 19
+
+- Se implementó el handler `getAllBasicChampionsHandler` en `champion.controller.ts` usando `prisma.champion.findMany()` y seleccionando solo los campos necesarios.
+- Se creó el schema `getAllBasicChampionsInput`.
+- Se expuso el endpoint `getAllBasic` en el `championRouter`.
+- Se corrigieron los tipos para evitar errores de tipado en la respuesta parcial.
+- Se documentó la convención para endpoints de info básica (`getAllBasic`, `getBasicById`).
+- Listo para consumir desde el frontend.
