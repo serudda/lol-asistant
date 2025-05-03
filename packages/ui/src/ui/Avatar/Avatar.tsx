@@ -47,6 +47,8 @@ Avatar.Fallback = Fallback;
 
 Avatar.displayName = Root.displayName;
 
+export { AvatarSize };
+
 /**
  * Reference:
  * https://www.radix-ui.com/primitives/docs/components/avatar.

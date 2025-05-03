@@ -16,6 +16,11 @@ export type GetChampionBySlugInputType = TypeOf<typeof getChampionBySlugInput>;
 
 /*------------------------------------*/
 
+export const getAllBasicChampionsInput = z.object({});
+export type GetAllBasicChampionsInputType = TypeOf<typeof getAllBasicChampionsInput>;
+
+/*------------------------------------*/
+
 export const createChampionInput = z.object({
   name: z.string(),
   slug: z.string(),

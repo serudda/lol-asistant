@@ -42,6 +42,10 @@ export type UserResponse = ApiResponse<{ user: User }>;
 export type ChampionResponse = ApiResponse<{ champion: Champion }>;
 export type ChampionsResponse = ApiResponse<{ champions: Array<Champion> }>;
 
+// Champion (basic info for lists)
+export type BasicChampion = Pick<Champion, 'id' | 'name' | 'slug' | 'imageUrl'>;
+export type BasicChampionsResponse = ApiResponse<{ champions: Array<BasicChampion> }>;
+
 // Patch Note
 export type PatchNoteResponse = ApiResponse<{ patchNote: PatchNote }>;
 export type PatchNotesResponse = ApiResponse<{ patchNotes: Array<PatchNote> }>;

@@ -28,6 +28,11 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
     - En `vercel.json` (en la raíz) se definirán los cron jobs apuntando a estas funciones desplegadas (ej. `/api/crons/update-champions`).
     - Manejo de seguridad con Vercel Cron Job Secret.
 
+4.  **Carga de Campeones en Combobox (`PickChampPage.tsx`):**
+    - **Opción 1: Carga Inicial Parcial + Búsqueda Backend (Debounce).** Cargar pocos campeones inicialmente, y buscar en el backend a medida que el usuario escribe. Más complejo, latencia en búsqueda.
+    - **Opción 2: Carga Completa + Filtrado Frontend.** Cargar todos los campeones (~170) al inicio y usar el filtro interno del `Combobox` en el frontend. Más simple, filtrado instantáneo.
+    - **Decisión:** Se opta por la **Opción 2** debido a la simplicidad y mejor UX para la cantidad actual de campeones. La transferencia de datos es pequeña y el filtrado en frontend es más rápido.
+
 ## Desglose de Tareas de Alto Nivel
 
 1.  **Verificar/Ajustar Configuración Monorepo:**
@@ -134,6 +139,21 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
     - Configurar cronjob en `vercel.json`.
     - _Criterio de Éxito:_ Cronjob automatizado funciona para la sincronización completa. **(Pendiente - Opcional)**
 
+### Nueva Tarea: Integrar Campeones en Combobox (PickChampPage)
+
+19. **Backend (`packages/api`): Crear Endpoint `getAllBasic`:**
+    - Crear handler `getAllBasicChampionsHandler` en `champion.controller.ts` usando `prisma.champion.findMany()` (ordenado por nombre, seleccionando solo `id`, `name`, `slug`, `imageUrl`).
+    - Definir schema de input `getAllBasicChampionsInput` (puede ser vacío).
+    - Añadir `publicProcedure` `getAllBasic` a `championRouter`.
+    - _Criterio de Éxito:_ Endpoint `champion.getAllBasic` funcional, devuelve la lista de campeones con los campos mínimos necesarios para UI/selects.
+    - **Convención:** Los endpoints `getAllBasic` y `getBasicById` se reservan para obtener solo la información mínima necesaria de los modelos, optimizados para listas y selects.
+20. **Frontend (`apps/web`): Consumir Endpoint en `PickChampPage`:**
+    - Usar hook `trpc.champion.getAll.useQuery()` en `PickChampPage.tsx`.
+    - Mapear la respuesta al formato `{ value: slug, label: name }` para el `Combobox`.
+    - Pasar los datos mapeados al `Combobox.List`.
+    - Implementar estados de carga y error (`isLoading`, `isError`).
+    - _Criterio de Éxito:_ El `Combobox` muestra la lista dinámica de campeones, el `Combobox.Search` filtra correctamente en el frontend, y se manejan los estados de carga/error.
+
 ## Tablero de Estado del Proyecto
 
 - [x] Verificar/Ajustar Configuración Monorepo
@@ -157,6 +177,9 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
   - [x] Implementar Lógica de Guardado Upsert con Prisma (Tarea 16 - Integrado en el bucle)
   - [x] Integrar Guardado en Bucle y Logging Final (en `syncAllChampions.ts`) (Tarea 17)
   - [ ] (Opcional) Crear Endpoint y Cronjob Vercel (Tarea 18)
+- **Nueva Tarea: Integrar Campeones en Combobox (PickChampPage)**
+  - [x] Backend: Crear Endpoint `getAllBasic` (Tarea 19)
+  - [x] Frontend: Consumir Endpoint en `PickChampPage` (Tarea 20)
 
 ## Comentarios o Solicitudes de Asistencia del Executor
 
@@ -193,3 +216,19 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
   - ✅ Resumen final con estadísticas de éxito/fallo
   - ✅ Verificado funcionamiento con pruebas locales
   - ✅ Confirmado funcionamiento tanto para creación como actualización de campeones
+
+### Progreso Tarea 19
+
+- Se implementó el handler `getAllBasicChampionsHandler` en `champion.controller.ts` usando `prisma.champion.findMany()` y seleccionando solo los campos necesarios.
+- Se creó el schema `getAllBasicChampionsInput`.
+- Se expuso el endpoint `getAllBasic` en el `championRouter`.
+- Se corrigieron los tipos para evitar errores de tipado en la respuesta parcial.
+- Se documentó la convención para endpoints de info básica (`getAllBasic`, `getBasicById`).
+- Listo para consumir desde el frontend.
+
+### Cierre Feature: Dynamic Champion Combobox
+
+- Se creó el componente `ChampionCombobox` que encapsula la lógica de fetching, mapeo y selección de campeones usando el endpoint `getAllBasic`.
+- Se integró el componente en la UI, reemplazando la data hardcodeada.
+- Se documentaron mejoras futuras (skeleton loader, error message) como issues en Linear.
+- El feature está listo para PR y revisión.

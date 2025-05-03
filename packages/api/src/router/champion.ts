@@ -1,11 +1,13 @@
 import {
   createChampionHandler,
+  getAllBasicChampionsHandler,
   getChampionByIdHandler,
   getChampionBySlugHandler,
   updateChampionHandler,
 } from '../controllers/champion.controller';
 import {
   createChampionInput,
+  getAllBasicChampionsInput,
   getChampionByIdInput,
   getChampionBySlugInput,
   updateChampionInput,
@@ -20,6 +22,10 @@ export const championRouter = createTRPCRouter({
   getBySlug: publicProcedure
     .input(getChampionBySlugInput)
     .query(({ ctx, input }) => getChampionBySlugHandler({ ctx, input })),
+
+  getAllBasic: publicProcedure
+    .input(getAllBasicChampionsInput)
+    .query(({ ctx, input }) => getAllBasicChampionsHandler({ ctx, input })),
 
   createChampion: publicProcedure
     .input(createChampionInput)
