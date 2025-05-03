@@ -28,6 +28,11 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
     - En `vercel.json` (en la raíz) se definirán los cron jobs apuntando a estas funciones desplegadas (ej. `/api/crons/update-champions`).
     - Manejo de seguridad con Vercel Cron Job Secret.
 
+4.  **Carga de Campeones en Combobox (`PickChampPage.tsx`):**
+    - **Opción 1: Carga Inicial Parcial + Búsqueda Backend (Debounce).** Cargar pocos campeones inicialmente, y buscar en el backend a medida que el usuario escribe. Más complejo, latencia en búsqueda.
+    - **Opción 2: Carga Completa + Filtrado Frontend.** Cargar todos los campeones (~170) al inicio y usar el filtro interno del `Combobox` en el frontend. Más simple, filtrado instantáneo.
+    - **Decisión:** Se opta por la **Opción 2** debido a la simplicidad y mejor UX para la cantidad actual de campeones. La transferencia de datos es pequeña y el filtrado en frontend es más rápido.
+
 ## Desglose de Tareas de Alto Nivel
 
 1.  **Verificar/Ajustar Configuración Monorepo:**
@@ -134,6 +139,20 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
     - Configurar cronjob en `vercel.json`.
     - _Criterio de Éxito:_ Cronjob automatizado funciona para la sincronización completa. **(Pendiente - Opcional)**
 
+### Nueva Tarea: Integrar Campeones en Combobox (PickChampPage)
+
+19. **Backend (`packages/api`): Crear Endpoint `getAllChampions`:**
+    - Crear handler `getAllChampionsHandler` en `champion.controller.ts` usando `prisma.champion.findMany()` (ordenado por nombre, seleccionando solo `id`, `name`, `slug`, `imageUrl`).
+    - Definir schema de input `getAllChampionsInput` (puede ser vacío).
+    - Añadir `publicProcedure` `getAll` a `championRouter`.
+    - _Criterio de Éxito:_ Endpoint `champion.getAll` funcional, devuelve la lista de campeones activos con los campos necesarios.
+20. **Frontend (`apps/web`): Consumir Endpoint en `PickChampPage`:**
+    - Usar hook `trpc.champion.getAll.useQuery()` en `PickChampPage.tsx`.
+    - Mapear la respuesta al formato `{ value: slug, label: name }` para el `Combobox`.
+    - Pasar los datos mapeados al `Combobox.List`.
+    - Implementar estados de carga y error (`isLoading`, `isError`).
+    - _Criterio de Éxito:_ El `Combobox` muestra la lista dinámica de campeones, el `Combobox.Search` filtra correctamente en el frontend, y se manejan los estados de carga/error.
+
 ## Tablero de Estado del Proyecto
 
 - [x] Verificar/Ajustar Configuración Monorepo
@@ -157,6 +176,9 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
   - [x] Implementar Lógica de Guardado Upsert con Prisma (Tarea 16 - Integrado en el bucle)
   - [x] Integrar Guardado en Bucle y Logging Final (en `syncAllChampions.ts`) (Tarea 17)
   - [ ] (Opcional) Crear Endpoint y Cronjob Vercel (Tarea 18)
+- **Nueva Tarea: Integrar Campeones en Combobox (PickChampPage)**
+  - [ ] Backend: Crear Endpoint `getAllChampions` (Tarea 19)
+  - [ ] Frontend: Consumir Endpoint en `PickChampPage` (Tarea 20)
 
 ## Comentarios o Solicitudes de Asistencia del Executor
 
