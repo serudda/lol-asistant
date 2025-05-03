@@ -1,13 +1,16 @@
 export const ErrorCodes = {
   Account: {
     NotCreated: 'AccountNotCreated',
-    DiscordUserNotFound: 'DiscordUserNotFound',
   },
   Champion: {
+    AlreadyExists: 'AlreadyExists',
     NoChampion: 'NoChampion',
     NoChampions: 'NoChampions',
     NotCreated: 'NotCreated',
     NotUpdated: 'NotUpdated',
+  },
+  PatchNote: {
+    NotCreated: 'NotCreated',
   },
   Common: {
     ConfigNotFound: 'ConfigNotFound',

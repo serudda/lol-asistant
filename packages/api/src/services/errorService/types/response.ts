@@ -1,4 +1,4 @@
-import type { Response } from '../../../common';
+import type { ResponseStatus } from '../../../common';
 
 export interface ErrorDetail {
   code: string;
@@ -9,7 +9,7 @@ export interface ErrorDetail {
 
 export interface ErrorResponse {
   result: {
-    status: Response.ERROR;
+    status: ResponseStatus.ERROR;
     error: ErrorDetail;
   };
 }

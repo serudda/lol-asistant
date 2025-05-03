@@ -145,7 +145,7 @@ model Subscription {
 model PatchNote {
     id            String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     patchVersion  String
-    date          DateTime
+    publishedDate String
     summary       String
     embedding     Unsupported("vector")?
     isActive      Boolean                @default(true) @map("is_active")
@@ -157,13 +157,14 @@ model PatchNote {
 }
 
 model Champion {
-    id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    name     String  @unique
-    slug     String  @unique
-    imageUrl String? // URL al icono o splash
-    stats    Json?
-    spells   Json?
-    passive  Json?
+    id               String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    name             String  @unique
+    slug             String  @unique
+    imageUrl         String?
+    stats            Json?
+    spells           Json?
+    passive          Json?
+    lastPatchVersion String? @map("last_patch_version")
 
     isActive  Boolean  @default(true) @map("is_active")
     createdAt DateTime @default(now())

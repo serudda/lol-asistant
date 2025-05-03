@@ -9,7 +9,6 @@ type ErrorMessageType = {
 export const ErrorMessages: ErrorMessageType = {
   Account: {
     NotCreated: 'Algo ha sucedido, no pudimos crear la cuenta del usuario',
-    DiscordUserNotFound: 'No logre encontrar al usuario de Discord. Algo anda mal con el ID proporcionado',
   },
   Common: {
     ConfigNotFound: 'Configuración no encontrada',
@@ -31,9 +30,13 @@ export const ErrorMessages: ErrorMessageType = {
     AlreadyExists: 'Este usuarios ya existe',
   },
   Champion: {
+    AlreadyExists: 'A champion with this slug already exists',
     NoChampion: 'No encontramos al campeón que buscas',
     NoChampions: 'No encontramos ningún campeón',
     NotCreated: 'Algo ha sucedido, no pudimos crear al campeón',
     NotUpdated: 'Algo ha sucedido, no pudimos actualizar al campeón',
+  },
+  PatchNote: {
+    NotCreated: 'Algo ha sucedido, no pudimos crear la nota de parche',
   },
 };

@@ -12,7 +12,7 @@ const scriptId = 'getChampionById';
  * @param options Configuration options with championId.
  * @returns Object with status and result.
  */
-export default async function getChampionById(options: ChampionOptions = {}): Promise<{ status: string; result: any }> {
+const getChampionById = async (options: ChampionOptions = {}): Promise<{ status: string; result: any }> => {
   // Get championId from options or use a default
   const championId = options.championId ?? '862edc50-5e27-486b-92d9-13387f8f7d4b';
 
@@ -40,4 +40,13 @@ export default async function getChampionById(options: ChampionOptions = {}): Pr
       result: error instanceof Error ? error.message : String(error),
     };
   }
-}
+};
+
+export default getChampionById;
+
+/*
+  Run the script
+  `pnpm script:run getChampionById championId="862edc50-5e27-486b-92d9-13387f8f7d4b"`
+ 
+  This script gets a champion by ID.
+ */

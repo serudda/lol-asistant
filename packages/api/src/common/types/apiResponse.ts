@@ -1,16 +1,12 @@
-import type { Account, Champion, User } from '@lol-assistant/db';
-
-export enum Response {
-  SUCCESS = 'SUCCESS',
-  ERROR = 'ERROR',
-}
+import type { Account, Champion, PatchNote, User } from '@lol-assistant/db';
+import type { ResponseStatus } from '../constants';
 
 export interface BaseResponse {
-  status: Response;
+  status: ResponseStatus;
 }
 
 export type SuccessResponse<T> = BaseResponse & {
-  status: Response.SUCCESS;
+  status: ResponseStatus.SUCCESS;
 } & T;
 
 export interface ErrorDetail {
@@ -21,14 +17,14 @@ export interface ErrorDetail {
 }
 
 export type ErrorResponse = BaseResponse & {
-  status: Response.ERROR;
+  status: ResponseStatus.ERROR;
   error: ErrorDetail;
 };
 
 // Modificamos ApiResponse para que muestre todas las propiedades posibles
 export type ApiResponse<T> = {
   result: {
-    status: Response;
+    status: ResponseStatus;
     error?: ErrorDetail;
   } & Partial<T>;
 };
@@ -45,3 +41,7 @@ export type UserResponse = ApiResponse<{ user: User }>;
 // Champion
 export type ChampionResponse = ApiResponse<{ champion: Champion }>;
 export type ChampionsResponse = ApiResponse<{ champions: Array<Champion> }>;
+
+// Patch Note
+export type PatchNoteResponse = ApiResponse<{ patchNote: PatchNote }>;
+export type PatchNotesResponse = ApiResponse<{ patchNotes: Array<PatchNote> }>;

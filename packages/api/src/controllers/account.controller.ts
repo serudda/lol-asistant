@@ -1,12 +1,9 @@
+import type { AccountResponse, AccountsResponse } from '../common';
+import { ResponseStatus, TRPCErrorCode, type Params } from '../common';
+import { type CreateAccountInputType, type GetAllProvidersByUserIdInputType } from '../schemas/account.schema';
+import { ErrorCodes, ErrorMessages, errorResponse } from '../services';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
-import { Response, TRPCErrorCode, type Params } from '../common';
-import type { AccountResponse, AccountsResponse } from '../common';
-import {
-  type CreateAccountInputType,
-  type GetAllProvidersByUserIdInputType,
-} from '../schemas/account.schema';
-import { ErrorCodes, ErrorMessages, errorResponse } from '../services';
 
 // Id domain to handle errors
 const domain = 'ACCOUNT';
@@ -33,17 +30,11 @@ export const getAllProvidersByUserIdHandler = async ({
     });
 
     // Check if account exists
-    if (!accounts || accounts.length === 0)
-      return errorResponse(
-        domain,
-        handlerId,
-        ErrorCodes.Account.DiscordUserNotFound,
-        ErrorMessages.Account.DiscordUserNotFound,
-      );
+    if (!accounts || accounts.length === 0) return errorResponse(domain, handlerId, 'NOT_FOUND', 'No accounts found');
 
     return {
       result: {
-        status: Response.SUCCESS,
+        status: ResponseStatus.SUCCESS,
         accounts,
       },
     };
@@ -102,16 +93,11 @@ export const createAccountHandler = async ({
 
     // Check if account was created
     if (!account)
-      return errorResponse(
-        domain,
-        handlerId,
-        ErrorCodes.Account.NotCreated,
-        ErrorMessages.Account.NotCreated,
-      );
+      return errorResponse(domain, handlerId, ErrorCodes.Account.NotCreated, ErrorMessages.Account.NotCreated);
 
     return {
       result: {
-        status: Response.SUCCESS,
+        status: ResponseStatus.SUCCESS,
         account,
       },
     };
