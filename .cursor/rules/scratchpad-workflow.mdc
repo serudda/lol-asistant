@@ -25,9 +25,32 @@ The scratchpad is organized into these key sections:
 - **Background and Motivation** - Project context and goals
 - **Key Challenges and Analysis** - Major challenges and analysis
 - **High-Level Task Breakdown** - Step-by-step implementation plan
+- **Project Structure Overview** – Key project points and High‑level directory tree
 - **Project Status Board** - Task tracking checklist
 - **Executor Comments or Assistance Requests** - Implementation notes
 - **Lessons** - Reusable knowledge and error solutions
+
+## Task Entry Convention
+
+All new tasks must be appended only inside the Project Status Board section and follow this one‑line format. Do not create new headings or scatter tasks elsewhere.
+```
+**[<STATUS: DONE | WIP | BLOCKED | PENDING>] Short descriptive title – <link to the Linear issue>**
+    - First actionable sub‑task
+    - Second actionable sub‑task
+    - N actiobable sub-task
+    - _Success Criteria:_ clear, measurable outcome
+```
+
+Example
+```
+**[WIP] Crear Script `updateChampionData` en `packages/cron-scripts` - https://linear.app/acme/ISSUE‑123**
+    - Crear `src/scripts/updateChampionData.ts`.
+    - El script debe obtener los datos de campeones (ej. API Riot).
+    - Para cada campeón, verificar si existe en nuestra BD (quizás con un endpoint `getChampion` o una consulta directa si la lógica está en el script).
+    - Llamar a `createChampion` si no existe, o a `updateChampion` si existe.
+    - Manejar respuestas y errores.
+    - _Criterio de Éxito:_ `pnpm --filter @lol-assistant/cron-scripts run start updateChampionData` ejecuta el script, sincroniza los datos llamando al endpoint apropiado (create o update) para cada campeón, y reporta el resultado.
+```
 
 ## Development Process
 
@@ -36,3 +59,9 @@ The scratchpad is organized into these key sections:
 3. The Executor implements one task at a time
 4. Progress is reported in the scratchpad
 5. The Planner reviews completed work before proceeding
+
+## Rules
+- The Planner does not modify any other section of the scratchpad unless explicitly instructed otherwise
+- The Planner must not delete previous tasks; instead mark them with the current task status
+
+
