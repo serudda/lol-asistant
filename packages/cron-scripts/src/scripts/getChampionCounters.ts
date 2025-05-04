@@ -1,13 +1,15 @@
-import type { MobalyticsRank, MobalyticsRole } from './getChampionCounters/mobalytics/common/constants';
+import type { InternalRank, InternalRole } from './getChampionCounters/common/constants';
+import { toMobalyticsRank, toMobalyticsRole, toOPGGRank, toOPGGRole } from './getChampionCounters/common/constants';
 import { getMobalyticsCounters } from './getChampionCounters/mobalytics/getMobalyticsCounters';
+import { getOPGGCounters } from './getChampionCounters/opgg/getOPGGCounters';
 
 const scriptId = '🛠️  getChampionCounters';
 
 interface GetChampionCountersArgs {
   patchVersion: string;
   championSlug: string;
-  role: string;
-  rank: string;
+  role: InternalRole;
+  rank: InternalRank;
 }
 
 /**
@@ -24,10 +26,20 @@ export const getChampionCounters = async ({
 
   try {
     // Get Mobalytics counters
+    const mobalyticsRole = toMobalyticsRole(role);
+    const mobalyticsRank = toMobalyticsRank(rank);
     console.log(`[${scriptId}] [Fetching Mobalytics] Fetching data for champion: ${championSlug}`);
-    const mobalyticsData = await getMobalyticsCounters(championSlug, role as MobalyticsRole, rank as MobalyticsRank);
-
+    const mobalyticsData = await getMobalyticsCounters(championSlug, mobalyticsRole, mobalyticsRank);
     console.log('** Mobalytics Data **', mobalyticsData);
+
+    // ------------------------------------------------------------
+
+    // Get OP.GG counters
+    const opggRole = toOPGGRole(role);
+    const opggRank = toOPGGRank(rank);
+    console.log(`[${scriptId}] [Fetching OP.GG] Fetching data for champion: ${championSlug}`);
+    const opggData = await getOPGGCounters(championSlug, opggRole, opggRank);
+    console.log('** OP.GG Data **', opggData);
 
     // ------------------------------------------------------------
 

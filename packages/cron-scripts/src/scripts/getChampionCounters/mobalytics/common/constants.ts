@@ -1,4 +1,5 @@
-export const MOBALYTICS_ENDPOINT = 'https://mobalytics.gg/api/lol/graphql/v1/query';
+export const MOBALYTICS_BASE_URL = 'https://mobalytics.gg/';
+export const MOBALYTICS_ENDPOINT = `${MOBALYTICS_BASE_URL}api/lol/graphql/v1/query`;
 
 export enum MobalyticsRank {
   IRON = 'Iron',
