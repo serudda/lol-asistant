@@ -1,4 +1,4 @@
-# lol-assistant Project Scratchpad
+# League of Legends Assistant Project Scratchpad
 
 ## Background and Motivation
 
