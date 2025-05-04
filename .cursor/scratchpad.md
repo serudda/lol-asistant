@@ -156,47 +156,27 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
 
 ### Nueva Tarea: Webscraping de Counters (Mobalytics Only, MVP)
 
-#### Antecedentes y Motivación
+#### Estado Final y Lecciones
 
-Se requiere un script en `@lol-assistant/cron-scripts` que haga webscraping de la página de Counters de un campeón. **A largo plazo**, el objetivo es obtener datos de **múltiples fuentes** (Mobalytics, U.GG, OP.GG, etc.), unificar los resultados y guardarlos en la base de datos (`ChampCounter`).
-
-**Alcance Actual (MVP):** Implementar el scraping solo para **Mobalytics**. El script debe ser parametrizable por `slug`, `rol` y `rank`. El objetivo inicial es solo obtener la lista de counters y loggearla, sin persistencia ni integración con la base de datos. Esto servirá como base sólida para luego añadir más fuentes y la lógica de unificación.
-
-#### Desafíos Clave y Análisis
-
-- **Multi-Fuente (Largo Plazo):** Cada fuente requerirá un scraper específico. La unificación necesitará normalizar nombres de campeones y combinar estadísticas (winrate, matches). Se decidió mantener los datos scrapeados en **runtime** y continuar el proceso aunque alguna fuente falle, loggeando el error y unificando los datos de las fuentes exitosas.
-- **Scraping Mobalytics (Actual):** El script original depende de archivos HTML locales y parámetros hardcodeados. Se requiere hacer fetch directo desde la web y parametrizar los argumentos. El output debe ser solo logging/return, sin guardar en archivos ni base de datos. El parsing debe ser robusto a cambios menores en el HTML.
-- **Parametrización:** El script final deberá aceptar `slug` (string), `role` (string, ej: 'jungle') y `rank` (string, ej: 'diamond_plus') como parámetros.
-
-#### Desglose de Tareas de Alto Nivel (MVP Mobalytics)
-
-1. Refactorizar el script para hacer fetch directo del HTML desde la web de Mobalytics.
-2. Parametrizar slug, role y rank como argumentos CLI.
-3. Simplificar el output: solo loggear el array de counters parseados.
-4. Mejorar el tipado y parsing (parsear winrate y matches a número en el extractor).
-5. Mantener la función de extracción modular y robusta.
-
-#### Criterios de Éxito (MVP Mobalytics)
-
-- El script recibe slug, role y rank como argumentos.
-- Hace scraping de la página de counters de Mobalytics en tiempo real.
-- Devuelve/loggea un array de counters con los datos principales.
-- Maneja errores de red y parsing de forma clara.
+- **Tarea Completada:** El script de counters de Mobalytics ahora usa el endpoint GraphQL oficial, eliminando la necesidad de scraping HTML y mejorando la robustez.
+- Se implementó paginación automática para obtener todos los counters disponibles.
+- Se separaron responsabilidades: fetch paginado, DTO específico para la API, y pipeline limpio que retorna un array unificado de counters (`SourceChampCounter`).
+- Se reutilizó la estructura de DTOs y tipos (`dtos.ts`, `types.ts`, `constants.ts`) para mantener el código modular y fácil de extender a nuevas fuentes.
+- El script está parametrizado (`slug`, `role`, `rank`) y sigue el estilo de los scripts principales del monorepo.
+- **Lección Clave:** Antes de recurrir a scraping HTML complejo (con Cheerio/Puppeteer), siempre investigar si existe un endpoint de API interna (JSON/GraphQL) que proporcione los datos directamente. Es más rápido, robusto y mantenible.
+- El pipeline está listo para la unificación multi-fuente en el futuro.
 
 #### Tablero de Estado del Proyecto (MVP Mobalytics)
 
-- [x] Refactor: fetch directo desde web
-- [⏳] Refactor: parametrización CLI (en progreso)
-- [ ] Refactor: output simplificado
-- [ ] Refactor: tipado y parsing mejorados
-- [ ] Refactor: extractor modular y robusto
+- [x] Refactor: fetch directo desde web (vía API GraphQL)
+- [x] Refactor: parametrización CLI
+- [x] Refactor: output simplificado
+- [x] Refactor: tipado y parsing mejorados (DTO para API)
+- [x] Refactor: extractor modular y robusto (separación de responsabilidades)
 
 #### Comentarios o Solicitudes de Asistencia del Executor
 
-- Se agregó `axios` como dependencia (`1.7.2`).
-- **Completado:** Modificado `getChampCounters.run.ts` para realizar fetch HTTP directo desde Mobalytics.
-- **Nota:** Se definieron constantes (`SOURCE_NAMES`, `SOURCE_URLS`) temporalmente en el script debido a un problema con la estructura `common`. Resolver esto en una tarea separada o al integrar más fuentes.
-- Próxima acción: Modificar el script para aceptar `slug`, `role` y `rank` como argumentos de línea de comandos.
+- Tarea finalizada y lista para PR. El pipeline es robusto, limpio y extensible.
 
 ## Tablero de Estado del Proyecto
 
@@ -225,11 +205,11 @@ Se requiere un script en `@lol-assistant/cron-scripts` que haga webscraping de l
   - [x] Backend: Crear Endpoint `getAllBasic` (Tarea 19)
   - [x] Frontend: Consumir Endpoint en `PickChampPage` (Tarea 20)
 - **Nueva Tarea: Webscraping de Counters (MVP Mobalytics)**
-  - [x] Refactor: fetch directo desde web
-  - [⏳] Refactor: parametrización CLI (en progreso)
-  - [ ] Refactor: output simplificado
-  - [ ] Refactor: tipado y parsing mejorados
-  - [ ] Refactor: extractor modular y robusto
+  - [x] Refactor: fetch directo desde web (vía API GraphQL)
+  - [x] Refactor: parametrización CLI
+  - [x] Refactor: output simplificado
+  - [x] Refactor: tipado y parsing mejorados (DTO para API)
+  - [x] Refactor: extractor modular y robusto (separación de responsabilidades)
 
 ## Comentarios o Solicitudes de Asistencia del Executor
 
@@ -266,24 +246,3 @@ Se requiere un script en `@lol-assistant/cron-scripts` que haga webscraping de l
   - ✅ Resumen final con estadísticas de éxito/fallo
   - ✅ Verificado funcionamiento con pruebas locales
   - ✅ Confirmado funcionamiento tanto para creación como actualización de campeones
-
-### Progreso Tarea 19
-
-- Se implementó el handler `getAllBasicChampionsHandler` en `champion.controller.ts` usando `prisma.champion.findMany()` y seleccionando solo los campos necesarios.
-- Se creó el schema `getAllBasicChampionsInput`.
-- Se expuso el endpoint `getAllBasic` en el `championRouter`.
-- Se corrigieron los tipos para evitar errores de tipado en la respuesta parcial.
-- Se documentó la convención para endpoints de info básica (`getAllBasic`, `getBasicById`).
-- Listo para consumir desde el frontend.
-
-### Cierre Feature: Dynamic Champion Combobox
-
-- Se creó el componente `ChampionCombobox` que encapsula la lógica de fetching, mapeo y selección de campeones usando el endpoint `getAllBasic`.
-- Se integró el componente en la UI, reemplazando la data hardcodeada.
-- Se documentaron mejoras futuras (skeleton loader, error message) como issues en Linear.
-- El feature está listo para PR y revisión.
-
-#### Comentarios o Solicitudes de Asistencia del Executor
-
-- Se agregó `axios` como dependencia (`1.7.2`).
-- Próxima acción: Modificar `getChampCounters.run.ts` para realizar el fetch HTTP directo desde Mobalytics y eliminar la lectura de archivos locales.
