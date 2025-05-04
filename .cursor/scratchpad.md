@@ -78,6 +78,37 @@ Si bien el MVP se enfocará exclusivamente en la funcionalidad de _counter picks
 
 ## Project Structure Overview
 
+Este proyecto utiliza una arquitectura monorepo gestionada con Turborepo y PNPM Workspaces para organizar el código de manera eficiente. La estructura principal se divide en aplicaciones (`apps`), paquetes compartidos (`packages`) y configuraciones globales (`tooling`).
+
+Puntos Clave y Directorios Principales:
+
+- **`/tooling`**: Directorio **CRUCIAL** donde se centralizan todas las configuraciones compartidas del proyecto (TypeScript, ESLint, Prettier, Tailwind CSS, etc.). **Antes de crear cualquier archivo de configuración en un paquete o aplicación, se debe verificar si ya existe una configuración base en `/tooling` para extenderla o reutilizarla.** El objetivo es minimizar la duplicidad de configuraciones.
+
+- **`/packages/api`**: Contiene toda la lógica del backend y los endpoints de la API.
+
+  - Se comunica con la base de datos utilizando **Prisma** y **tRPC**.
+  - La infraestructura de base de datos se apoya en **Supabase**.
+  - **Convención:** Antes de crear un nuevo endpoint, verificar si ya existe uno similar. Al agregar nuevos, seguir la estructura modular: `controller`, `router`, `schemas`.
+
+- **`/packages/db`**: Define el esquema de la base de datos y contiene toda la configuración de **Prisma**.
+
+  - Aquí se encuentra `schema.prisma` y cualquier migración o script relacionado con la base de datos. Es la fuente de verdad para la estructura de datos.
+
+- **`/packages/ui`**: Nuestra librería de componentes de UI compartidos (UI Kit).
+
+  - Contiene componentes base reutilizables en todo el proyecto (ej. `Button`, `TextInput`, `Modal`, `Combobox`).
+  - **Convención:** Agregar aquí solo componentes genéricos y reutilizables. Componentes específicos de una aplicación deben vivir dentro de la carpeta de componentes de esa aplicación.
+
+- **`/packages/cron-scripts`**: Centraliza todos los scripts diseñados para ejecutarse periódicamente o bajo demanda.
+
+  - Incluye tareas como _web scraping_, llamadas a APIs externas, procesamiento de datos, etc.
+  - Estos scripts son los candidatos a ser desplegados como Cron Jobs en plataformas como Vercel.
+
+- **`/apps/web`**: La aplicación web principal orientada al usuario final.
+  - Implementa la interfaz con la que interactúan los usuarios (ej. el _combobox_ para buscar campeones).
+  - Contendrá funcionalidades como visualización de datos, autenticación de usuarios, gestión de perfiles (como el Champion Pool), etc.
+  - Utilizará componentes de `/packages/ui` y se comunicará con `/packages/api` para obtener y enviar datos.
+
 ## Project Status Board
 
 ## Executor Comments or Assistance Requests
