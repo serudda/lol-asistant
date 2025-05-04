@@ -33,6 +33,49 @@ Si bien el MVP se enfocará exclusivamente en la funcionalidad de _counter picks
 
 ## High-Level Task Breakdown
 
+**Fase 1: Configuración Inicial y Estructura del Proyecto**
+
+1.  **Inicializar Monorepo:** Configurar el proyecto usando Turborepo y PNPM workspaces.
+2.  **Configurar Herramientas Base:** Establecer TypeScript, ESLint, Prettier, asegurando el uso de configuraciones compartidas desde `/tooling` según las convenciones del proyecto.
+3.  **Definir Estructura Básica:** Crear los paquetes iniciales necesarios (ej. `apps/web`, `packages/api`, `packages/db`, `packages/cron-scripts`).
+
+**Fase 2: Investigación y Adquisición de Datos**
+
+1.  **Investigar Fuentes de Datos:** Analizar Mobalytics, OP.GG y U.GG para determinar la mejor estrategia de extracción de datos (API vs. Scraping). Priorizar la búsqueda de APIs (públicas u ocultas).
+2.  **Implementar Fetchers de Datos:** Crear funciones o scripts (probablemente en `packages/cron-scripts` o `packages/api`) para obtener los datos de _counter picks_ y _winrates_ de cada una de las 3 fuentes.
+
+**Fase 3: Almacenamiento y Procesamiento de Datos**
+
+1.  **Configurar Base de Datos:** Inicializar Prisma en `packages/db` y definir los modelos necesarios (ej. Campeón, CounterPick, FuenteDeDatos).
+2.  **Implementar Lógica de Almacenamiento:** Crear funciones para guardar los datos obtenidos en la Fase 2 en la base de datos.
+3.  **Implementar Lógica de Consolidación:** Desarrollar la función que tome los datos de las 3 fuentes desde la BD y calcule el indicador agregado/ponderado para los _counter picks_.
+
+**Fase 4: Desarrollo del Backend (API)**
+
+1.  **Crear API Endpoint:** Desarrollar un endpoint (ej. `/api/counters/[championName]`) que reciba un nombre de campeón y devuelva la lista consolidada de _counter picks_ con sus métricas, usando la lógica de la Fase 3. (Podría vivir en `apps/web/pages/api`, `apps/nextjs/app/api` o directamente en `api/` si usamos Vercel Serverless Functions).
+
+**Fase 5: Desarrollo del Frontend (UI/UX)**
+
+1.  **Diseñar Interfaz Básica:** Crear la estructura visual de la aplicación web en `apps/web` (o `apps/nextjs`).
+2.  **Implementar Componente de Búsqueda:** Desarrollar el _combobox_ o campo de entrada para buscar campeones.
+3.  **Implementar Vista de Resultados:** Mostrar la lista de _counter picks_ devuelta por la API, incluyendo _winrates_ y el indicador agregado.
+4.  **Conectar Frontend con Backend:** Integrar la UI con el endpoint de la API creado en la Fase 4.
+
+**Fase 6: Automatización y Mantenimiento de Datos**
+
+1.  **Script - Obtener Notas del Parche:** Desarrollar un script para obtener información sobre los nuevos parches de League of Legends (identificar fuente: ¿API de Riot, web oficial?). Almacenar información relevante en la BD si es necesario para referencia o para disparar otras actualizaciones.
+2.  **Script - Actualizar Datos Base de Campeones:** Crear/adaptar un script para actualizar la información fundamental de los campeones (estadísticas base, habilidades, etc.) si la aplicación lo requiere, posiblemente usando datos oficiales (ej. Riot Data Dragon) o basándose en las notas del parche.
+3.  **Script - Actualizar Datos de Counters/Winrates:** Desarrollar el script principal (en `packages/cron-scripts`) que orqueste la ejecución de los _fetchers_ de la Fase 2 (Mobalytics, OP.GG, U.GG) y actualice los datos de _counter picks_ y _winrates_ en la base de datos. Este es el corazón de la actualización periódica.
+4.  **Configurar Cron Jobs:** Configurar un servicio de Cron (ej. Vercel Cron Jobs) para ejecutar los scripts anteriores.
+    - El script de _counters/winrates_ (Paso 3) debería ejecutarse con una frecuencia regular (ej. diaria o cada pocas horas) para mantener los datos frescos.
+    - Los scripts de notas del parche y datos base de campeones (Pasos 1 y 2) podrían ejecutarse con menor frecuencia o activarse idealmente tras la detección de un nuevo parche (ciclo típico de ~15 días), o simplemente ejecutarse también de forma regular (ej. diaria) si la detección es compleja.
+
+**Fase 7: Pruebas y Despliegue**
+
+1.  **Implementar Pruebas:** Escribir pruebas unitarias y/o de integración (siguiendo TDD) para las partes críticas (lógica de datos, API).
+2.  **Configurar Despliegue:** Preparar la configuración para desplegar la aplicación (ej. Vercel).
+3.  **Desplegar MVP:** Poner en producción la versión inicial de la aplicación.
+
 ## Project Structure Overview
 
 ## Project Status Board
