@@ -10,6 +10,27 @@ Si bien el MVP se enfocará exclusivamente en la funcionalidad de _counter picks
 
 ## Key Challenges and Analysis
 
+1.  **Obtención de Datos (Data Acquisition):**
+
+    - Identificar fuentes de datos fiables y actualizadas para los _counter picks_ y _winrates_. Inicialmente, nos centraremos en las siguientes tres fuentes principales:
+      - Mobalytics ([https://mobalytics.gg/](https://mobalytics.gg/))
+      - OP.GG ([https://op.gg/](https://op.gg/))
+      - U.GG ([https://u.gg/](https://u.gg/))
+    - Evaluar si estas fuentes ofrecen APIs públicas o si será necesario recurrir a técnicas de _web scraping_. El scraping presenta desafíos como fragilidad ante cambios en las webs, posibles bloqueos y necesidad de mantenimiento constante. Investigar APIs ocultas/internas será prioritario antes de optar por scraping (ver sección _Lessons_).
+    - Gestionar la posible inconsistencia o variaciones en los datos entre diferentes fuentes.
+
+2.  **Consolidación y Ponderación de Datos:**
+
+    - Definir la lógica para agregar los datos de las múltiples fuentes. ¿Cómo calcular el "indicador agregado"? (Ej: promedio simple, ponderado -¿con qué pesos?-, métrica propia).
+    - De ser necesario, establecer criterios claros para determinar qué constituye un "counter pick efectivo". O simplemente con el ponderado ya seria lo suficientemente confiable?.
+
+3.  **Actualización de Datos:**
+
+    - El metajuego de League of Legends cambia constantemente. Se necesitará un mecanismo para mantener los datos actualizados (probablemente _cron jobs_). Definir la frecuencia y el proceso de actualización es clave. Una buena opción podria ser los Cron Jobs de Vercel.
+
+4.  **Experiencia de Usuario (UX) en Tiempo Real:**
+    - La aplicación debe ser extremadamente rápida y fácil de usar durante la breve fase de selección de campeón. El rendimiento y la claridad de la interfaz son cruciales.
+
 ## High-Level Task Breakdown
 
 ## Project Structure Overview
