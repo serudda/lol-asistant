@@ -1,248 +1,118 @@
-# lol-assistant Project Scratchpad
+# League of Legends Assistant Project Scratchpad
 
-## Antecedentes y Motivación
+## Background and Motivation
 
-El objetivo es desarrollar un sistema que permita la ejecución de scripts personalizados **dentro del monorepo existente**. Estos scripts deben poder ejecutarse de forma local para tareas de desarrollo o mantenimiento, y algunos de ellos deben poder desplegarse como tareas programadas (cron jobs) en Vercel para ejecuciones periódicas automatizadas. Se busca una estructura flexible **que se integre con la estructura actual (`apps/`, `packages/`)**, facilitando tanto la ejecución local como el despliegue selectivo en Vercel.
+Este Side Project surge de la experiencia personal como jugador casual de League of Legends. La fase de selección de campeón, con su tiempo limitado, a menudo obliga a consultar de forma apresurada y simultánea múltiples fuentes web (Mobalytics, OP.GG, U.GG, etc.) para identificar los _counter picks_ más efectivos contra un campeón enemigo específico (por ejemplo, buscar _counters_ para Lee Sin en la jungla). Este proceso fragmentado y bajo presión puede llevar a tomar decisiones de selección subóptimas.
 
-## Desafíos Clave y Análisis
+El objetivo principal de Lol Assistant es centralizar y simplificar esta búsqueda. Se propone desarrollar una aplicación (inicialmente como un Producto Mínimo Viable - MVP) que permita, a través de una interfaz simple como un _combobox_, buscar rápidamente un campeón enemigo y obtener una vista consolidada de sus _counter picks_ más relevantes. La aplicación presentará los porcentajes de _winrate_ de cada _counter_, obtenidos de diversas fuentes de datos confiables, y calculará un indicador agregado (como un promedio ponderado o una métrica propia) para ofrecer una recomendación clara y fundamentada, optimizando la toma de decisiones durante la selección de campeón.
 
-1.  **¿Integración en `packages/` o `apps/`?**
+Si bien el MVP se enfocará exclusivamente en la funcionalidad de _counter picks_, la visión a largo plazo es expandir Lol Assistant con características adicionales que aporten valor a los jugadores de League of Legends.
 
-    - **Opción 1: Nuevo Paquete (`packages/cron-scripts`)**: Encapsula la lógica reutilizable. Fácil ejecución local (`pnpm --filter cron-scripts ...`). Requiere una forma de exponer endpoints HTTP para Vercel Crons.
-    - **Opción 2: Endpoint HTTP directo (Vercel Serverless Functions)**: Crear archivos directamente en un directorio `api/` (en la raíz o en `apps/`) que Vercel despliega como funciones serverless. Estas funciones importarían la lógica del paquete.
-    - **Recomendación: Híbrido Simplificado.**
-      - Un paquete `packages/cron-scripts` que contenga la lógica central de todos los scripts (locales y cron).
-      - Un directorio `api/crons/` (p. ej., en la raíz del monorepo o dentro de `apps/` si se prefiere organización) conteniendo Vercel Serverless Functions. Cada función (`.ts`) aquí importará y ejecutará una función específica del paquete `cron-scripts`, sirviendo como endpoint para los Vercel Crons.
-    - **Ventajas:** Separación clara (lógica en `packages`, endpoints en `api`), reutilización, integración limpia, ejecución local directa de scripts, despliegue ligero en Vercel (sin necesidad de Next.js/Express solo para los crons).
+## Key Challenges and Analysis
 
-2.  **Estructura para Ejecución Local:**
+1.  **Obtención de Datos (Data Acquisition):**
 
-    - Dentro del nuevo paquete `packages/cron-scripts`, directorio `src/scripts/` con los archivos `.ts` de cada script.
-    - Runner/dispatcher (`src/run.ts`) en `packages/cron-scripts` que toma el nombre del script como argumento y lo ejecuta.
-    - Invocación vía `package.json`: `pnpm --filter cron-scripts run start <nombre-script>`.
+    - Identificar fuentes de datos fiables y actualizadas para los _counter picks_ y _winrates_. Inicialmente, nos centraremos en las siguientes tres fuentes principales:
+      - Mobalytics ([https://mobalytics.gg/](https://mobalytics.gg/))
+      - OP.GG ([https://op.gg/](https://op.gg/))
+      - U.GG ([https://u.gg/](https://u.gg/))
+    - Evaluar si estas fuentes ofrecen APIs públicas o si será necesario recurrir a técnicas de _web scraping_. El scraping presenta desafíos como fragilidad ante cambios en las webs, posibles bloqueos y necesidad de mantenimiento constante. Investigar APIs ocultas/internas será prioritario antes de optar por scraping (ver sección _Lessons_).
+    - Gestionar la posible inconsistencia o variaciones en los datos entre diferentes fuentes.
 
-3.  **Estructura para Despliegue en Vercel (Cron Jobs):**
+2.  **Consolidación y Ponderación de Datos:**
 
-    - Directorio `api/crons/` con archivos `.ts` (Vercel Serverless Functions), p. ej., `api/crons/update-champions.ts`.
-    - Cada función importa la lógica necesaria de `packages/cron-scripts`.
-    - En `vercel.json` (en la raíz) se definirán los cron jobs apuntando a estas funciones desplegadas (ej. `/api/crons/update-champions`).
-    - Manejo de seguridad con Vercel Cron Job Secret.
+    - Definir la lógica para agregar los datos de las múltiples fuentes. ¿Cómo calcular el "indicador agregado"? (Ej: promedio simple, ponderado -¿con qué pesos?-, métrica propia).
+    - De ser necesario, establecer criterios claros para determinar qué constituye un "counter pick efectivo". O simplemente con el ponderado ya seria lo suficientemente confiable?.
 
-4.  **Carga de Campeones en Combobox (`PickChampPage.tsx`):**
-    - **Opción 1: Carga Inicial Parcial + Búsqueda Backend (Debounce).** Cargar pocos campeones inicialmente, y buscar en el backend a medida que el usuario escribe. Más complejo, latencia en búsqueda.
-    - **Opción 2: Carga Completa + Filtrado Frontend.** Cargar todos los campeones (~170) al inicio y usar el filtro interno del `Combobox` en el frontend. Más simple, filtrado instantáneo.
-    - **Decisión:** Se opta por la **Opción 2** debido a la simplicidad y mejor UX para la cantidad actual de campeones. La transferencia de datos es pequeña y el filtrado en frontend es más rápido.
+3.  **Actualización de Datos:**
 
-## Desglose de Tareas de Alto Nivel
+    - El metajuego de League of Legends cambia constantemente. Se necesitará un mecanismo para mantener los datos actualizados (probablemente _cron jobs_). Definir la frecuencia y el proceso de actualización es clave. Una buena opción podria ser los Cron Jobs de Vercel.
 
-1.  **Verificar/Ajustar Configuración Monorepo:**
-    - Asegurarse de que `pnpm-workspace.yaml` incluye `packages/*` y `apps/*` (y potencialmente `api/*` si se pone allí).
-    - Verificar configuración base de TS.
-    - _Criterio de Éxito:_ `pnpm install` funciona y reconoce workspaces.
-2.  **Crear Paquete `packages/cron-scripts`:**
-    - Inicializar paquete Node.js/TS en `packages/`.
-    - Crear `src/index.ts`, `src/scripts/`, y script de ejemplo (`sample-script.ts`).
-    - _Criterio de Éxito:_ Construcción (`pnpm --filter cron-scripts build`) y reconocimiento por `pnpm install`.
-3.  **Crear Directorio y Función Base para API Crons:**
-    - Crear directorio `api/crons/` (decidir si en raíz o `apps/`).
-    - Crear una función serverless de ejemplo (`api/crons/sample-cron.ts`) que simplemente importe algo (o loguee) de `packages/cron-scripts` para verificar la conexión.
-    - Asegurarse de que Vercel pueda reconocer/desplegar funciones desde esta ubicación (puede requerir ajustes en `vercel.json` si no está en la raíz).
-    - _Criterio de Éxito:_ La estructura existe. La función de ejemplo puede (potencialmente) ser construida/detectada. `pnpm install` funciona.
-4.  **Implementar Runner de Scripts Locales en `packages/cron-scripts`:**
-    - Crear `src/run.ts` (import dinámico, ejecución).
-    - Añadir script `start` en `package.json`.
-    - _Criterio de Éxito:_ `pnpm --filter cron-scripts run start sample-script` funciona.
-5.  **Implementar Endpoint API Serverless Específico:**
-    - Modificar/crear la función serverless correspondiente (ej. `api/crons/sample-cron.ts`) para:
-      - Validar la llamada (ej. método GET, secret `process.env.CRON_SECRET`).
-      - Importar y ejecutar la función real de `packages/cron-scripts`.
-      - Manejar errores y devolver respuesta JSON.
-    - _Criterio de Éxito:_ Se puede invocar localmente (si Vercel CLI está configurado o mediante pruebas) o después del despliegue, y ejecuta el script de `packages`, devolviendo JSON.
-6.  **Configurar Vercel Cron Job:**
-    - Añadir configuración en `vercel.json` apuntando a la función serverless desplegada.
-    - Configurar `CRON_SECRET` en Vercel.
-    - Desplegar.
-    - _Criterio de Éxito:_ Cron visible en Vercel, se ejecuta, logs OK.
-7.  **Implementar Endpoints CRUD Campeones en `packages/api`:**
-    - Definir rutas y handlers para `createChampion` (POST) y `updateChampion` (PUT/PATCH, por ID/key) en `packages/api`.
-    - Incluir validación de payloads para ambos endpoints.
-    - Conectar con `packages/db` para crear/actualizar registros.
-    - _Criterio de Éxito:_ Ambos endpoints existen, son llamables, y realizan la operación correcta (crear o actualizar) en la BD.
-8.  **Crear Script `updateChampionData` en `packages/cron-scripts`:**
-    - Crear `src/scripts/updateChampionData.ts`.
-    - El script debe obtener los datos de campeones (ej. API Riot).
-    - Para cada campeón, verificar si existe en nuestra BD (quizás con un endpoint `getChampion` o una consulta directa si la lógica está en el script).
-    - Llamar a `createChampion` si no existe, o a `updateChampion` si existe.
-    - Manejar respuestas y errores.
-    - _Criterio de Éxito:_ `pnpm --filter @lol-assistant/cron-scripts run start updateChampionData` ejecuta el script, sincroniza los datos llamando al endpoint apropiado (create o update) para cada campeón, y reporta el resultado.
-9.  **Adaptar Script de Webscrapping (`getLatestPatchNote`)**
-    - Adaptar `packages/cron-scripts/src/scripts/getLatestPatchNote.ts` para usar el modelo `PatchNote` de la BD (Supabase) y la lógica de guardado/actualización implementada en `packages/api` (si procede, o usar Supabase client directamente si es más simple).
-    - Refinar la estructura interna siguiendo el ejemplo de `api/`, `common/`, `ai/` dentro del script.
-    - _Criterio de Éxito:_ Script `getLatestPatchNote` ejecutable localmente (`pnpm script:run getLatestPatchNote`), obtiene, procesa (resume) y guarda correctamente el último parche en Supabase.
-10. **Crear Endpoint para Cronjob (`check-patch-notes`)**
-    - Implementar en `api/crons/check-patch-notes.ts`
-    - Integrar con el script `getLatestPatchNote` (importar y ejecutar).
-    - Añadir validación de secret.
-    - _Criterio de Éxito:_ Endpoint desplegado accesible, ejecuta `getLatestPatchNote` y devuelve estado.
-11. **Configurar Cronjob en Vercel (`check-patch-notes`)**
-    - Añadir configuración en `vercel.json`.
-    - Establecer frecuencia de ejecución.
-    - Configurar `CRON_SECRET`.
-    - _Criterio de Éxito:_ Cronjob configurado, programado y ejecutándose correctamente en Vercel.
+4.  **Experiencia de Usuario (UX) en Tiempo Real:**
+    - La aplicación debe ser extremadamente rápida y fácil de usar durante la breve fase de selección de campeón. El rendimiento y la claridad de la interfaz son cruciales.
 
-### Nueva Tarea: Sincronizar Datos de Campeones desde DDragon
+## High-Level Task Breakdown
 
-12. **Refactorizar Script `updateChampionStats.ts`:**
-    - Mover a `packages/cron-scripts/src/scripts/`.
-    - Reestructurar internamente con subdirectorios (`common/` para fetching/parsing DDragon, `api/` para interacción Supabase).
-    - **Confirmar que el script acepta `patchVersion` y `championSlug` como parámetros.** (Aclaración del rol)
-    - _Criterio de Éxito:_ Script reubicado, estructura interna modularizada, acepta `patchVersion` y `championSlug`. **(Completado)**
+**Fase 1: Configuración Inicial y Estructura del Proyecto**
 
-**Nuevo Enfoque: Script Orquestador `syncAllChampions.ts`**
+1.  **Inicializar Monorepo:** Configurar el proyecto usando Turborepo y PNPM workspaces.
+2.  **Configurar Herramientas Base:** Establecer TypeScript, ESLint, Prettier, asegurando el uso de configuraciones compartidas desde `/tooling` según las convenciones del proyecto.
+3.  **Definir Estructura Básica:** Crear los paquetes iniciales necesarios (ej. `apps/web`, `packages/api`, `packages/db`, `packages/cron-scripts`).
 
-13. **Crear Script Orquestador `syncAllChampions.ts`:**
+**Fase 2: Investigación y Adquisición de Datos**
 
-    - Crear `packages/cron-scripts/src/scripts/syncAllChampions.ts`.
-    - Este script aceptará `patchVersion` como argumento.
-    - _Criterio de Éxito:_ El archivo existe y es ejecutable mediante `pnpm script:run syncAllChampions patchVersion=<version>`. **(Completado)**
+1.  **Investigar Fuentes de Datos:** Analizar Mobalytics, OP.GG y U.GG para determinar la mejor estrategia de extracción de datos (API vs. Scraping). Priorizar la búsqueda de APIs (públicas u ocultas).
+2.  **Implementar Fetchers de Datos:** Crear funciones o scripts (probablemente en `packages/cron-scripts` o `packages/api`) para obtener los datos de _counter picks_ y _winrates_ de cada una de las 3 fuentes.
 
-14. **Implementar Obtención de Lista Maestra (en `syncAllChampions.ts`):**
+**Fase 3: Almacenamiento y Procesamiento de Datos**
 
-    - Dentro de `syncAllChampions.ts` (o un helper que llame), implementar la lógica para obtener el archivo `champion.json` de DDragon para la `patchVersion` especificada.
-    - Extraer la lista de `slugs` de campeones del objeto `data`.
-    - Manejar errores si `champion.json` no se puede obtener (log + posiblemente detener el script si la lista es necesaria para continuar).
-    - _Criterio de Éxito:_ `syncAllChampions.ts` puede obtener y loguear la lista de slugs para la versión dada. **(Completado)**
+1.  **Configurar Base de Datos:** Inicializar Prisma en `packages/db` y definir los modelos necesarios (ej. Campeón, CounterPick, FuenteDeDatos).
+2.  **Implementar Lógica de Almacenamiento:** Crear funciones para guardar los datos obtenidos en la Fase 2 en la base de datos.
+3.  **Implementar Lógica de Consolidación:** Desarrollar la función que tome los datos de las 3 fuentes desde la BD y calcule el indicador agregado/ponderado para los _counter picks_.
 
-15. **Implementar Bucle de Procesamiento (en `syncAllChampions.ts`):**
+**Fase 4: Desarrollo del Backend (API)**
 
-    - Modificar `syncAllChampions.ts` para iterar sobre la lista de `slugs` obtenida (Tarea 14).
-    - Para cada `slug`:
-      - Importar y llamar a el script `updateChampionStats` para obtener y parsear los datos del campeón específico.
-      - Implementar manejo de errores para esta iteración: si falla el fetch o parseo para un campeón, registrar el error (con `slug` y `version`) y **continuar con el siguiente campeón**.
-    - _Criterio de Éxito:_ `syncAllChampions.ts` itera sobre todos los slugs, intenta obtener y parsear datos para cada uno, loguea progreso/errores individuales y continúa. **(Completado)**
+1.  **Crear API Endpoint:** Desarrollar un endpoint (ej. `/api/counters/[championName]`) que reciba un nombre de campeón y devuelva la lista consolidada de _counter picks_ con sus métricas, usando la lógica de la Fase 3. (Podría vivir en `apps/web/pages/api`, `apps/nextjs/app/api` o directamente en `api/` si usamos Vercel Serverless Functions).
 
-16. **Implementar Lógica de Guardado Upsert con Prisma (Ya existe, integrar en `syncAllChampions.ts`):**
+**Fase 5: Desarrollo del Frontend (UI/UX)**
 
-    - La función `saveChampion` (o similar usando Prisma `upsert`) existe en `updateChampionStats/api/`. Debe ser llamada desde el bucle de `syncAllChampions.ts`.
-    - _Criterio de Éxito:_ La función `saveChampion` se llama correctamente dentro del bucle para los campeones procesados con éxito. **(Completado - Integrado en el bucle)**
+1.  **Diseñar Interfaz Básica:** Crear la estructura visual de la aplicación web en `apps/web` (o `apps/nextjs`).
+2.  **Implementar Componente de Búsqueda:** Desarrollar el _combobox_ o campo de entrada para buscar campeones.
+3.  **Implementar Vista de Resultados:** Mostrar la lista de _counter picks_ devuelta por la API, incluyendo _winrates_ y el indicador agregado.
+4.  **Conectar Frontend con Backend:** Integrar la UI con el endpoint de la API creado en la Fase 4.
 
-17. **Integrar Guardado en Bucle y Logging Final (en `syncAllChampions.ts`):**
+**Fase 6: Automatización y Mantenimiento de Datos**
 
-    - Dentro del bucle de `syncAllChampions.ts` (Tarea 15), después de parsear exitosamente un campeón, llamar a la función `saveChampion` (Tarea 16) con los datos parseados y `patchVersion`.
-    - Añadir manejo de errores específico para la operación de guardado: si falla, registrar el error (con `slug`) y continuar con el siguiente campeón.
-    - Al final de `syncAllChampions.ts`, añadir un resumen en los logs: número total de campeones intentados, número de éxitos (fetch, parse, save), número de fallos por categoría (fetch/parse, guardado).
-    - _Criterio de Éxito:_ Script `syncAllChampions.ts` completo se ejecuta, procesa todos los campeones, intenta guardarlos/actualizarlos, maneja errores individuales, y reporta un resumen final. Verificación en BD. **(Completado)**
+1.  **Script - Obtener Notas del Parche:** Desarrollar un script para obtener información sobre los nuevos parches de League of Legends (identificar fuente: ¿API de Riot, web oficial?). Almacenar información relevante en la BD si es necesario para referencia o para disparar otras actualizaciones.
+2.  **Script - Actualizar Datos Base de Campeones:** Crear/adaptar un script para actualizar la información fundamental de los campeones (estadísticas base, habilidades, etc.) si la aplicación lo requiere, posiblemente usando datos oficiales (ej. Riot Data Dragon) o basándose en las notas del parche.
+3.  **Script - Actualizar Datos de Counters/Winrates:** Desarrollar el script principal (en `packages/cron-scripts`) que orqueste la ejecución de los _fetchers_ de la Fase 2 (Mobalytics, OP.GG, U.GG) y actualice los datos de _counter picks_ y _winrates_ en la base de datos. Este es el corazón de la actualización periódica.
+4.  **Configurar Cron Jobs:** Configurar un servicio de Cron (ej. Vercel Cron Jobs) para ejecutar los scripts anteriores.
+    - El script de _counters/winrates_ (Paso 3) debería ejecutarse con una frecuencia regular (ej. diaria o cada pocas horas) para mantener los datos frescos.
+    - Los scripts de notas del parche y datos base de campeones (Pasos 1 y 2) podrían ejecutarse con menor frecuencia o activarse idealmente tras la detección de un nuevo parche (ciclo típico de ~15 días), o simplemente ejecutarse también de forma regular (ej. diaria) si la detección es compleja.
 
-18. **(Opcional) Crear Endpoint y Cronjob Vercel para `syncAllChampions`:**
-    - Si se desea automatizar, crear endpoint en `api/crons/sync-all-champions.ts`.
-    - Este endpoint llamará a `syncAllChampions.ts`.
-    - Configurar cronjob en `vercel.json`.
-    - _Criterio de Éxito:_ Cronjob automatizado funciona para la sincronización completa. **(Pendiente - Opcional)**
+**Fase 7: Pruebas y Despliegue**
 
-### Nueva Tarea: Integrar Campeones en Combobox (PickChampPage)
+1.  **Implementar Pruebas:** Escribir pruebas unitarias y/o de integración (siguiendo TDD) para las partes críticas (lógica de datos, API).
+2.  **Configurar Despliegue:** Preparar la configuración para desplegar la aplicación (ej. Vercel).
+3.  **Desplegar MVP:** Poner en producción la versión inicial de la aplicación.
 
-19. **Backend (`packages/api`): Crear Endpoint `getAllBasic`:**
-    - Crear handler `getAllBasicChampionsHandler` en `champion.controller.ts` usando `prisma.champion.findMany()` (ordenado por nombre, seleccionando solo `id`, `name`, `slug`, `imageUrl`).
-    - Definir schema de input `getAllBasicChampionsInput` (puede ser vacío).
-    - Añadir `publicProcedure` `getAllBasic` a `championRouter`.
-    - _Criterio de Éxito:_ Endpoint `champion.getAllBasic` funcional, devuelve la lista de campeones con los campos mínimos necesarios para UI/selects.
-    - **Convención:** Los endpoints `getAllBasic` y `getBasicById` se reservan para obtener solo la información mínima necesaria de los modelos, optimizados para listas y selects.
-20. **Frontend (`apps/web`): Consumir Endpoint en `PickChampPage`:**
-    - Usar hook `trpc.champion.getAll.useQuery()` en `PickChampPage.tsx`.
-    - Mapear la respuesta al formato `{ value: slug, label: name }` para el `Combobox`.
-    - Pasar los datos mapeados al `Combobox.List`.
-    - Implementar estados de carga y error (`isLoading`, `isError`).
-    - _Criterio de Éxito:_ El `Combobox` muestra la lista dinámica de campeones, el `Combobox.Search` filtra correctamente en el frontend, y se manejan los estados de carga/error.
+## Project Structure Overview
 
-### Nueva Tarea: Webscraping de Counters (Mobalytics Only, MVP)
+Este proyecto utiliza una arquitectura monorepo gestionada con Turborepo y PNPM Workspaces para organizar el código de manera eficiente. La estructura principal se divide en aplicaciones (`apps`), paquetes compartidos (`packages`) y configuraciones globales (`tooling`).
 
-#### Estado Final y Lecciones
+Puntos Clave y Directorios Principales:
 
-- **Tarea Completada:** El script de counters de Mobalytics ahora usa el endpoint GraphQL oficial, eliminando la necesidad de scraping HTML y mejorando la robustez.
-- Se implementó paginación automática para obtener todos los counters disponibles.
-- Se separaron responsabilidades: fetch paginado, DTO específico para la API, y pipeline limpio que retorna un array unificado de counters (`SourceChampCounter`).
-- Se reutilizó la estructura de DTOs y tipos (`dtos.ts`, `types.ts`, `constants.ts`) para mantener el código modular y fácil de extender a nuevas fuentes.
-- El script está parametrizado (`slug`, `role`, `rank`) y sigue el estilo de los scripts principales del monorepo.
-- **Lección Clave:** Antes de recurrir a scraping HTML complejo (con Cheerio/Puppeteer), siempre investigar si existe un endpoint de API interna (JSON/GraphQL) que proporcione los datos directamente. Es más rápido, robusto y mantenible.
-- El pipeline está listo para la unificación multi-fuente en el futuro.
+- **`/tooling`**: Directorio **CRUCIAL** donde se centralizan todas las configuraciones compartidas del proyecto (TypeScript, ESLint, Prettier, Tailwind CSS, etc.). **Antes de crear cualquier archivo de configuración en un paquete o aplicación, se debe verificar si ya existe una configuración base en `/tooling` para extenderla o reutilizarla.** El objetivo es minimizar la duplicidad de configuraciones.
 
-#### Tablero de Estado del Proyecto (MVP Mobalytics)
+- **`/packages/api`**: Contiene toda la lógica del backend y los endpoints de la API.
 
-- [x] Refactor: fetch directo desde web (vía API GraphQL)
-- [x] Refactor: parametrización CLI
-- [x] Refactor: output simplificado
-- [x] Refactor: tipado y parsing mejorados (DTO para API)
-- [x] Refactor: extractor modular y robusto (separación de responsabilidades)
+  - Se comunica con la base de datos utilizando **Prisma** y **tRPC**.
+  - La infraestructura de base de datos se apoya en **Supabase**.
+  - **Convención:** Antes de crear un nuevo endpoint, verificar si ya existe uno similar. Al agregar nuevos, seguir la estructura modular: `controller`, `router`, `schemas`.
 
-#### Comentarios o Solicitudes de Asistencia del Executor
+- **`/packages/db`**: Define el esquema de la base de datos y contiene toda la configuración de **Prisma**.
 
-- Tarea finalizada y lista para PR. El pipeline es robusto, limpio y extensible.
+  - Aquí se encuentra `schema.prisma` y cualquier migración o script relacionado con la base de datos. Es la fuente de verdad para la estructura de datos.
 
-## Tablero de Estado del Proyecto
+- **`/packages/ui`**: Nuestra librería de componentes de UI compartidos (UI Kit).
 
-- [x] Verificar/Ajustar Configuración Monorepo
-- [x] Crear Paquete `packages/cron-scripts`
-- [ ] Crear Directorio y Función Base para API Crons
-- [x] Implementar Runner de Scripts Locales en `packages/cron-scripts`
-- [ ] Implementar Endpoint API Serverless Específico (para `sample-cron`)
-- [ ] Configurar Vercel Cron Job (para `sample-cron`)
-- [x] Implementar Endpoints CRUD Campeones en `packages/api`
-- [x] Crear Script `updateChampionData` en `packages/cron-scripts` (versión inicial, necesita refactor)
-- [x] Crear Schema para Patch Notes
-- [x] Implementar Endpoints Básicos de Patch Notes
-- [x] Adaptar Script de Webscrapping (`getLatestPatchNote`)
-- [ ] Crear Endpoint para Cronjob (`check-patch-notes`)
-- [ ] Configurar Cronjob en Vercel (`check-patch-notes`)
-- **Nueva Tarea: Sincronizar Datos de Campeones desde DDragon**
-  - [x] Refactorizar Script `updateChampionStats.ts` (Tarea 12 - Rol aclarado)
-  - [x] Crear Script Orquestador `syncAllChampions.ts` (Tarea 13)
-  - [x] Implementar Obtención de Lista Maestra (en `syncAllChampions.ts`) (Tarea 14)
-  - [x] Implementar Bucle de Procesamiento (en `syncAllChampions.ts`) (Tarea 15)
-  - [x] Implementar Lógica de Guardado Upsert con Prisma (Tarea 16 - Integrado en el bucle)
-  - [x] Integrar Guardado en Bucle y Logging Final (en `syncAllChampions.ts`) (Tarea 17)
-  - [ ] (Opcional) Crear Endpoint y Cronjob Vercel (Tarea 18)
-- **Nueva Tarea: Integrar Campeones en Combobox (PickChampPage)**
-  - [x] Backend: Crear Endpoint `getAllBasic` (Tarea 19)
-  - [x] Frontend: Consumir Endpoint en `PickChampPage` (Tarea 20)
-- **Nueva Tarea: Webscraping de Counters (MVP Mobalytics)**
-  - [x] Refactor: fetch directo desde web (vía API GraphQL)
-  - [x] Refactor: parametrización CLI
-  - [x] Refactor: output simplificado
-  - [x] Refactor: tipado y parsing mejorados (DTO para API)
-  - [x] Refactor: extractor modular y robusto (separación de responsabilidades)
+  - Contiene componentes base reutilizables en todo el proyecto (ej. `Button`, `TextInput`, `Modal`, `Combobox`).
+  - **Convención:** Agregar aquí solo componentes genéricos y reutilizables. Componentes específicos de una aplicación deben vivir dentro de la carpeta de componentes de esa aplicación.
 
-## Comentarios o Solicitudes de Asistencia del Executor
+- **`/packages/cron-scripts`**: Centraliza todos los scripts diseñados para ejecutarse periódicamente o bajo demanda.
 
-- **Tarea 1:** Verificado `pnpm-workspace.yaml`. Incluye `packages/*` y `apps/*`. Ejecutado `pnpm install` con éxito. Configuración del monorepo lista para los nuevos paquetes/directorios.
-- **Tarea 2:** Creado paquete `packages/cron-scripts` con estructura base (package.json, tsconfig.json). Añadido script de ejemplo `sample-script.ts` e implementado `index.ts` para exportación. Corregidas dependencias para usar las mismas versiones del monorepo existente. Actualizado `tsconfig.json` para extender de `@lol-assistant/typescript-config/internal-package.json` y usar la misma configuración de módulos que otros paquetes (`moduleResolution: "Bundler"`). Compilación exitosa con `pnpm --filter @lol-assistant/cron-scripts run build`.
-- **Tarea 4:** Implementado y probado el runner de scripts locales. Corregidos problemas de resolución de módulos para `ts-node` utilizando `--experimental-specifier-resolution=node`. Verificado el funcionamiento con `pnpm --filter @lol-assistant/cron-scripts run start sample-script` y la capacidad de pasar parámetros como `timestamp=true message="Prueba personalizada"`.
-- **Tarea 7 y 8:** Implementados endpoints CRUD para campeones y script de actualización. El script `updateChampion` permite actualizar campos específicos de un campeón sin sobrescribir valores existentes no proporcionados. Verificado el funcionamiento con `pnpm script:run updateChampion id="<champion-id>" name="New Name"`.
-- **Tarea 9:**
-  - Creado schema de validación en `packages/api/src/schemas/patchNote.schema.ts`
-  - Implementado controlador en `packages/api/src/controllers/patchNote.controller.ts`
-  - Implementados endpoints básicos:
-    - Create Patch Note
-    - Get Latest Patch Note (usando campo date para ordenamiento)
-  - ⏳ Pendientes:
-    - Crear endpoint para cronjob
-    - Configurar cronjob en Vercel
-- **Tarea 10:** Refactorizado `updateChampionStats.ts`.
-  - ✅ Movida lógica de DDragon a `common/getChampionRawData.ts` y `common/parseChampionRawData.ts`.
-  - ✅ Criterio de Éxito: Script reubicado, estructura modularizada, acepta `patchVersion`.
-- **Tarea 11:**
-  - ✅ Actualizado schema de champion para incluir `lastPatchVersion`
-  - ✅ Mejorado controlador de champion con:
-    - ✅ Validación de duplicados (nombre/slug)
-    - ✅ Manejo explícito de `lastPatchVersion`
-    - ✅ Mejor manejo de errores
-  - ✅ Implementada lógica de upsert para actualizaciones
-  - ✅ Verificado funcionamiento con pruebas locales
-- **Tarea 13:** Creado script `packages/cron-scripts/src/scripts/syncAllChampions.ts`. Exportada y utilizada la función `parseArgs` desde `run.ts` para manejar el argumento `patchVersion`. Script ejecutable a través de `pnpm script:run syncAllChampions patchVersion=<version>`.
-- **Tarea 14-17:** Implementado script `syncAllChampions.ts` completo:
-  - ✅ Obtención de lista de campeones desde DDragon
-  - ✅ Bucle de procesamiento con reintentos (3 intentos por campeón)
-  - ✅ Manejo de errores individuales sin detener el proceso
-  - ✅ Logging detallado de progreso y resultados
-  - ✅ Resumen final con estadísticas de éxito/fallo
-  - ✅ Verificado funcionamiento con pruebas locales
-  - ✅ Confirmado funcionamiento tanto para creación como actualización de campeones
+  - Incluye tareas como _web scraping_, llamadas a APIs externas, procesamiento de datos, etc.
+  - Estos scripts son los candidatos a ser desplegados como Cron Jobs en plataformas como Vercel.
+
+- **`/apps/web`**: La aplicación web principal orientada al usuario final.
+  - Implementa la interfaz con la que interactúan los usuarios (ej. el _combobox_ para buscar campeones).
+  - Contendrá funcionalidades como visualización de datos, autenticación de usuarios, gestión de perfiles (como el Champion Pool), etc.
+  - Utilizará componentes de `/packages/ui` y se comunicará con `/packages/api` para obtener y enviar datos.
+
+## Project Status Board
+
+## Executor Comments or Assistance Requests
+
+## Lessons
+
+- **Estrategia de Scraping:** Siempre investigar APIs JSON/GraphQL ocultas o internas antes de recurrir al scraping HTML (Cheerio/Puppeteer). La interacción API es mucho más robusta y menos propensa a romperse por cambios en la UI. Usar extensivamente las herramientas de desarrollador del navegador (pestaña Red).
