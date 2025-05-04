@@ -41,17 +41,7 @@ export const extractDataFromHtml = (html: string, role: OPGGRole, rank: OPGGRank
 
     // Extract win rate - try multiple selectors and handle empty cases
     const winRateElement = $el.find('strong.text-xs');
-    if (!winRateElement.length) {
-      throw new Error(
-        `[extractFromHtml] Could not extract winrate for counter '${champion}' in role '${role}'. Element HTML: ${$el.html()}`,
-      );
-    }
-    const counterWinRate = parseInt(winRateElement.text().trim().replace('%', ''));
-    if (isNaN(counterWinRate)) {
-      throw new Error(
-        `[extractFromHtml] Parsed winrate is NaN for counter '${champion}' in role '${role}'. Raw text: '${winRateElement.text()}'`,
-      );
-    }
+    const counterWinRate = winRateElement.text().trim().replace('%', '');
 
     // Extract number of games
     const games = $el.find('span.text-gray-600').last().text().trim();
@@ -62,7 +52,6 @@ export const extractDataFromHtml = (html: string, role: OPGGRole, rank: OPGGRank
           matchupSlug: champion,
           matchupRole: role,
           counterWinRate,
-          winRate: 0,
           games: parseInt(games),
         },
         rank,
@@ -72,13 +61,10 @@ export const extractDataFromHtml = (html: string, role: OPGGRole, rank: OPGGRank
   });
 
   // Sort and assign ranks in one step
-  /* TODO: Review if we need to sort the counters
   return counters
-    .sort((a, b) => parseFloat(b.counterWinRate) - parseFloat(a.counterWinRate))
+    .sort((a, b) => b.counterWinRate - a.counterWinRate)
     .map((counter, index) => ({
       ...counter,
       rank: index + 1,
     }));
-  */
-  return counters;
 };

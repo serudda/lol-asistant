@@ -13,7 +13,14 @@ export const mobalyticsApiCounterDto = (
   const wins = item.counterMetrics?.wins ?? 0;
   const looses = item.counterMetrics?.looses ?? 0;
   const totalMatches = wins + looses;
-  const winRate = totalMatches > 0 ? (wins / totalMatches) * 100 : null;
+
+  if (totalMatches === 0) {
+    throw new Error(
+      `[mobalyticsApiCounterDto] Total matches is 0 for counter '${item.matchupSlug}' in role '${item.matchupRole}'.`,
+    );
+  }
+
+  const winRate = (wins / totalMatches) * 100;
   const lowerCaseRole = role.toLowerCase();
 
   return {
@@ -22,7 +29,7 @@ export const mobalyticsApiCounterDto = (
     champUrl: `${MOBALYTICS_BASE_URL}lol/champions/${item.matchupSlug}/build/${lowerCaseRole}?rank=${rank}`,
     role: item.matchupRole,
     source: Sources.MOBALYTICS,
-    counterWinRate: winRate ? parseFloat(winRate.toFixed(1)) : null,
+    counterWinRate: parseFloat(winRate.toFixed(1)),
     matches: totalMatches,
   };
 };
