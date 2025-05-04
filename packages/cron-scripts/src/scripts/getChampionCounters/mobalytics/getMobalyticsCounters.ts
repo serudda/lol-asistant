@@ -30,7 +30,7 @@ async function fetchAllMobalyticsCounters(
 }
 
 /**
- * Get champion data from Data Dragon API for a specific
+ * Get champion data from Mobalytics API for a specific
  * champion and version.
  *
  * @param slug - The slug of the champion. e.g. 'ahri'

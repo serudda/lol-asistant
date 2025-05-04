@@ -1,6 +1,7 @@
 import { Sources } from '../../common/constants';
 import type { SourceCounter } from '../../common/types';
 import type { MobalyticsRank, MobalyticsRole } from './constants';
+import { MOBALYTICS_BASE_URL } from './constants';
 import type { MobalyticsCountersOptionsData } from './types';
 
 export const mobalyticsApiCounterDto = (
@@ -18,7 +19,7 @@ export const mobalyticsApiCounterDto = (
   return {
     rank: index + 1,
     champion: item.matchupSlug,
-    champUrl: `https://mobalytics.gg/lol/champions/${item.matchupSlug}/build/${lowerCaseRole}?rank=${rank}`,
+    champUrl: `${MOBALYTICS_BASE_URL}lol/champions/${item.matchupSlug}/build/${lowerCaseRole}?rank=${rank}`,
     role: item.matchupRole,
     source: Sources.MOBALYTICS,
     counterWinRate: winRate ? parseFloat(winRate.toFixed(1)) : null,
