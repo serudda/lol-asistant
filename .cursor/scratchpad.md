@@ -154,6 +154,30 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
     - Implementar estados de carga y error (`isLoading`, `isError`).
     - _Criterio de Éxito:_ El `Combobox` muestra la lista dinámica de campeones, el `Combobox.Search` filtra correctamente en el frontend, y se manejan los estados de carga/error.
 
+### Nueva Tarea: Webscraping de Counters (Mobalytics Only, MVP)
+
+#### Estado Final y Lecciones
+
+- **Tarea Completada:** El script de counters de Mobalytics ahora usa el endpoint GraphQL oficial, eliminando la necesidad de scraping HTML y mejorando la robustez.
+- Se implementó paginación automática para obtener todos los counters disponibles.
+- Se separaron responsabilidades: fetch paginado, DTO específico para la API, y pipeline limpio que retorna un array unificado de counters (`SourceChampCounter`).
+- Se reutilizó la estructura de DTOs y tipos (`dtos.ts`, `types.ts`, `constants.ts`) para mantener el código modular y fácil de extender a nuevas fuentes.
+- El script está parametrizado (`slug`, `role`, `rank`) y sigue el estilo de los scripts principales del monorepo.
+- **Lección Clave:** Antes de recurrir a scraping HTML complejo (con Cheerio/Puppeteer), siempre investigar si existe un endpoint de API interna (JSON/GraphQL) que proporcione los datos directamente. Es más rápido, robusto y mantenible.
+- El pipeline está listo para la unificación multi-fuente en el futuro.
+
+#### Tablero de Estado del Proyecto (MVP Mobalytics)
+
+- [x] Refactor: fetch directo desde web (vía API GraphQL)
+- [x] Refactor: parametrización CLI
+- [x] Refactor: output simplificado
+- [x] Refactor: tipado y parsing mejorados (DTO para API)
+- [x] Refactor: extractor modular y robusto (separación de responsabilidades)
+
+#### Comentarios o Solicitudes de Asistencia del Executor
+
+- Tarea finalizada y lista para PR. El pipeline es robusto, limpio y extensible.
+
 ## Tablero de Estado del Proyecto
 
 - [x] Verificar/Ajustar Configuración Monorepo
@@ -180,6 +204,12 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
 - **Nueva Tarea: Integrar Campeones en Combobox (PickChampPage)**
   - [x] Backend: Crear Endpoint `getAllBasic` (Tarea 19)
   - [x] Frontend: Consumir Endpoint en `PickChampPage` (Tarea 20)
+- **Nueva Tarea: Webscraping de Counters (MVP Mobalytics)**
+  - [x] Refactor: fetch directo desde web (vía API GraphQL)
+  - [x] Refactor: parametrización CLI
+  - [x] Refactor: output simplificado
+  - [x] Refactor: tipado y parsing mejorados (DTO para API)
+  - [x] Refactor: extractor modular y robusto (separación de responsabilidades)
 
 ## Comentarios o Solicitudes de Asistencia del Executor
 
@@ -216,19 +246,3 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
   - ✅ Resumen final con estadísticas de éxito/fallo
   - ✅ Verificado funcionamiento con pruebas locales
   - ✅ Confirmado funcionamiento tanto para creación como actualización de campeones
-
-### Progreso Tarea 19
-
-- Se implementó el handler `getAllBasicChampionsHandler` en `champion.controller.ts` usando `prisma.champion.findMany()` y seleccionando solo los campos necesarios.
-- Se creó el schema `getAllBasicChampionsInput`.
-- Se expuso el endpoint `getAllBasic` en el `championRouter`.
-- Se corrigieron los tipos para evitar errores de tipado en la respuesta parcial.
-- Se documentó la convención para endpoints de info básica (`getAllBasic`, `getBasicById`).
-- Listo para consumir desde el frontend.
-
-### Cierre Feature: Dynamic Champion Combobox
-
-- Se creó el componente `ChampionCombobox` que encapsula la lógica de fetching, mapeo y selección de campeones usando el endpoint `getAllBasic`.
-- Se integró el componente en la UI, reemplazando la data hardcodeada.
-- Se documentaron mejoras futuras (skeleton loader, error message) como issues en Linear.
-- El feature está listo para PR y revisión.

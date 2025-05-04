@@ -27,3 +27,13 @@ export const normalizeString = (str: string) => {
   }
   return ret.join('');
 };
+
+/**
+ * Parse a percentage string to a number. Example: "48.0%"
+ * or "48.0" becomes 48.0.
+ */
+export const normalizePercentage = (value: string): number | null => {
+  const cleaned = value.replace('%', '').trim();
+  const num = parseFloat(cleaned);
+  return isNaN(num) ? null : num;
+};
