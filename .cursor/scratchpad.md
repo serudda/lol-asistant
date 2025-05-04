@@ -154,6 +154,50 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
     - Implementar estados de carga y error (`isLoading`, `isError`).
     - _Criterio de Éxito:_ El `Combobox` muestra la lista dinámica de campeones, el `Combobox.Search` filtra correctamente en el frontend, y se manejan los estados de carga/error.
 
+### Nueva Tarea: Webscraping de Counters (Mobalytics Only, MVP)
+
+#### Antecedentes y Motivación
+
+Se requiere un script en `@lol-assistant/cron-scripts` que haga webscraping de la página de Counters de un campeón. **A largo plazo**, el objetivo es obtener datos de **múltiples fuentes** (Mobalytics, U.GG, OP.GG, etc.), unificar los resultados y guardarlos en la base de datos (`ChampCounter`).
+
+**Alcance Actual (MVP):** Implementar el scraping solo para **Mobalytics**. El script debe ser parametrizable por `slug`, `rol` y `rank`. El objetivo inicial es solo obtener la lista de counters y loggearla, sin persistencia ni integración con la base de datos. Esto servirá como base sólida para luego añadir más fuentes y la lógica de unificación.
+
+#### Desafíos Clave y Análisis
+
+- **Multi-Fuente (Largo Plazo):** Cada fuente requerirá un scraper específico. La unificación necesitará normalizar nombres de campeones y combinar estadísticas (winrate, matches). Se decidió mantener los datos scrapeados en **runtime** y continuar el proceso aunque alguna fuente falle, loggeando el error y unificando los datos de las fuentes exitosas.
+- **Scraping Mobalytics (Actual):** El script original depende de archivos HTML locales y parámetros hardcodeados. Se requiere hacer fetch directo desde la web y parametrizar los argumentos. El output debe ser solo logging/return, sin guardar en archivos ni base de datos. El parsing debe ser robusto a cambios menores en el HTML.
+- **Parametrización:** El script final deberá aceptar `slug` (string), `role` (string, ej: 'jungle') y `rank` (string, ej: 'diamond_plus') como parámetros.
+
+#### Desglose de Tareas de Alto Nivel (MVP Mobalytics)
+
+1. Refactorizar el script para hacer fetch directo del HTML desde la web de Mobalytics.
+2. Parametrizar slug, role y rank como argumentos CLI.
+3. Simplificar el output: solo loggear el array de counters parseados.
+4. Mejorar el tipado y parsing (parsear winrate y matches a número en el extractor).
+5. Mantener la función de extracción modular y robusta.
+
+#### Criterios de Éxito (MVP Mobalytics)
+
+- El script recibe slug, role y rank como argumentos.
+- Hace scraping de la página de counters de Mobalytics en tiempo real.
+- Devuelve/loggea un array de counters con los datos principales.
+- Maneja errores de red y parsing de forma clara.
+
+#### Tablero de Estado del Proyecto (MVP Mobalytics)
+
+- [x] Refactor: fetch directo desde web
+- [⏳] Refactor: parametrización CLI (en progreso)
+- [ ] Refactor: output simplificado
+- [ ] Refactor: tipado y parsing mejorados
+- [ ] Refactor: extractor modular y robusto
+
+#### Comentarios o Solicitudes de Asistencia del Executor
+
+- Se agregó `axios` como dependencia (`1.7.2`).
+- **Completado:** Modificado `getChampCounters.run.ts` para realizar fetch HTTP directo desde Mobalytics.
+- **Nota:** Se definieron constantes (`SOURCE_NAMES`, `SOURCE_URLS`) temporalmente en el script debido a un problema con la estructura `common`. Resolver esto en una tarea separada o al integrar más fuentes.
+- Próxima acción: Modificar el script para aceptar `slug`, `role` y `rank` como argumentos de línea de comandos.
+
 ## Tablero de Estado del Proyecto
 
 - [x] Verificar/Ajustar Configuración Monorepo
@@ -180,6 +224,12 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
 - **Nueva Tarea: Integrar Campeones en Combobox (PickChampPage)**
   - [x] Backend: Crear Endpoint `getAllBasic` (Tarea 19)
   - [x] Frontend: Consumir Endpoint en `PickChampPage` (Tarea 20)
+- **Nueva Tarea: Webscraping de Counters (MVP Mobalytics)**
+  - [x] Refactor: fetch directo desde web
+  - [⏳] Refactor: parametrización CLI (en progreso)
+  - [ ] Refactor: output simplificado
+  - [ ] Refactor: tipado y parsing mejorados
+  - [ ] Refactor: extractor modular y robusto
 
 ## Comentarios o Solicitudes de Asistencia del Executor
 
@@ -232,3 +282,8 @@ El objetivo es desarrollar un sistema que permita la ejecución de scripts perso
 - Se integró el componente en la UI, reemplazando la data hardcodeada.
 - Se documentaron mejoras futuras (skeleton loader, error message) como issues en Linear.
 - El feature está listo para PR y revisión.
+
+#### Comentarios o Solicitudes de Asistencia del Executor
+
+- Se agregó `axios` como dependencia (`1.7.2`).
+- Próxima acción: Modificar `getChampCounters.run.ts` para realizar el fetch HTTP directo desde Mobalytics y eliminar la lectura de archivos locales.
