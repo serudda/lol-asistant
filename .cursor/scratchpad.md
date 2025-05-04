@@ -111,17 +111,11 @@ Puntos Clave y Directorios Principales:
 
 ## Project Status Board
 
-**[WIP] Implementar Script `opgg-get-counters` (LOL-33) - https://linear.app/lol-assistant/issue/LOL-33/add-opgg-get-counters-script**
-
-**1. Analizar Fuente de Datos OP.GG:** Investigar las páginas de campeones en OP.GG (ej. /champions/leesin/counters) usando dev tools. Identificar la llamada de red (API JSON/GraphQL preferiblemente) que devuelve los datos de counters (campeón, winrate, partidas). Documentar URL, método, headers/payload y estructura de la respuesta relevante.
-**2. Crear Estructura del Script:** Crear la carpeta `packages/cron-scripts/src/scripts/getChampionCounters/opgg`. Configurar la estructura básica (función async, imports necesarios como `axios` o similar). Basandonos en como lo hacemos en `packages/cron-scripts/src/scripts/getChampionCounters/mobalytics`.
-**3. Implementar Lógica de Fetching:** Escribir el código en `fetchOpggApi.ts` para realizar la petición HTTP identificada en el paso 1. Manejar errores de red y respuestas no exitosas. Parsear la respuesta para extraer la lista de counters con sus datos. Recordar siempre usar `packages/cron-scripts/src/scripts/getChampionCounters/mobalytics` como referencia.
-**4. Definir Tipos de Datos:** Definir una interfaz TypeScript (ej. `OpggCounterData`) para la estructura de los datos parseados (ej. `{ counterChampionName: string; winRate: number; gamesPlayed: number; }`). Asegurar que el parseo se ajuste a este tipo.
-**5. Añadir Logging y Manejo de Errores:** Implementar logs informativos (inicio, éxito, errores específicos) y manejo robusto de errores en fetching y parsing.
-
-_Criterio de Éxito General:_ El script `getChampionCounters.ts` ademas de obtener los counters pick de Mobalytics (algo que ya dejamos implementado previamente), obtiene datos de counters de OP.GG para un campeón, los muestra estructurados en consola (según el tipo definido), y maneja errores básicos.
+**[DONE] Implementar Script `opgg-get-counters` (LOL-33) - https://linear.app/lol-assistant/issue/LOL-33/add-opgg-get-counters-script** - Scraping robusto de counters desde OP.GG usando Cheerio. - Estructura de carpetas y DTOs alineada con Mobalytics. - Mapeo bidireccional de roles y rangos (enums internos + mappers por fuente). - Integración con entrypoint multi-fuente (`getChampionCounters`), permitiendo fácil extensión a nuevas fuentes. - _Criterio de Éxito:_ El script obtiene y normaliza datos de counters de OP.GG, con validación estricta y logs útiles. Listo para PR y revisión.
 
 ## Executor Comments or Assistance Requests
+
+- OP.GG fetcher ahora es robusto, extensible y alineado con el resto del sistema. El mapeo de enums internos permite agregar nuevas fuentes sin fricción. Listo para revisión/merge.
 
 ## Lessons
 
