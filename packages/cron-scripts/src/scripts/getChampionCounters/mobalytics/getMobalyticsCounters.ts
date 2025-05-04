@@ -48,7 +48,9 @@ export const getMobalyticsCounters = async (
     const rawCounters = await fetchAllMobalyticsCounters(slug, role, rank);
 
     // Map to DTO format
-    const counters: Array<SourceCounter> = rawCounters.map(mobalyticsApiCounterDto);
+    const counters: Array<SourceCounter> = rawCounters.map((item, index) =>
+      mobalyticsApiCounterDto(item, rank, role, index),
+    );
     console.log(`[getMobalyticsCounters] Extracted ${counters.length} counters.`);
 
     return counters;
