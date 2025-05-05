@@ -1,5 +1,6 @@
 import { MobalyticsRank, MobalyticsRole } from '../mobalytics/common/constants';
 import { OPGGRank, OPGGRole } from '../opgg/common/constants';
+import { UGGRank, UGGRole } from '../ugg/common/constants';
 
 export enum Sources {
   MOBALYTICS = 'mobalytics',
@@ -48,7 +49,7 @@ export const toMobalyticsRole = (role: InternalRole): MobalyticsRole => {
     case InternalRole.SUPPORT:
       return MobalyticsRole.SUPPORT;
     default:
-      throw new Error('Unknown internal role:', role);
+      throw new Error('[toMobalyticsRole] Unknown internal role:', role);
   }
 };
 
@@ -73,7 +74,7 @@ export const toMobalyticsRank = (rank: InternalRank): MobalyticsRank => {
     case InternalRank.CHALLENGER:
       return MobalyticsRank.CHALLENGER;
     default:
-      throw new Error(`Unknown internal rank: ${rank}`);
+      throw new Error(`[toMobalyticsRank] Unknown internal rank: ${rank}`);
   }
 };
 
@@ -91,7 +92,7 @@ export const toOPGGRole = (role: InternalRole): OPGGRole => {
     case InternalRole.SUPPORT:
       return OPGGRole.SUPPORT;
     default:
-      throw new Error('Unknown internal role:', role);
+      throw new Error('[toOPGGRole] Unknown internal role:', role);
   }
 };
 
@@ -118,6 +119,51 @@ export const toOPGGRank = (rank: InternalRank): OPGGRank => {
     case InternalRank.CHALLENGER:
       return OPGGRank.CHALLENGER;
     default:
-      throw new Error('Unknown internal rank:', rank);
+      throw new Error('[toOPGGRank] Unknown internal rank:', rank);
+  }
+};
+
+// Mappers for U.GG
+export const toUGGRole = (role: InternalRole): UGGRole => {
+  switch (role) {
+    case InternalRole.TOP:
+      return UGGRole.TOP;
+    case InternalRole.JUNGLE:
+      return UGGRole.JUNGLE;
+    case InternalRole.MID:
+      return UGGRole.MID;
+    case InternalRole.ADC:
+      return UGGRole.ADC;
+    case InternalRole.SUPPORT:
+      return UGGRole.SUPPORT;
+    default:
+      throw new Error('[toUGGRole] Unknown internal role:', role);
+  }
+};
+
+export const toUGGRank = (rank: InternalRank): UGGRank => {
+  switch (rank) {
+    case InternalRank.IRON:
+      return UGGRank.IRON;
+    case InternalRank.BRONZE:
+      return UGGRank.BRONZE;
+    case InternalRank.SILVER:
+      return UGGRank.SILVER;
+    case InternalRank.GOLD:
+      return UGGRank.GOLD;
+    case InternalRank.PLATINUM:
+      return UGGRank.PLATINUM;
+    case InternalRank.EMERALD:
+      return UGGRank.EMERALD;
+    case InternalRank.DIAMOND:
+      return UGGRank.DIAMOND;
+    case InternalRank.MASTER:
+      return UGGRank.MASTER;
+    case InternalRank.GRANDMASTER:
+      return UGGRank.GRANDMASTER;
+    case InternalRank.CHALLENGER:
+      return UGGRank.CHALLENGER;
+    default:
+      throw new Error('[toUGGRank] Unknown internal rank:', rank);
   }
 };

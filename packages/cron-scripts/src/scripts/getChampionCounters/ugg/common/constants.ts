@@ -1,7 +1,7 @@
-export const OPGG_BASE_URL = 'https://www.op.gg';
-export const OPGG_CHAMPION_URL = `${OPGG_BASE_URL}/lol/champions`;
+export const U_GG_BASE_URL = 'https://u.gg';
+export const U_GG_CHAMPION_URL = `${U_GG_BASE_URL}/lol/champions`;
 
-export enum OPGGRank {
+export enum UGGRank {
   IRON = 'iron',
   BRONZE = 'bronze',
   SILVER = 'silver',
@@ -19,7 +19,7 @@ export enum OPGGRank {
   CHALLENGER = 'challenger',
 }
 
-export enum OPGGRole {
+export enum UGGRole {
   TOP = 'top',
   JUNGLE = 'jungle',
   MID = 'mid',

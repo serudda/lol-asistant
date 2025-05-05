@@ -25,7 +25,7 @@ export const opggChampCounterDto = (item: OPGGCountersOptionsData, rank: OPGGRan
     champUrl: `${OPGG_BASE_URL}/lol/champions/${item.matchupSlug}/build/${item.matchupRole.toLowerCase()}?tier=${rank}`,
     role: item.matchupRole,
     source: Sources.OP_GG,
-    counterWinRate: 100 - parseFloat(item.counterWinRate), // op.gg shows winrate inverted, so we invert it
+    counterWinRate: 100 - counterWinRate, // op.gg shows winrate inverted, so we invert it
     matches: item.games,
   };
 };
