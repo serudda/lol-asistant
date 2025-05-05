@@ -113,20 +113,15 @@ Puntos Clave y Directorios Principales:
 
 **[DONE] Implementar Script `opgg-get-counters` (LOL-33) - https://linear.app/lol-assistant/issue/LOL-33/add-opgg-get-counters-script** - Scraping robusto de counters desde OP.GG usando Cheerio. - Estructura de carpetas y DTOs alineada con Mobalytics. - Mapeo bidireccional de roles y rangos (enums internos + mappers por fuente). - Integración con entrypoint multi-fuente (`getChampionCounters`), permitiendo fácil extensión a nuevas fuentes. - _Criterio de Éxito:_ El script obtiene y normaliza datos de counters de OP.GG, con validación estricta y logs útiles. Listo para PR y revisión.
 
-**[WIP] Implementar Script `ugg-get-counters` (LOL-35) - https://linear.app/lol-assistant/issue/LOL-35/add-ugg-script-to-get-counter-list**
-
-- **1. Analizar Fuente de Datos U.GG:** Investigar la página de counters de U.GG (ej. `/champion/leesin/counters`) usando DevTools. Identificar si existe una API pública, endpoint interno (JSON/GraphQL) o si es necesario hacer scraping HTML. Documentar la estrategia elegida (URL, método, headers, estructura de respuesta).
-- **2. Crear Estructura del Script:** Crear la carpeta `packages/cron-scripts/src/scripts/getChampionCounters/ugg` y la subcarpeta `common/`. Configurar la estructura base del fetcher (`getUGGCounters.ts`), DTOs y tipos, siguiendo el patrón de Mobalytics/OP.GG.
-- **3. Implementar Lógica de Fetching:** Escribir el código para obtener y parsear los datos de counters de U.GG para un campeón, rol y rango dados. Manejar errores de red, validaciones estrictas y logs útiles. No asignar valores arbitrarios si faltan datos críticos.
-- **4. Definir Tipos de Datos y DTOs:** Definir los tipos y DTOs alineados con el modelo común (`SourceCounter`). Asegurar que el parseo y la salida cumplen con la estructura esperada.
-- **5. Añadir Logging y Manejo de Errores:** Implementar logs informativos (inicio, éxito, errores específicos) y manejo robusto de errores en fetching y parsing.
-- **6. Integrar con el Entrypoint Multi-fuente:** Integrar el fetcher de U.GG en `getChampionCounters`, usando los enums internos y mappers para roles/rangos.
-- _Criterio de Éxito:_ El script obtiene y normaliza datos de counters de U.GG para un campeón, rol y rango, los muestra estructurados en consola (según el tipo definido), y maneja errores básicos. El código es robusto, extensible y alineado con los fetchers de Mobalytics y OP.GG.
+**[DONE] Implementar Script `ugg-get-counters` (LOL-35) - https://linear.app/lol-assistant/issue/LOL-35/add-ugg-script-to-get-counter-list** - Parsing y normalización de slugs y datos de counters de U.GG robusto y alineado con OP.GG. (DONE) - _Criterio de Éxito:_ El script obtiene y normaliza datos de counters de U.GG para un campeón, rol y rango, los muestra estructurados en consola (según el tipo definido), y maneja errores básicos. El código es robusto, extensible y alineado con los fetchers de Mobalytics y OP.GG.
 
 ## Executor Comments or Assistance Requests
 
 - OP.GG fetcher ahora es robusto, extensible y alineado con el resto del sistema. El mapeo de enums internos permite agregar nuevas fuentes sin fricción. Listo para revisión/merge.
+- **Task LOL-35 (U.GG):** Necesito ayuda con el primer paso: investigar la fuente de datos de U.GG (API interna o scraping) para obtener los datos de counters. Por favor, proporciona la URL, método, headers (si aplica) y estructura de la respuesta encontrada. -> Scraping HTML confirmado.
 
 ## Lessons
 
-- **Estrategia de Scraping:** Siempre investigar APIs JSON/GraphQL ocultas o internas antes de recurrir al scraping HTML (Cheerio/Puppeteer). La interacción API es mucho más robusta y menos propensa a romperse por cambios en la UI. Usar extensivamente las herramientas de desarrollador del navegador (pestaña Red).
+- **Consistencia entre fuentes:** Mantener la misma estructura de función y DTOs entre los fetchers de diferentes fuentes (OP.GG, U.GG, etc.) facilita el mantenimiento y la extensión del sistema.
+- **Validación y logs:** Siempre validar la existencia de los datos extraídos (nombre, winrate, matches) y loguear advertencias o errores para debugging rápido.
+- **Robustez ante cambios:** Si el selector o estructura HTML cambia y no se encuentra la sección esperada, lanzar un error explícito y loguear el HTML problemático para facilitar el diagnóstico.
