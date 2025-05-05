@@ -1,7 +1,15 @@
 import type { InternalRank, InternalRole } from './getChampionCounters/common/constants';
-import { toMobalyticsRank, toMobalyticsRole, toOPGGRank, toOPGGRole } from './getChampionCounters/common/constants';
+import {
+  toMobalyticsRank,
+  toMobalyticsRole,
+  toOPGGRank,
+  toOPGGRole,
+  toUGGRank,
+  toUGGRole,
+} from './getChampionCounters/common/constants';
 import { getMobalyticsCounters } from './getChampionCounters/mobalytics/getMobalyticsCounters';
 import { getOPGGCounters } from './getChampionCounters/opgg/getOPGGCounters';
+import { getUGGCounters } from './getChampionCounters/ugg/getUGGCounters';
 
 const scriptId = '🛠️  getChampionCounters';
 
@@ -40,6 +48,15 @@ export const getChampionCounters = async ({
     console.log(`[${scriptId}] [Fetching OP.GG] Fetching data for champion: ${championSlug}`);
     const opggData = await getOPGGCounters(championSlug, opggRole, opggRank);
     console.log('** OP.GG Data **', opggData);
+
+    // ------------------------------------------------------------
+
+    // Get U.GG counters
+    const uggRole = toUGGRole(role);
+    const uggRank = toUGGRank(rank);
+    console.log(`[${scriptId}] [Fetching U.GG] Fetching data for champion: ${championSlug}`);
+    const uggData = await getUGGCounters(championSlug, uggRole, uggRank);
+    console.log('** U.GG Data **', uggData);
 
     // ------------------------------------------------------------
 

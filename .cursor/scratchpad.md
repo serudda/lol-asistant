@@ -113,10 +113,15 @@ Puntos Clave y Directorios Principales:
 
 **[DONE] Implementar Script `opgg-get-counters` (LOL-33) - https://linear.app/lol-assistant/issue/LOL-33/add-opgg-get-counters-script** - Scraping robusto de counters desde OP.GG usando Cheerio. - Estructura de carpetas y DTOs alineada con Mobalytics. - Mapeo bidireccional de roles y rangos (enums internos + mappers por fuente). - Integración con entrypoint multi-fuente (`getChampionCounters`), permitiendo fácil extensión a nuevas fuentes. - _Criterio de Éxito:_ El script obtiene y normaliza datos de counters de OP.GG, con validación estricta y logs útiles. Listo para PR y revisión.
 
+**[DONE] Implementar Script `ugg-get-counters` (LOL-35) - https://linear.app/lol-assistant/issue/LOL-35/add-ugg-script-to-get-counter-list** - Parsing y normalización de slugs y datos de counters de U.GG robusto y alineado con OP.GG. (DONE) - _Criterio de Éxito:_ El script obtiene y normaliza datos de counters de U.GG para un campeón, rol y rango, los muestra estructurados en consola (según el tipo definido), y maneja errores básicos. El código es robusto, extensible y alineado con los fetchers de Mobalytics y OP.GG.
+
 ## Executor Comments or Assistance Requests
 
 - OP.GG fetcher ahora es robusto, extensible y alineado con el resto del sistema. El mapeo de enums internos permite agregar nuevas fuentes sin fricción. Listo para revisión/merge.
+- **Task LOL-35 (U.GG):** Necesito ayuda con el primer paso: investigar la fuente de datos de U.GG (API interna o scraping) para obtener los datos de counters. Por favor, proporciona la URL, método, headers (si aplica) y estructura de la respuesta encontrada. -> Scraping HTML confirmado.
 
 ## Lessons
 
-- **Estrategia de Scraping:** Siempre investigar APIs JSON/GraphQL ocultas o internas antes de recurrir al scraping HTML (Cheerio/Puppeteer). La interacción API es mucho más robusta y menos propensa a romperse por cambios en la UI. Usar extensivamente las herramientas de desarrollador del navegador (pestaña Red).
+- **Consistencia entre fuentes:** Mantener la misma estructura de función y DTOs entre los fetchers de diferentes fuentes (OP.GG, U.GG, etc.) facilita el mantenimiento y la extensión del sistema.
+- **Validación y logs:** Siempre validar la existencia de los datos extraídos (nombre, winrate, matches) y loguear advertencias o errores para debugging rápido.
+- **Robustez ante cambios:** Si el selector o estructura HTML cambia y no se encuentra la sección esperada, lanzar un error explícito y loguear el HTML problemático para facilitar el diagnóstico.
