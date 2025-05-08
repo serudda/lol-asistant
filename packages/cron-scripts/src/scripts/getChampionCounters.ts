@@ -60,9 +60,7 @@ export const getChampionCounters = async ({
 
     // ------------------------------------------------------------
 
-    // Parse champion data
-    // console.log(`[${scriptId}] [Parsing Champion Data] Extracting valuable stats for ${championSlug}`);
-    // const parsedChampion = parseChampionRawData(rawChampionData, patchVersion);
+    // TODO: Consolidate and parse all data to a single object to save it in the database
 
     // ------------------------------------------------------------
 

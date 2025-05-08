@@ -115,6 +115,30 @@ Puntos Clave y Directorios Principales:
 
 **[DONE] Implementar Script `ugg-get-counters` (LOL-35) - https://linear.app/lol-assistant/issue/LOL-35/add-ugg-script-to-get-counter-list** - Parsing y normalización de slugs y datos de counters de U.GG robusto y alineado con OP.GG. (DONE) - _Criterio de Éxito:_ El script obtiene y normaliza datos de counters de U.GG para un campeón, rol y rango, los muestra estructurados en consola (según el tipo definido), y maneja errores básicos. El código es robusto, extensible y alineado con los fetchers de Mobalytics y OP.GG.
 
+**[PENDING] Persist counter matchups in DB for each source (LOL-40) - https://linear.app/lol-assistant/issue/LOL-37/persist-counter-matchups-in-db-for-each-source**
+
+- 1. **Crear endpoints:**
+
+  - Crear los endpoints de "create" y "update" relacionados al modelo SourceMatchupStat. (Eso dentro de nuestro `packages/api`).
+
+- 2. **Definir DTOs de Persistencia:**
+
+  - Crear un nuevo DTO específicos en cada source `packages/cron-scripts/src/scripts/getChampionCounters/[source]/common/dtos.ts` (donde `[source]` es `mobalytics`, `opgg`, `ugg`) para mapear los datos crudos del fetcher a la estructura del servicio de crear mathup.
+
+- 3. **Crear Funciones de Guardado por Fuente:**
+
+  - Implementar `saveMobalyticsMatchups(rawData, championSlug, role, tier, patchVersion)` en `packages/cron-scripts/src/scripts/getChampionCounters/mobalytics/saveMobalyticsMatchups.ts`. Esta función usará el DTO de Mobalytics y llamará al respectivo endpoint.
+  - Implementar `saveOpggMatchups(rawData, championSlug, role, tier, patchVersion)` en `packages/cron-scripts/src/scripts/getChampionCounters/opgg/saveOpggMatchups.ts`. (Similar a Mobalytics).
+  - Implementar `saveUggMatchups(rawData, championSlug, role, tier, patchVersion)` en `packages/cron-scripts/src/scripts/getChampionCounters/ugg/saveUggMatchups.ts`. (Similar a Mobalytics).
+
+- 4. **Modificar `packages/cron-scripts/src/scripts/getChampionCounters.ts`:**
+
+  - Después de cada `get<Source>Counters(...)`, llamar a la función `save<Source>Matchups(...)` correspondiente, pasando los datos y metadatos necesarios.
+
+- _Criterios de Éxito:_ Después de ejecutar `getChampionCounters.ts` para un campeón, rol, rango y parche:
+  - La base de datos contiene registros correspondientes de `SourceMatchupStat` para cada fuente (Mobalytics, OP.GG, U.GG) con los porcentajes de victoria y partidas jugadas correctos.
+  - Las ejecuciones posteriores con los mismos parámetros actualizan los registros existentes de `SourceMatchupStat` (winRate, gamesPlayed). Si hay un nuevo PatchNote, se agregaran nuevos registros a `SourceMatchupStat` asociados a este nuevo Patch.
+
 ## Executor Comments or Assistance Requests
 
 - OP.GG fetcher ahora es robusto, extensible y alineado con el resto del sistema. El mapeo de enums internos permite agregar nuevas fuentes sin fricción. Listo para revisión/merge.
