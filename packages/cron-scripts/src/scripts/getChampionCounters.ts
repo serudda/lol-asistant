@@ -1,5 +1,6 @@
 import type { InternalRank, InternalRole } from './getChampionCounters/common/constants';
 import {
+  Sources,
   toMobalyticsRank,
   toMobalyticsRole,
   toOPGGRank,
@@ -7,6 +8,7 @@ import {
   toUGGRank,
   toUGGRole,
 } from './getChampionCounters/common/constants';
+import { saveSourceMatchupStats } from './getChampionCounters/common/saveSourceMatchupStats';
 import { getMobalyticsCounters } from './getChampionCounters/mobalytics/getMobalyticsCounters';
 import { getOPGGCounters } from './getChampionCounters/opgg/getOPGGCounters';
 import { getUGGCounters } from './getChampionCounters/ugg/getUGGCounters';
@@ -47,7 +49,12 @@ export const getChampionCounters = async ({
     const opggRank = toOPGGRank(rank);
     console.log(`[${scriptId}] [Fetching OP.GG] Fetching data for champion: ${championSlug}`);
     const opggData = await getOPGGCounters(championSlug, opggRole, opggRank);
-    console.log('** OP.GG Data **', opggData);
+    await saveSourceMatchupStats({
+      counters: opggData,
+      championMatchupId: '8c9c4bba-66d6-4e07-ac28-9a3f32cbc81f',
+      sourceSlug: Sources.OP_GG,
+      scrapedAt: new Date().toISOString(),
+    });
 
     // ------------------------------------------------------------
 
@@ -80,7 +87,6 @@ export const getChampionCounters = async ({
 
   console.log(`[${scriptId}] Finished update process for version: ${patchVersion}`);
 };
-
 export default getChampionCounters;
 
 /*

@@ -2,6 +2,7 @@ import { accountRouter } from './router/account';
 import { championRouter } from './router/champion';
 import { configRouter } from './router/config';
 import { patchNoteRouter } from './router/patchNote';
+import { sourceRouter } from './router/source';
 import { sourceMatchupStatRouter } from './router/sourceMatchupStat';
 import { userRouter } from './router/user';
 import { createTRPCRouter } from './trpc';
@@ -12,6 +13,7 @@ export const appRouter = createTRPCRouter({
   config: configRouter,
   user: userRouter,
   patchNote: patchNoteRouter,
+  source: sourceRouter,
   sourceMatchupStat: sourceMatchupStatRouter,
 });
 
