@@ -12,7 +12,7 @@ datasource db {
 }
 
 // --------------------------------------------------
-// ENUMS (sin cambios)
+// ENUMS
 // --------------------------------------------------
 enum SubscriptionFrequency {
     day
@@ -202,21 +202,23 @@ model Champion {
 // Match-up between two Champions
 model ChampionMatchup {
     id                 String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    role               String?
+    weightedWinRate    Float
+    totalMatches       Int
+    isActive           Boolean         @default(true) @map("is_active")
+    createdAt          DateTime        @default(now())
+    updatedAt          DateTime        @updatedAt @map("updated_at")
+    // --- Relations ---
+    patchNote          PatchNote       @relation(fields: [patchNoteId], references: [id])
+    patchNoteId        String          @map("patch_note_id")
     // Selected Champion (base)
     baseChampion       Champion        @relation("MatchupBase", fields: [baseChampionId], references: [id])
     baseChampionId     String          @map("base_champion_id")
     // Opponent Champion
     opponentChampion   Champion        @relation("MatchupOpponent", fields: [opponentChampionId], references: [id])
     opponentChampionId String          @map("opponent_champion_id")
-    role               String?
-    weightedWinRate    Float
-    totalMatches       Int
-    patchNote          PatchNote       @relation(fields: [patchNoteId], references: [id])
-    patchNoteId        String          @map("patch_note_id")
     details            CounterDetail[]
-    isActive           Boolean         @default(true) @map("is_active")
-    createdAt          DateTime        @default(now())
-    updatedAt          DateTime        @updatedAt @map("updated_at")
+    // -----------------
 
     @@unique([baseChampionId, opponentChampionId, role, patchNoteId])
     @@map("champion_matchups")
