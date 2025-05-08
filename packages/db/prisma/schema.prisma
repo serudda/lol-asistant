@@ -211,13 +211,13 @@ model ChampionMatchup {
     updatedAt          DateTime            @updatedAt @map("updated_at")
     // --- Relations ---
     patchNote          PatchNote           @relation(fields: [patchNoteId], references: [id])
-    patchNoteId        String              @map("patch_note_id")
+    patchNoteId        String              @map("patch_note_id") @db.Uuid
     // Selected Champion (base)
     baseChampion       Champion            @relation("MatchupBase", fields: [baseChampionId], references: [id])
-    baseChampionId     String              @map("base_champion_id")
+    baseChampionId     String              @map("base_champion_id") @db.Uuid
     // Opponent Champion
     opponentChampion   Champion            @relation("MatchupOpponent", fields: [opponentChampionId], references: [id])
-    opponentChampionId String              @map("opponent_champion_id")
+    opponentChampionId String              @map("opponent_champion_id") @db.Uuid
     sourceStats        SourceMatchupStat[]
     // -----------------
 
@@ -228,7 +228,6 @@ model ChampionMatchup {
 // Raw stats by source
 model SourceMatchupStat {
     id                String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    rank              Int?
     winRate           Float
     matches           Int
     sourceUrl         String
