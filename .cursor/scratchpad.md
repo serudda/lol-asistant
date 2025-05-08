@@ -117,33 +117,40 @@ Puntos Clave y Directorios Principales:
 
 **[WIP] Persist counter matchups in DB for each source (LOL-40) - https://linear.app/lol-assistant/issue/LOL-37/persist-counter-matchups-in-db-for-each-source**
 
-- 1. **Crear endpoints:**
+- 1. **[DONE] Implementar Endpoints API para `Source` y `SourceMatchupStat`:**
+  - Crear/actualizar schemas (Zod) en `packages/api/src/schemas/` para `Source` y `SourceMatchupStat` (CRUD básico para `Source`, `create` para `SourceMatchupStat` esperando IDs de dependencias).
+  - Implementar controllers en `packages/api/src/controllers/` para `Source` (CRUD) y `SourceMatchupStat` (`createSourceMatchupStatHandler` que toma IDs y datos directos para `SourceMatchupStat`).
+  - Configurar routers en `packages/api/src/router/` y agregarlos a `appRouter`.
+  - _Nota:_ La lógica compleja de buscar/crear entidades dependientes (`Champion`, `PatchNote`, `ChampionMatchup`) NO reside en estos handlers directos.
+- 2. **Definir DTOs de Persistencia en `cron-scripts`:**
 
-  - Crear los endpoints de "create" y "update" relacionados al modelo SourceMatchupStat. (Eso dentro de nuestro `packages/api`).
+  - Crear DTOs específicos en `packages/cron-scripts/src/scripts/getChampionCounters/[source]/common/dtos.ts`.
+  - Estos DTOs transformarán los datos del fetcher de cada fuente en la estructura que esperan las funciones `save<Source>Matchups` (incluyendo la preparación de datos para las dependencias).
 
-- 2. **Definir DTOs de Persistencia:**
+- 3. **Crear Funciones de Guardado por Fuente en `cron-scripts` (con lógica de dependencias):**
 
-  - Crear un nuevo DTO específicos en cada source `packages/cron-scripts/src/scripts/getChampionCounters/[source]/common/dtos.ts` (donde `[source]` es `mobalytics`, `opgg`, `ugg`) para mapear los datos crudos del fetcher a la estructura del servicio de crear mathup.
-
-- 3. **Crear Funciones de Guardado por Fuente:**
-
-  - Implementar `saveMobalyticsMatchups(rawData, championSlug, role, tier, patchVersion)` en `packages/cron-scripts/src/scripts/getChampionCounters/mobalytics/saveMobalyticsMatchups.ts`. Esta función usará el DTO de Mobalytics y llamará al respectivo endpoint.
-  - Implementar `saveOpggMatchups(rawData, championSlug, role, tier, patchVersion)` en `packages/cron-scripts/src/scripts/getChampionCounters/opgg/saveOpggMatchups.ts`. (Similar a Mobalytics).
-  - Implementar `saveUggMatchups(rawData, championSlug, role, tier, patchVersion)` en `packages/cron-scripts/src/scripts/getChampionCounters/ugg/saveUggMatchups.ts`. (Similar a Mobalytics).
+  - Implementar `saveMobalyticsMatchups(rawData, ...)` en `.../mobalytics/saveMobalyticsMatchups.ts`.
+  - Implementar `saveOpggMatchups(rawData, ...)` en `.../opgg/saveOpggMatchups.ts`.
+  - Implementar `saveUggMatchups(rawData, ...)` en `.../ugg/saveUggMatchups.ts`.
+  - **Lógica Clave:** Estas funciones serán responsables de:
+    - Usar los DTOs para parsear `rawData`.
+    - Orquestar la creación/búsqueda de `Champion` (base y oponente), `PatchNote` y `ChampionMatchup` (posiblemente usando un nuevo servicio compartido en `packages/api/src/services/` o lógica directa con Prisma).
+    - Una vez obtenidos/creados los IDs de las dependencias, llamar al endpoint `sourceMatchupStat.create` (implementado en el paso 1) para guardar el `SourceMatchupStat`.
 
 - 4. **Modificar `packages/cron-scripts/src/scripts/getChampionCounters.ts`:**
-
-  - Después de cada `get<Source>Counters(...)`, llamar a la función `save<Source>Matchups(...)` correspondiente, pasando los datos y metadatos necesarios.
-
+  - Llamar a `save<Source>Matchups(...)` después de cada `get<Source>Counters(...)`.
 - _Criterios de Éxito:_ Después de ejecutar `getChampionCounters.ts` para un campeón, rol, rango y parche:
-  - La base de datos contiene registros correspondientes de `SourceMatchupStat` para cada fuente (Mobalytics, OP.GG, U.GG) con los porcentajes de victoria y partidas jugadas correctos.
-  - Las ejecuciones posteriores con los mismos parámetros actualizan los registros existentes de `SourceMatchupStat` (winRate, gamesPlayed). Si hay un nuevo PatchNote, se agregaran nuevos registros a `SourceMatchupStat` asociados a este nuevo Patch.
+  - La base de datos contiene los `Champion`, `PatchNote`, `Source` y `ChampionMatchup` necesarios.
+  - Existen registros `SourceMatchupStat` para cada fuente con los datos correctos, vinculados a las entidades anteriores.
+  - Ejecuciones posteriores actualizan/crean `SourceMatchupStat` según corresponda, sin duplicar `ChampionMatchup` para el mismo campeón base, oponente, rol y parche.
+  - Todos los tests unitarios pasan.
 
 ## Executor Comments or Assistance Requests
 
 - OP.GG fetcher ahora es robusto, extensible y alineado con el resto del sistema. El mapeo de enums internos permite agregar nuevas fuentes sin fricción. Listo para revisión/merge.
 - **Task LOL-35 (U.GG):** Necesito ayuda con el primer paso: investigar la fuente de datos de U.GG (API interna o scraping) para obtener los datos de counters. Por favor, proporciona la URL, método, headers (si aplica) y estructura de la respuesta encontrada. -> Scraping HTML confirmado.
 - **Progress (08-May):** Started implementation of sub-task 1 – created tRPC endpoint (`sourceMatchupStat.create`) with schema, controller, service (`upsertSourceMatchupStat`) and router; added to root router. Next: DTO definitions per source + save functions.
+- **Progress (09-May):** User has implemented direct API endpoints for `Source` (CRUD) and `SourceMatchupStat` (`create` taking IDs). This completes a revised version of sub-task 1. The logic for resolving/creating dependencies (`Champion`, `PatchNote`, `ChampionMatchup`) is now planned to be handled within the `save<Source>Matchups` functions in `cron-scripts`.
 
 ## Lessons
 
