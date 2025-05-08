@@ -39,4 +39,7 @@ export const ErrorMessages: ErrorMessageType = {
   PatchNote: {
     NotCreated: 'Algo ha sucedido, no pudimos crear la nota de parche',
   },
+  Source: {
+    NoSource: 'No encontramos la fuente que buscas',
+  },
 };
