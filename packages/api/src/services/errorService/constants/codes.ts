@@ -33,5 +33,7 @@ export const ErrorCodes = {
   },
   Source: {
     NoSource: 'NoSource',
+    AlreadyExists: 'AlreadyExists',
+    NotCreated: 'NotCreated',
   },
 } as const;

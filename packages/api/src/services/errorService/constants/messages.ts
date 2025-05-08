@@ -41,5 +41,7 @@ export const ErrorMessages: ErrorMessageType = {
   },
   Source: {
     NoSource: 'No encontramos la fuente que buscas',
+    AlreadyExists: 'Ya existe una fuente con este slug',
+    NotCreated: 'Algo ha sucedido, no pudimos crear la fuente',
   },
 };

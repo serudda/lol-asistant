@@ -1,4 +1,4 @@
-import type { Account, Champion, PatchNote, SourceMatchupStat, User } from '@lol-assistant/db';
+import type { Account, Champion, PatchNote, Source, SourceMatchupStat, User } from '@lol-assistant/db';
 import type { ResponseStatus } from '../constants';
 
 export interface BaseResponse {
@@ -52,3 +52,6 @@ export type PatchNotesResponse = ApiResponse<{ patchNotes: Array<PatchNote> }>;
 
 // Source Matchup Stat
 export type SourceMatchupStatResponse = ApiResponse<{ sourceMatchupStat: SourceMatchupStat }>;
+
+// Source
+export type SourceResponse = ApiResponse<{ source: Source }>;
