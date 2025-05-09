@@ -1,4 +1,4 @@
-import { ResponseStatus } from '@lol-assistant/api/src/common/constants';
+import { ResponseStatus } from '@lol-assistant/api';
 import { createClient } from '../../../utils/trpc-client';
 import type { InternalRole } from './constants';
 
