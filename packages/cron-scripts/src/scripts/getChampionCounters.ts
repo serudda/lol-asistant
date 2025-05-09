@@ -74,6 +74,26 @@ export const getChampionCounters = async ({
     const opggData = await getOPGGCounters(championSlug, opggRole, opggRank);
     console.log('** OP.GG Data **', opggData);
 
+    for (const counter of opggData) {
+      try {
+        const championMatchupId = await createChampionMatchup({
+          baseChampionSlug: championSlug,
+          opponentChampionSlug: counter.champion,
+          patchVersion,
+          role,
+        });
+
+        await saveSourceMatchupStats({
+          counter,
+          championMatchupId,
+          sourceSlug: Sources.OP_GG,
+          scrapedAt: new Date().toISOString(),
+        });
+      } catch (error) {
+        console.error(`[${scriptId}] [OP.GG] Failed to process counter for opponent '${counter.champion}':`, error);
+      }
+    }
+
     // ------------------------------------------------------------
 
     // Get U.GG counters
@@ -82,6 +102,26 @@ export const getChampionCounters = async ({
     console.log(`[${scriptId}] [Fetching U.GG] Fetching data for champion: ${championSlug}`);
     const uggData = await getUGGCounters(championSlug, uggRole, uggRank);
     console.log('** U.GG Data **', uggData);
+
+    for (const counter of uggData) {
+      try {
+        const championMatchupId = await createChampionMatchup({
+          baseChampionSlug: championSlug,
+          opponentChampionSlug: counter.champion,
+          patchVersion,
+          role,
+        });
+
+        await saveSourceMatchupStats({
+          counter,
+          championMatchupId,
+          sourceSlug: Sources.U_GG,
+          scrapedAt: new Date().toISOString(),
+        });
+      } catch (error) {
+        console.error(`[${scriptId}] [U.GG] Failed to process counter for opponent '${counter.champion}':`, error);
+      }
+    }
 
     // ------------------------------------------------------------
 
