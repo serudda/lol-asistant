@@ -145,6 +145,8 @@ Puntos Clave y Directorios Principales:
   - Ejecuciones posteriores actualizan/crean `SourceMatchupStat` según corresponda, sin duplicar `ChampionMatchup` para el mismo campeón base, oponente, rol y parche.
   - Todos los tests unitarios pasan.
 
+**[WIP] Integrar OP.GG counters -> ChampionMatchup + SourceMatchupStat (LOL-50)** - Refactor `createChampionMatchup` y `saveSourceMatchupStats` utilidades listas. - En `getChampionCounters.ts`: - Crear championMatchup por cada oponente de OP.GG. - Construir `entries` y llamar `saveSourceMatchupStats` una única vez. - _Success Criteria:_ Ejecutar `getChampionCounters` para Volibear jungle patch14.x crea ChampionMatchup y SourceMatchupStat records para todos los oponentes de OP.GG sin hardcodes ni duplicados.
+
 ## Executor Comments or Assistance Requests
 
 - OP.GG fetcher ahora es robusto, extensible y alineado con el resto del sistema. El mapeo de enums internos permite agregar nuevas fuentes sin fricción. Listo para revisión/merge.

@@ -2,6 +2,13 @@ import { z, type TypeOf } from 'zod';
 
 // ------------------------------------------------------------
 
+export const getAllIdsByPatchVersionInput = z.object({
+  patchVersion: z.string(),
+});
+export type GetAllIdsByPatchVersionInputType = TypeOf<typeof getAllIdsByPatchVersionInput>;
+
+// ------------------------------------------------------------
+
 export const createChampionMatchupInput = z.object({
   patchNoteId: z.string(),
   baseChampionId: z.string(),

@@ -51,7 +51,6 @@ export const getChampionCounters = async ({
     const mobalyticsChampionSlug = getChampionSlugForSource(championSlug, Sources.MOBALYTICS);
     console.log(`[${scriptId}] [Fetching Mobalytics] Fetching data for champion: ${mobalyticsChampionSlug}`);
     const mobalyticsData = await getMobalyticsCounters(mobalyticsChampionSlug, mobalyticsRole, mobalyticsRank);
-    console.log('** Mobalytics Data **', mobalyticsData);
 
     for (const counter of mobalyticsData) {
       try {
@@ -87,7 +86,6 @@ export const getChampionCounters = async ({
     const opggChampionSlug = getChampionSlugForSource(championSlug, Sources.OP_GG);
     console.log(`[${scriptId}] [Fetching OP.GG] Fetching data for champion: ${opggChampionSlug}`);
     const opggData = await getOPGGCounters(opggChampionSlug, opggRole, opggRank);
-    console.log('** OP.GG Data **', opggData);
 
     for (const counter of opggData) {
       try {
@@ -123,7 +121,6 @@ export const getChampionCounters = async ({
     const uggChampionSlug = getChampionSlugForSource(championSlug, Sources.U_GG);
     console.log(`[${scriptId}] [Fetching U.GG] Fetching data for champion: ${uggChampionSlug}`);
     const uggData = await getUGGCounters(uggChampionSlug, uggRole, uggRank);
-    console.log('** U.GG Data **', uggData);
 
     for (const counter of uggData) {
       try {

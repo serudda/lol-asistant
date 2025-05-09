@@ -1,6 +1,10 @@
-import { ResponseStatus, type Params } from '../common';
-import type { CreateChampionMatchupInputType } from '../schemas/championMatchup.schema';
+import { ResponseStatus, type ChampionMatchupIdsResponse, type Params } from '../common';
+import type {
+  CreateChampionMatchupInputType,
+  GetAllIdsByPatchVersionInputType,
+} from '../schemas/championMatchup.schema';
 import { ErrorCodes, ErrorMessages, errorResponse, handleError } from '../services';
+import { getPatchNoteByVersionHandler } from './patchNote.controller';
 
 const domain = 'CHAMPION_MATCHUP';
 
@@ -137,6 +141,42 @@ export const calculateChampionMatchupStatsHandler = async ({ ctx, input }: Param
       result: {
         status: ResponseStatus.SUCCESS,
         championMatchup: updated,
+      },
+    };
+  } catch (error: unknown) {
+    throw handleError(domain, handlerId, error);
+  }
+};
+
+/**
+ * Get all championMatchup IDs by patchVersion.
+ *
+ * @param ctx Ctx.
+ * @param input { patchVersion: string }
+ * @returns Array of championMatchup IDs.
+ */
+export const getAllIdsByPatchVersionHandler = async ({
+  ctx,
+  input,
+}: Params<GetAllIdsByPatchVersionInputType>): Promise<ChampionMatchupIdsResponse> => {
+  const handlerId = 'getAllIdsByPatchVersionHandler';
+  try {
+    const { patchVersion } = input;
+
+    // Get patchNote by patchVersion
+    const patchNoteResponse = await getPatchNoteByVersionHandler({ ctx, input: { patchVersion } });
+    if (patchNoteResponse.result.status !== ResponseStatus.SUCCESS) {
+      return errorResponse(domain, handlerId, ErrorCodes.PatchNote.NotCreated, ErrorMessages.PatchNote.NotCreated);
+    }
+    const patchNote = patchNoteResponse.result.patchNote;
+
+    // Get all championMatchup IDs by patchNote ID
+    const matchups = await ctx.prisma.championMatchup.findMany({ where: { patchNoteId: patchNote?.id } });
+
+    return {
+      result: {
+        status: ResponseStatus.SUCCESS,
+        championMatchupIds: matchups.map((element) => element.id),
       },
     };
   } catch (error: unknown) {
