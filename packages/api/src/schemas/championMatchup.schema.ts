@@ -1,0 +1,11 @@
+import { z, type TypeOf } from 'zod';
+
+export const createChampionMatchupInput = z.object({
+  patchNoteId: z.string(),
+  baseChampionId: z.string(),
+  opponentChampionId: z.string(),
+  role: z.string(),
+  weightedWinRate: z.number().default(0),
+  totalMatches: z.number().default(0),
+});
+export type CreateChampionMatchupInputType = TypeOf<typeof createChampionMatchupInput>;

@@ -35,6 +35,8 @@ export const ErrorMessages: ErrorMessageType = {
     NoChampions: 'No encontramos ningún campeón',
     NotCreated: 'Algo ha sucedido, no pudimos crear al campeón',
     NotUpdated: 'Algo ha sucedido, no pudimos actualizar al campeón',
+    BaseChampionNotFound: 'Base champion not found',
+    OpponentChampionNotFound: 'Opponent champion not found',
   },
   PatchNote: {
     NotCreated: 'Algo ha sucedido, no pudimos crear la nota de parche',
@@ -43,5 +45,10 @@ export const ErrorMessages: ErrorMessageType = {
     NoSource: 'No encontramos la fuente que buscas',
     AlreadyExists: 'Ya existe una fuente con este slug',
     NotCreated: 'Algo ha sucedido, no pudimos crear la fuente',
+  },
+  ChampionMatchup: {
+    AlreadyExists: 'This champion matchup already exists',
+    NotCreated: 'Could not create the champion matchup',
+    NoChampionMatchup: 'Champion matchup not found',
   },
 };

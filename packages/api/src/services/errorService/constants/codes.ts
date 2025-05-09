@@ -27,6 +27,8 @@ export const ErrorCodes = {
     NoChampions: 'NoChampions',
     NotCreated: 'NotCreated',
     NotUpdated: 'NotUpdated',
+    BaseChampionNotFound: 'BaseChampionNotFound',
+    OpponentChampionNotFound: 'OpponentChampionNotFound',
   },
   PatchNote: {
     NotCreated: 'NotCreated',
@@ -35,5 +37,10 @@ export const ErrorCodes = {
     NoSource: 'NoSource',
     AlreadyExists: 'AlreadyExists',
     NotCreated: 'NotCreated',
+  },
+  ChampionMatchup: {
+    AlreadyExists: 'ChampionMatchupAlreadyExists',
+    NotCreated: 'ChampionMatchupNotCreated',
+    NoChampionMatchup: 'NoChampionMatchup',
   },
 } as const;
