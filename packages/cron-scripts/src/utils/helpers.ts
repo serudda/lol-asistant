@@ -1,14 +1,14 @@
 /**
- * normalizeString.
+ * Normalize a string to a slug.
  *
  * - replace special characters from a string.
  *
  * @function
  * @param {string} str - string to parse.
  * @returns {string} string parsed (e.g. Fabula Nino)
- * @use - normalizeString('Fábula Niño');
+ * @use - normalizeStringToSlug('Fábula Niño');
  */
-export const normalizeString = (str: string) => {
+export const normalizeStringToSlug = (str: string) => {
   // VARIABLES
   const from = 'ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç';
   const to = 'AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc';
@@ -25,7 +25,13 @@ export const normalizeString = (str: string) => {
       ret.push(c);
     }
   }
-  return ret.join('');
+  // Join characters back together and remove any character that is not an
+  // alphanumeric one. That means we strip punctuation AND spaces so that
+  // "Kha'Zix" -> "KhaZix" and "Dr. Mundo" -> "DrMundo".
+  return ret
+    .join('')
+    .replace(/[^a-zA-Z0-9]/g, '')
+    .toLowerCase();
 };
 
 /**
