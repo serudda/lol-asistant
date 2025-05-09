@@ -72,3 +72,25 @@ export const createPatchNoteHandler = async ({
     throw handleError(domain, handlerId, error);
   }
 };
+
+/**
+ * Get patch note by patchVersion.
+ *
+ * @param ctx - Context with Prisma client.
+ * @param input - { patchVersion: string }
+ * @returns Patch note.
+ */
+export const getPatchNoteByVersionHandler = async ({
+  ctx,
+  input,
+}: Params<{ patchVersion: string }>): Promise<PatchNoteResponse> => {
+  const handlerId = 'getPatchNoteByVersionHandler';
+  try {
+    const patchNote = await ctx.prisma.patchNote.findFirst({ where: { patchVersion: input.patchVersion } });
+    if (!patchNote)
+      return errorResponse(domain, handlerId, ErrorCodes.PatchNote.NoPatchNote, ErrorMessages.PatchNote.NoPatchNote);
+    return { result: { status: ResponseStatus.SUCCESS, patchNote } };
+  } catch (error: unknown) {
+    throw handleError(domain, handlerId, error);
+  }
+};

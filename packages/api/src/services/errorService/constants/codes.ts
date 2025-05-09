@@ -31,6 +31,7 @@ export const ErrorCodes = {
     OpponentChampionNotFound: 'OpponentChampionNotFound',
   },
   PatchNote: {
+    NoPatchNote: 'NoPatchNote',
     NotCreated: 'NotCreated',
   },
   Source: {

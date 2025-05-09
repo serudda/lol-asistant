@@ -17,3 +17,10 @@ export const createPatchNoteInput = z.object({
 export type CreatePatchNoteInputType = TypeOf<typeof createPatchNoteInput>;
 
 /*------------------------------------*/
+
+export const getPatchNoteByVersionInput = z.object({
+  patchVersion: z.string(),
+});
+export type GetPatchNoteByVersionInputType = TypeOf<typeof getPatchNoteByVersionInput>;
+
+/*------------------------------------*/
