@@ -1,3 +1,4 @@
+import { createClient } from '../utils/trpc-client';
 import type { InternalRank, InternalRole } from './getChampionCounters/common/constants';
 import {
   getChampionSlugForSource,
@@ -37,7 +38,13 @@ export const getChampionCounters = async ({
 }: GetChampionCountersArgs): Promise<void> => {
   console.log(`[${scriptId}] Starting get champion counters for version: ${patchVersion}`);
 
+  // Collect unique championMatchupIds
+  const processedMatchupIds = new Set<string>();
+
   try {
+    // Use the centralized TRPC client
+    const client = createClient();
+
     // Get Mobalytics counters
     const mobalyticsRole = toMobalyticsRole(role);
     const mobalyticsRank = toMobalyticsRank(rank);
@@ -54,6 +61,8 @@ export const getChampionCounters = async ({
           patchVersion,
           role,
         });
+
+        processedMatchupIds.add(championMatchupId);
 
         await saveSourceMatchupStats({
           counter,
@@ -89,6 +98,8 @@ export const getChampionCounters = async ({
           role,
         });
 
+        processedMatchupIds.add(championMatchupId);
+
         await saveSourceMatchupStats({
           counter,
           championMatchupId,
@@ -123,6 +134,8 @@ export const getChampionCounters = async ({
           role,
         });
 
+        processedMatchupIds.add(championMatchupId);
+
         await saveSourceMatchupStats({
           counter,
           championMatchupId,
@@ -140,13 +153,34 @@ export const getChampionCounters = async ({
 
     // ------------------------------------------------------------
 
-    // TODO: Consolidate and parse all data to a single object to save it in the database
+    // Recalculate stats for all processed matchups
+    console.log(`[${scriptId}] Recalculating stats for all processed matchups...`);
 
-    // ------------------------------------------------------------
+    // Navigate through all processed matchupIds and recalculate stats
+    const recalcResults = await Promise.all(
+      Array.from(processedMatchupIds).map(async (championMatchupId) => {
+        try {
+          await client.championMatchup.calculateStats.mutate({ championMatchupId });
+          console.log(`[${scriptId}] [SUCCESS] Recalculated stats for matchup ${championMatchupId}`);
+          return { championMatchupId, success: true };
+        } catch (err) {
+          console.error(`[${scriptId}] [ERROR] Failed to recalculate stats for matchup ${championMatchupId}:`, err);
+          return { championMatchupId, success: false, error: err };
+        }
+      }),
+    );
 
-    // Save champion data to database
-    // console.log(`[${scriptId}] [Saving Champion Data] Saving stats for ${championSlug}`);
-    // await saveChampion(parsedChampion, patchVersion);
+    // Show a summary of the recalculation results
+    const successCount = recalcResults.filter((r) => r.success).length;
+    const failCount = recalcResults.length - successCount;
+    console.log(`[${scriptId}] Recalculation summary: ${successCount} succeeded, ${failCount} failed.`);
+
+    if (failCount > 0) {
+      console.log(
+        `[${scriptId}] Failed matchups:`,
+        recalcResults.filter((r) => !r.success).map((r) => r.championMatchupId),
+      );
+    }
 
     // ------------------------------------------------------------
 
