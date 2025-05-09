@@ -1,6 +1,7 @@
 import type { InternalRank, InternalRole } from './getChampionCounters/common/constants';
 import {
   getChampionSlugForSource,
+  normalizeChampionSlugFromSource,
   Sources,
   toMobalyticsRank,
   toMobalyticsRole,
@@ -47,10 +48,9 @@ export const getChampionCounters = async ({
 
     for (const counter of mobalyticsData) {
       try {
-        /*
         const championMatchupId = await createChampionMatchup({
           baseChampionSlug: championSlug,
-          opponentChampionSlug: counter.sourceChampionSlug,
+          opponentChampionSlug: normalizeChampionSlugFromSource(counter.sourceChampionSlug, Sources.MOBALYTICS),
           patchVersion,
           role,
         });
@@ -62,7 +62,6 @@ export const getChampionCounters = async ({
           sourceChampionSlug: counter.sourceChampionSlug,
           scrapedAt: new Date().toISOString(),
         });
-        */
       } catch (error) {
         console.error(
           `[${scriptId}] [Mobalytics] Failed to process counter for opponent '${counter.sourceChampionSlug}':`,
@@ -85,7 +84,7 @@ export const getChampionCounters = async ({
       try {
         const championMatchupId = await createChampionMatchup({
           baseChampionSlug: championSlug,
-          opponentChampionSlug: counter.sourceChampionSlug,
+          opponentChampionSlug: normalizeChampionSlugFromSource(counter.sourceChampionSlug, Sources.OP_GG),
           patchVersion,
           role,
         });
@@ -117,10 +116,9 @@ export const getChampionCounters = async ({
 
     for (const counter of uggData) {
       try {
-        /*
         const championMatchupId = await createChampionMatchup({
           baseChampionSlug: championSlug,
-          opponentChampionSlug: counter.champion,
+          opponentChampionSlug: normalizeChampionSlugFromSource(counter.sourceChampionSlug, Sources.U_GG),
           patchVersion,
           role,
         });
@@ -129,9 +127,9 @@ export const getChampionCounters = async ({
           counter,
           championMatchupId,
           sourceSlug: Sources.U_GG,
+          sourceChampionSlug: counter.sourceChampionSlug,
           scrapedAt: new Date().toISOString(),
         });
-        */
       } catch (error) {
         console.error(
           `[${scriptId}] [U.GG] Failed to process counter for opponent '${counter.sourceChampionSlug}':`,
