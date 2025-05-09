@@ -19,6 +19,7 @@ export const saveSourceMatchupStats = async ({
   counter: SourceCounter;
   championMatchupId: string;
   sourceSlug: Sources;
+  sourceChampionSlug: string;
   scrapedAt: string;
 }): Promise<void> => {
   try {

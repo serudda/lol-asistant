@@ -18,7 +18,7 @@ export const createSourceMatchupStatHandler = async ({
 }: Params<CreateSourceMatchupStatInputType>): Promise<SourceMatchupStatResponse> => {
   const handlerId = 'createSourceMatchupStatHandler';
   try {
-    const { championMatchupId, sourceId, winRate, matches, sourceUrl, scrapedAt } = input;
+    const { championMatchupId, sourceId, sourceChampionSlug, winRate, matches, sourceUrl, scrapedAt } = input;
 
     // Check if the source exists
     const source = await ctx.prisma.source.findUnique({ where: { id: sourceId } });
@@ -28,10 +28,11 @@ export const createSourceMatchupStatHandler = async ({
     const sourceMatchupStat = await ctx.prisma.sourceMatchupStat.create({
       data: {
         sourceId,
+        sourceChampionSlug,
+        sourceUrl,
         winRate,
         matches,
         championMatchupId,
-        sourceUrl,
         scrapedAt,
       },
     });

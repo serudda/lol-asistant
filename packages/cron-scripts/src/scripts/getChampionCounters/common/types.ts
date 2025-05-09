@@ -1,6 +1,6 @@
 export interface SourceCounter {
   rank: number;
-  champion: string;
+  sourceChampionSlug: string;
   champUrl: string;
   role: string;
   source: string;

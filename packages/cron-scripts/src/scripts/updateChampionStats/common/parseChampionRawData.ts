@@ -1,5 +1,5 @@
 import { DATA_DRAGON_BASE_URL } from '../../../common/constants/ddragon';
-import { normalizeString } from '../../../utils/helpers';
+import { normalizeStringToSlug } from '../../../utils/helpers';
 import type { ChampionSaveInput, DDragonChampionData, DDragonSpell } from './types';
 
 /**
@@ -67,7 +67,7 @@ export const parseChampionRawData = (championData: DDragonChampionData, patchVer
     // Combine all extracted data suitable for Prisma schema
     // Note: The 'stats', 'spells', 'passive' fields in Prisma are Json type
     return {
-      slug: normalizeString(basicInfo.id).toLowerCase().replace(/ /g, ''), // Use the champion ID as the unique slug
+      slug: normalizeStringToSlug(basicInfo.id), // Use the champion ID as the unique slug
       name: basicInfo.name,
       imageUrl: `${DATA_DRAGON_BASE_URL}/${patchVersion}/img/champion/${basicInfo.image}`, // Construct full image URL
       stats: stats,

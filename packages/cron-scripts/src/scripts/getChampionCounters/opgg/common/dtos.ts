@@ -1,4 +1,5 @@
-import { Sources } from '../../common/constants';
+import { normalizeStringToSlug } from '../../../../utils/helpers';
+import { getChampionSlugForSource, Sources } from '../../common/constants';
 import type { SourceCounter } from '../../common/types';
 import type { OPGGRank } from './constants';
 import { OPGG_BASE_URL } from './constants';
@@ -19,10 +20,13 @@ export const opggChampCounterDto = (item: OPGGCountersOptionsData, rank: OPGGRan
     );
   }
 
+  // Some champions have different slugs depending on the data
+  const sourceChampionSlug = getChampionSlugForSource(normalizeStringToSlug(item.matchupSlug), Sources.OP_GG);
+
   return {
     rank: id,
-    champion: item.matchupSlug,
-    champUrl: `${OPGG_BASE_URL}/lol/champions/${item.matchupSlug}/build/${item.matchupRole.toLowerCase()}?tier=${rank}`,
+    sourceChampionSlug,
+    champUrl: `${OPGG_BASE_URL}/lol/champions/${sourceChampionSlug}/build/${item.matchupRole.toLowerCase()}?tier=${rank}`,
     role: item.matchupRole,
     source: Sources.OP_GG,
     counterWinRate: 100 - counterWinRate, // op.gg shows winrate inverted, so we invert it

@@ -1,4 +1,5 @@
-import { Sources } from '../../common/constants';
+import { normalizeStringToSlug } from '../../../../utils/helpers';
+import { getChampionSlugForSource, Sources } from '../../common/constants';
 import type { SourceCounter } from '../../common/types';
 import type { MobalyticsRank, MobalyticsRole } from './constants';
 import { MOBALYTICS_BASE_URL } from './constants';
@@ -23,10 +24,13 @@ export const mobalyticsApiCounterDto = (
   const winRate = (wins / totalMatches) * 100;
   const lowerCaseRole = role.toLowerCase();
 
+  // Some champions have different slugs depending on the data
+  const sourceChampionSlug = getChampionSlugForSource(normalizeStringToSlug(item.matchupSlug), Sources.MOBALYTICS);
+
   return {
     rank: index + 1,
-    champion: item.matchupSlug,
-    champUrl: `${MOBALYTICS_BASE_URL}lol/champions/${item.matchupSlug}/build/${lowerCaseRole}?rank=${rank}`,
+    sourceChampionSlug,
+    champUrl: `${MOBALYTICS_BASE_URL}lol/champions/${sourceChampionSlug}/build/${lowerCaseRole}?rank=${rank}`,
     role: item.matchupRole,
     source: Sources.MOBALYTICS,
     counterWinRate: parseFloat(winRate.toFixed(1)),

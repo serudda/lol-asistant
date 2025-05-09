@@ -1,5 +1,6 @@
 import type { InternalRank, InternalRole } from './getChampionCounters/common/constants';
 import {
+  getChampionSlugForSource,
   Sources,
   toMobalyticsRank,
   toMobalyticsRole,
@@ -39,14 +40,17 @@ export const getChampionCounters = async ({
     // Get Mobalytics counters
     const mobalyticsRole = toMobalyticsRole(role);
     const mobalyticsRank = toMobalyticsRank(rank);
-    console.log(`[${scriptId}] [Fetching Mobalytics] Fetching data for champion: ${championSlug}`);
-    const mobalyticsData = await getMobalyticsCounters(championSlug, mobalyticsRole, mobalyticsRank);
+    const mobalyticsChampionSlug = getChampionSlugForSource(championSlug, Sources.MOBALYTICS);
+    console.log(`[${scriptId}] [Fetching Mobalytics] Fetching data for champion: ${mobalyticsChampionSlug}`);
+    const mobalyticsData = await getMobalyticsCounters(mobalyticsChampionSlug, mobalyticsRole, mobalyticsRank);
+    console.log('** Mobalytics Data **', mobalyticsData);
 
     for (const counter of mobalyticsData) {
       try {
+        /*
         const championMatchupId = await createChampionMatchup({
           baseChampionSlug: championSlug,
-          opponentChampionSlug: counter.champion,
+          opponentChampionSlug: counter.sourceChampionSlug,
           patchVersion,
           role,
         });
@@ -55,11 +59,13 @@ export const getChampionCounters = async ({
           counter,
           championMatchupId,
           sourceSlug: Sources.MOBALYTICS,
+          sourceChampionSlug: counter.sourceChampionSlug,
           scrapedAt: new Date().toISOString(),
         });
+        */
       } catch (error) {
         console.error(
-          `[${scriptId}] [Mobalytics] Failed to process counter for opponent '${counter.champion}':`,
+          `[${scriptId}] [Mobalytics] Failed to process counter for opponent '${counter.sourceChampionSlug}':`,
           error,
         );
       }
@@ -70,15 +76,16 @@ export const getChampionCounters = async ({
     // Get OP.GG counters
     const opggRole = toOPGGRole(role);
     const opggRank = toOPGGRank(rank);
-    console.log(`[${scriptId}] [Fetching OP.GG] Fetching data for champion: ${championSlug}`);
-    const opggData = await getOPGGCounters(championSlug, opggRole, opggRank);
+    const opggChampionSlug = getChampionSlugForSource(championSlug, Sources.OP_GG);
+    console.log(`[${scriptId}] [Fetching OP.GG] Fetching data for champion: ${opggChampionSlug}`);
+    const opggData = await getOPGGCounters(opggChampionSlug, opggRole, opggRank);
     console.log('** OP.GG Data **', opggData);
 
     for (const counter of opggData) {
       try {
         const championMatchupId = await createChampionMatchup({
           baseChampionSlug: championSlug,
-          opponentChampionSlug: counter.champion,
+          opponentChampionSlug: counter.sourceChampionSlug,
           patchVersion,
           role,
         });
@@ -87,10 +94,14 @@ export const getChampionCounters = async ({
           counter,
           championMatchupId,
           sourceSlug: Sources.OP_GG,
+          sourceChampionSlug: counter.sourceChampionSlug,
           scrapedAt: new Date().toISOString(),
         });
       } catch (error) {
-        console.error(`[${scriptId}] [OP.GG] Failed to process counter for opponent '${counter.champion}':`, error);
+        console.error(
+          `[${scriptId}] [OP.GG] Failed to process counter for opponent '${counter.sourceChampionSlug}':`,
+          error,
+        );
       }
     }
 
@@ -99,12 +110,14 @@ export const getChampionCounters = async ({
     // Get U.GG counters
     const uggRole = toUGGRole(role);
     const uggRank = toUGGRank(rank);
-    console.log(`[${scriptId}] [Fetching U.GG] Fetching data for champion: ${championSlug}`);
-    const uggData = await getUGGCounters(championSlug, uggRole, uggRank);
+    const uggChampionSlug = getChampionSlugForSource(championSlug, Sources.U_GG);
+    console.log(`[${scriptId}] [Fetching U.GG] Fetching data for champion: ${uggChampionSlug}`);
+    const uggData = await getUGGCounters(uggChampionSlug, uggRole, uggRank);
     console.log('** U.GG Data **', uggData);
 
     for (const counter of uggData) {
       try {
+        /*
         const championMatchupId = await createChampionMatchup({
           baseChampionSlug: championSlug,
           opponentChampionSlug: counter.champion,
@@ -118,8 +131,12 @@ export const getChampionCounters = async ({
           sourceSlug: Sources.U_GG,
           scrapedAt: new Date().toISOString(),
         });
+        */
       } catch (error) {
-        console.error(`[${scriptId}] [U.GG] Failed to process counter for opponent '${counter.champion}':`, error);
+        console.error(
+          `[${scriptId}] [U.GG] Failed to process counter for opponent '${counter.sourceChampionSlug}':`,
+          error,
+        );
       }
     }
 

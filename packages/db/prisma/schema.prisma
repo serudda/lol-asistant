@@ -227,19 +227,20 @@ model ChampionMatchup {
 
 // Raw stats by source
 model SourceMatchupStat {
-    id                String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    winRate           Float
-    matches           Int
-    sourceUrl         String
-    scrapedAt         DateTime        @default(now())
-    isActive          Boolean         @default(true) @map("is_active")
-    createdAt         DateTime        @default(now())
-    updatedAt         DateTime        @updatedAt @map("updated_at")
+    id                 String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    winRate            Float
+    matches            Int
+    sourceChampionSlug String          @map("source_champion_slug")
+    sourceUrl          String
+    scrapedAt          DateTime        @default(now())
+    isActive           Boolean         @default(true) @map("is_active")
+    createdAt          DateTime        @default(now())
+    updatedAt          DateTime        @updatedAt @map("updated_at")
     // --- Relations ---
-    championMatchup   ChampionMatchup @relation(fields: [championMatchupId], references: [id], onDelete: Cascade)
-    championMatchupId String          @map("champion_matchup_id") @db.Uuid
-    source            Source          @relation(fields: [sourceId], references: [id])
-    sourceId          String          @map("source_id") @db.Uuid
+    championMatchup    ChampionMatchup @relation(fields: [championMatchupId], references: [id], onDelete: Cascade)
+    championMatchupId  String          @map("champion_matchup_id") @db.Uuid
+    source             Source          @relation(fields: [sourceId], references: [id])
+    sourceId           String          @map("source_id") @db.Uuid
     // -------------------
 
     @@unique([championMatchupId, sourceId])
