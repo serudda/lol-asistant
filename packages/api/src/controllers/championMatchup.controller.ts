@@ -84,3 +84,62 @@ export const createChampionMatchupHandler = async ({ ctx, input }: Params<Create
     throw handleError(domain, handlerId, error);
   }
 };
+
+/**
+ * Calculate weightedWinRate and totalMatches for a champion
+ * matchup.
+ *
+ * @param ctx Ctx.
+ * @param input { championMatchupId: string }
+ * @returns Updated ChampionMatchup.
+ */
+export const calculateChampionMatchupStatsHandler = async ({ ctx, input }: Params<{ championMatchupId: string }>) => {
+  const handlerId = 'calculateChampionMatchupStatsHandler';
+  try {
+    const { championMatchupId } = input;
+
+    // Check if matchup exists
+    const championMatchup = await ctx.prisma.championMatchup.findUnique({ where: { id: championMatchupId } });
+    if (!championMatchup) {
+      return errorResponse(
+        domain,
+        handlerId,
+        ErrorCodes.ChampionMatchup.NoChampionMatchup,
+        ErrorMessages.ChampionMatchup.NoChampionMatchup,
+      );
+    }
+
+    // Get all source stats for this matchup
+    const sourceStats = await ctx.prisma.sourceMatchupStat.findMany({
+      where: { championMatchupId },
+    });
+
+    // Calculate total matches
+    const totalMatches = sourceStats.reduce((sum, s) => sum + s.matches, 0);
+
+    // Calculate weighted win rate
+    let weightedWinRate = 0;
+    if (totalMatches > 0) {
+      const weightedSum = sourceStats.reduce((sum, s) => sum + s.winRate * s.matches, 0);
+      weightedWinRate = weightedSum / totalMatches;
+    }
+
+    // Update the matchup
+    const updated = await ctx.prisma.championMatchup.update({
+      where: { id: championMatchupId },
+      data: {
+        weightedWinRate,
+        totalMatches,
+      },
+    });
+
+    return {
+      result: {
+        status: ResponseStatus.SUCCESS,
+        championMatchup: updated,
+      },
+    };
+  } catch (error: unknown) {
+    throw handleError(domain, handlerId, error);
+  }
+};

@@ -1,5 +1,7 @@
 import { z, type TypeOf } from 'zod';
 
+// ------------------------------------------------------------
+
 export const createChampionMatchupInput = z.object({
   patchNoteId: z.string(),
   baseChampionId: z.string(),
@@ -9,3 +11,10 @@ export const createChampionMatchupInput = z.object({
   totalMatches: z.number().default(0),
 });
 export type CreateChampionMatchupInputType = TypeOf<typeof createChampionMatchupInput>;
+
+// ------------------------------------------------------------
+
+export const calculateChampionMatchupStatsInput = z.object({
+  championMatchupId: z.string(),
+});
+export type CalculateChampionMatchupStatsInputType = TypeOf<typeof calculateChampionMatchupStatsInput>;
