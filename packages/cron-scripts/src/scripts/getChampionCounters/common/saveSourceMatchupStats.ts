@@ -5,27 +5,24 @@ import { sourceCounterToSourceMatchupStatDto } from './dtos';
 import type { SourceCounter } from './types';
 
 /**
- * Centralized function to map SourceCounter[] to DTOs and
- * save them in the DB.
+ * Save a single SourceCounter as SourceMatchupStat in DB.
  *
- * @param params - Object with counters, championMatchupId,
+ * @param params - Object with counter, championMatchupId,
  *   sourceSlug, scrapedAt.
  */
 export const saveSourceMatchupStats = async ({
-  counters,
+  counter,
   championMatchupId,
   sourceSlug,
   scrapedAt,
 }: {
-  counters: SourceCounter[];
+  counter: SourceCounter;
   championMatchupId: string;
   sourceSlug: Sources;
   scrapedAt: string;
 }): Promise<void> => {
   try {
-    console.log(
-      `[saveSourceMatchupStats] - Processing ${counters.length} source matchup stats for source '${sourceSlug}'...`,
-    );
+    console.log(`[saveSourceMatchupStats] - Saving source matchup stat for source '${sourceSlug}'...`);
 
     // Use the centralized TRPC client
     const client = createClient();
@@ -39,15 +36,12 @@ export const saveSourceMatchupStats = async ({
     // Save the matchup stats
     const sourceId = sourceResp.result.source.id;
 
-    // Map the counters to DTOs and save them in the DB
-    for (const counter of counters) {
-      const dto = sourceCounterToSourceMatchupStatDto(counter, championMatchupId, sourceId, scrapedAt);
-      const result = await client.sourceMatchupStat.create.mutate(dto);
-      if (result.result.status === ResponseStatus.SUCCESS) {
-        console.log(`[saveSourceMatchupStats] - Source matchup stat saved successfully.`);
-      } else {
-        console.error(`[saveSourceMatchupStats] - Error saving source matchup stat:`, result.result.error);
-      }
+    const dto = sourceCounterToSourceMatchupStatDto(counter, championMatchupId, sourceId, scrapedAt);
+    const result = await client.sourceMatchupStat.create.mutate(dto);
+    if (result.result.status === ResponseStatus.SUCCESS) {
+      console.log(`[saveSourceMatchupStats] - Source matchup stat saved successfully.`);
+    } else {
+      console.error(`[saveSourceMatchupStats] - Error saving source matchup stat:`, result.result.error);
     }
   } catch (error) {
     console.error(`[saveSourceMatchupStats] - Error processing source matchup stats:`, error);

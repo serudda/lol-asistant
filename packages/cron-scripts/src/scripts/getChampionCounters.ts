@@ -8,6 +8,7 @@ import {
   toUGGRank,
   toUGGRole,
 } from './getChampionCounters/common/constants';
+import { createChampionMatchup } from './getChampionCounters/common/createChampionMatchup';
 import { saveSourceMatchupStats } from './getChampionCounters/common/saveSourceMatchupStats';
 import { getMobalyticsCounters } from './getChampionCounters/mobalytics/getMobalyticsCounters';
 import { getOPGGCounters } from './getChampionCounters/opgg/getOPGGCounters';
@@ -40,7 +41,29 @@ export const getChampionCounters = async ({
     const mobalyticsRank = toMobalyticsRank(rank);
     console.log(`[${scriptId}] [Fetching Mobalytics] Fetching data for champion: ${championSlug}`);
     const mobalyticsData = await getMobalyticsCounters(championSlug, mobalyticsRole, mobalyticsRank);
-    console.log('** Mobalytics Data **', mobalyticsData);
+
+    for (const counter of mobalyticsData) {
+      try {
+        const championMatchupId = await createChampionMatchup({
+          baseChampionSlug: championSlug,
+          opponentChampionSlug: counter.champion,
+          patchVersion,
+          role,
+        });
+
+        await saveSourceMatchupStats({
+          counter,
+          championMatchupId,
+          sourceSlug: Sources.MOBALYTICS,
+          scrapedAt: new Date().toISOString(),
+        });
+      } catch (error) {
+        console.error(
+          `[${scriptId}] [Mobalytics] Failed to process counter for opponent '${counter.champion}':`,
+          error,
+        );
+      }
+    }
 
     // ------------------------------------------------------------
 
@@ -49,12 +72,7 @@ export const getChampionCounters = async ({
     const opggRank = toOPGGRank(rank);
     console.log(`[${scriptId}] [Fetching OP.GG] Fetching data for champion: ${championSlug}`);
     const opggData = await getOPGGCounters(championSlug, opggRole, opggRank);
-    await saveSourceMatchupStats({
-      counters: opggData,
-      championMatchupId: '8c9c4bba-66d6-4e07-ac28-9a3f32cbc81f',
-      sourceSlug: Sources.OP_GG,
-      scrapedAt: new Date().toISOString(),
-    });
+    console.log('** OP.GG Data **', opggData);
 
     // ------------------------------------------------------------
 
