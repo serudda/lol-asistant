@@ -44,7 +44,7 @@ export const extractDataFromHtml = (html: string, role: OPGGRole, rank: OPGGRank
     const counterWinRate = winRateElement.text().trim().replace('%', '');
 
     // Extract number of games
-    const games = $el.find('span.text-gray-600').last().text().trim();
+    const games = $el.find('span.text-gray-600').last().text().trim().replace(/,/g, '');
 
     counters.push(
       opggChampCounterDto(
