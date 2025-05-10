@@ -44,4 +44,7 @@ export const ErrorCodes = {
     NotCreated: 'ChampionMatchupNotCreated',
     NoChampionMatchup: 'NoChampionMatchup',
   },
+  SourceStats: {
+    NoSourceMatchupStats: 'NoSourceMatchupStats',
+  },
 } as const;

@@ -118,6 +118,16 @@ export const calculateChampionMatchupStatsHandler = async ({ ctx, input }: Param
       where: { championMatchupId },
     });
 
+    // Check if there are any source stats
+    if (sourceStats.length === 0) {
+      return errorResponse(
+        domain,
+        handlerId,
+        ErrorCodes.SourceStats.NoSourceMatchupStats,
+        ErrorMessages.SourceStats.NoSourceMatchupStats,
+      );
+    }
+
     // Calculate total matches
     const totalMatches = sourceStats.reduce((sum, s) => sum + s.matches, 0);
 

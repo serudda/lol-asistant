@@ -47,6 +47,9 @@ export const ErrorMessages: ErrorMessageType = {
     AlreadyExists: 'A source with this slug already exists',
     NotCreated: 'Something happened, we could not create the source',
   },
+  SourceStats: {
+    NoSourceMatchupStats: 'Could not find any source matchup stats',
+  },
   ChampionMatchup: {
     AlreadyExists: 'This champion matchup already exists',
     NotCreated: 'Could not create the champion matchup',
