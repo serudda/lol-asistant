@@ -1,5 +1,9 @@
+import { createClient } from '../utils/trpc-client';
 import type { InternalRank, InternalRole } from './getChampionCounters/common/constants';
 import {
+  getChampionSlugForSource,
+  normalizeChampionSlugFromSource,
+  Sources,
   toMobalyticsRank,
   toMobalyticsRole,
   toOPGGRank,
@@ -7,6 +11,8 @@ import {
   toUGGRank,
   toUGGRole,
 } from './getChampionCounters/common/constants';
+import { createChampionMatchup } from './getChampionCounters/common/createChampionMatchup';
+import { saveSourceMatchupStats } from './getChampionCounters/common/saveSourceMatchupStats';
 import { getMobalyticsCounters } from './getChampionCounters/mobalytics/getMobalyticsCounters';
 import { getOPGGCounters } from './getChampionCounters/opgg/getOPGGCounters';
 import { getUGGCounters } from './getChampionCounters/ugg/getUGGCounters';
@@ -32,43 +38,146 @@ export const getChampionCounters = async ({
 }: GetChampionCountersArgs): Promise<void> => {
   console.log(`[${scriptId}] Starting get champion counters for version: ${patchVersion}`);
 
+  // Collect unique championMatchupIds
+  const processedMatchupIds = new Set<string>();
+
   try {
+    // Use the centralized TRPC client
+    const client = createClient();
+
     // Get Mobalytics counters
     const mobalyticsRole = toMobalyticsRole(role);
     const mobalyticsRank = toMobalyticsRank(rank);
-    console.log(`[${scriptId}] [Fetching Mobalytics] Fetching data for champion: ${championSlug}`);
-    const mobalyticsData = await getMobalyticsCounters(championSlug, mobalyticsRole, mobalyticsRank);
-    console.log('** Mobalytics Data **', mobalyticsData);
+    const mobalyticsChampionSlug = getChampionSlugForSource(championSlug, Sources.MOBALYTICS);
+    console.log(`[${scriptId}] [Fetching Mobalytics] Fetching data for champion: ${mobalyticsChampionSlug}`);
+    const mobalyticsData = await getMobalyticsCounters(mobalyticsChampionSlug, mobalyticsRole, mobalyticsRank);
+
+    for (const counter of mobalyticsData) {
+      try {
+        const championMatchupId = await createChampionMatchup({
+          baseChampionSlug: championSlug,
+          opponentChampionSlug: normalizeChampionSlugFromSource(counter.sourceChampionSlug, Sources.MOBALYTICS),
+          patchVersion,
+          role,
+        });
+
+        processedMatchupIds.add(championMatchupId);
+
+        await saveSourceMatchupStats({
+          counter,
+          championMatchupId,
+          sourceSlug: Sources.MOBALYTICS,
+          sourceChampionSlug: counter.sourceChampionSlug,
+          scrapedAt: new Date().toISOString(),
+        });
+      } catch (error) {
+        console.error(
+          `[${scriptId}] [Mobalytics] Failed to process counter for opponent '${counter.sourceChampionSlug}':`,
+          error,
+        );
+      }
+    }
 
     // ------------------------------------------------------------
 
     // Get OP.GG counters
     const opggRole = toOPGGRole(role);
     const opggRank = toOPGGRank(rank);
-    console.log(`[${scriptId}] [Fetching OP.GG] Fetching data for champion: ${championSlug}`);
-    const opggData = await getOPGGCounters(championSlug, opggRole, opggRank);
-    console.log('** OP.GG Data **', opggData);
+    const opggChampionSlug = getChampionSlugForSource(championSlug, Sources.OP_GG);
+    console.log(`[${scriptId}] [Fetching OP.GG] Fetching data for champion: ${opggChampionSlug}`);
+    const opggData = await getOPGGCounters(opggChampionSlug, opggRole, opggRank);
+
+    for (const counter of opggData) {
+      try {
+        const championMatchupId = await createChampionMatchup({
+          baseChampionSlug: championSlug,
+          opponentChampionSlug: normalizeChampionSlugFromSource(counter.sourceChampionSlug, Sources.OP_GG),
+          patchVersion,
+          role,
+        });
+
+        processedMatchupIds.add(championMatchupId);
+
+        await saveSourceMatchupStats({
+          counter,
+          championMatchupId,
+          sourceSlug: Sources.OP_GG,
+          sourceChampionSlug: counter.sourceChampionSlug,
+          scrapedAt: new Date().toISOString(),
+        });
+      } catch (error) {
+        console.error(
+          `[${scriptId}] [OP.GG] Failed to process counter for opponent '${counter.sourceChampionSlug}':`,
+          error,
+        );
+      }
+    }
 
     // ------------------------------------------------------------
 
     // Get U.GG counters
     const uggRole = toUGGRole(role);
     const uggRank = toUGGRank(rank);
-    console.log(`[${scriptId}] [Fetching U.GG] Fetching data for champion: ${championSlug}`);
-    const uggData = await getUGGCounters(championSlug, uggRole, uggRank);
-    console.log('** U.GG Data **', uggData);
+    const uggChampionSlug = getChampionSlugForSource(championSlug, Sources.U_GG);
+    console.log(`[${scriptId}] [Fetching U.GG] Fetching data for champion: ${uggChampionSlug}`);
+    const uggData = await getUGGCounters(uggChampionSlug, uggRole, uggRank);
+
+    for (const counter of uggData) {
+      try {
+        const championMatchupId = await createChampionMatchup({
+          baseChampionSlug: championSlug,
+          opponentChampionSlug: normalizeChampionSlugFromSource(counter.sourceChampionSlug, Sources.U_GG),
+          patchVersion,
+          role,
+        });
+
+        processedMatchupIds.add(championMatchupId);
+
+        await saveSourceMatchupStats({
+          counter,
+          championMatchupId,
+          sourceSlug: Sources.U_GG,
+          sourceChampionSlug: counter.sourceChampionSlug,
+          scrapedAt: new Date().toISOString(),
+        });
+      } catch (error) {
+        console.error(
+          `[${scriptId}] [U.GG] Failed to process counter for opponent '${counter.sourceChampionSlug}':`,
+          error,
+        );
+      }
+    }
 
     // ------------------------------------------------------------
 
-    // Parse champion data
-    // console.log(`[${scriptId}] [Parsing Champion Data] Extracting valuable stats for ${championSlug}`);
-    // const parsedChampion = parseChampionRawData(rawChampionData, patchVersion);
+    // Recalculate stats for all processed matchups
+    console.log(`[${scriptId}] Recalculating stats for all processed matchups...`);
 
-    // ------------------------------------------------------------
+    // Navigate through all processed matchupIds and recalculate stats
+    const recalcResults = await Promise.all(
+      Array.from(processedMatchupIds).map(async (championMatchupId) => {
+        try {
+          await client.championMatchup.calculateStats.mutate({ championMatchupId });
+          console.log(`[${scriptId}] [SUCCESS] Recalculated stats for matchup ${championMatchupId}`);
+          return { championMatchupId, success: true };
+        } catch (err) {
+          console.error(`[${scriptId}] [ERROR] Failed to recalculate stats for matchup ${championMatchupId}:`, err);
+          return { championMatchupId, success: false, error: err };
+        }
+      }),
+    );
 
-    // Save champion data to database
-    // console.log(`[${scriptId}] [Saving Champion Data] Saving stats for ${championSlug}`);
-    // await saveChampion(parsedChampion, patchVersion);
+    // Show a summary of the recalculation results
+    const successCount = recalcResults.filter((r) => r.success).length;
+    const failCount = recalcResults.length - successCount;
+    console.log(`[${scriptId}] Recalculation summary: ${successCount} succeeded, ${failCount} failed.`);
+
+    if (failCount > 0) {
+      console.log(
+        `[${scriptId}] Failed matchups:`,
+        recalcResults.filter((r) => !r.success).map((r) => r.championMatchupId),
+      );
+    }
 
     // ------------------------------------------------------------
 
@@ -82,7 +191,6 @@ export const getChampionCounters = async ({
 
   console.log(`[${scriptId}] Finished update process for version: ${patchVersion}`);
 };
-
 export default getChampionCounters;
 
 /*
@@ -90,7 +198,11 @@ export default getChampionCounters;
  
   Example: `pnpm script:run getChampionCounters patchVersion=14.1.1 championSlug=ahri role=mid rank=platinum`
  
-  This script fetches champion data from the League of
-  Legends Data Dragon API for a specific version, processes
-  it, and saves/updates it in the database.
+  This script fetches champion counters from the following sources:
+  - Mobalytics
+  - OP.GG
+  - U.GG
+
+  It then creates ChampionMatchup and SourceMatchupStat records for each counter.
+  It also recalculates the stats for all processed matchups (weightedWinRate and totalMatches).
  */

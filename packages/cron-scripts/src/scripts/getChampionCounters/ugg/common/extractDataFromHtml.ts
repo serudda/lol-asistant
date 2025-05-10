@@ -37,7 +37,6 @@ export const extractDataFromHtml = (html: string, role: UGGRole, rank: UGGRank):
       // Extract champion slug
       const championLinkRelative = $row.attr('href') ?? ''; // e.g. lol/champions/drmundo/build
       const championSlug = championLinkRelative.split('/')[3] ?? ''; // e.g. drmundo
-      console.log(`[extractDataFromHtml - U.GG] Champion slug: ${championSlug}`);
 
       // Extract champion name
       const champion = $row.find('.text-white.text-\\[14px\\].font-bold.truncate').text().trim();

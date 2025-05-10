@@ -154,8 +154,8 @@ model Source {
     id        String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     slug      String              @unique // "mobalytics", "u-gg", "op-gg"
     name      String
-    logoUrl   String
-    baseUrl   String
+    logoUrl   String              @map("logo_url")
+    baseUrl   String              @map("base_url")
     isActive  Boolean             @default(true) @map("is_active")
     stats     SourceMatchupStat[]
     createdAt DateTime            @default(now()) @map("created_at")
@@ -167,12 +167,12 @@ model Source {
 // Game Patch (release by Riot Games)
 model PatchNote {
     id            String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    patchVersion  String
-    publishedDate String
+    patchVersion  String                 @map("patch_version")
+    publishedDate String                 @map("published_date")
     summary       String
     embedding     Unsupported("vector")?
     isActive      Boolean                @default(true) @map("is_active")
-    createdAt     DateTime               @default(now())
+    createdAt     DateTime               @default(now()) @map("created_at")
     updatedAt     DateTime               @updatedAt @map("updated_at")
     matchups      ChampionMatchup[]
 
@@ -184,7 +184,7 @@ model Champion {
     id                 String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     name               String            @unique
     slug               String            @unique
-    imageUrl           String?
+    imageUrl           String?           @map("image_url")
     stats              Json?
     spells             Json?
     passive            Json?
@@ -204,10 +204,10 @@ model Champion {
 model ChampionMatchup {
     id                 String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     role               String?
-    weightedWinRate    Float
-    totalMatches       Int
+    weightedWinRate    Float               @map("weighted_win_rate")
+    totalMatches       Int                 @map("total_matches")
     isActive           Boolean             @default(true) @map("is_active")
-    createdAt          DateTime            @default(now())
+    createdAt          DateTime            @default(now()) @map("created_at")
     updatedAt          DateTime            @updatedAt @map("updated_at")
     // --- Relations ---
     patchNote          PatchNote           @relation(fields: [patchNoteId], references: [id])
@@ -227,19 +227,20 @@ model ChampionMatchup {
 
 // Raw stats by source
 model SourceMatchupStat {
-    id                String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    winRate           Float
-    matches           Int
-    sourceUrl         String
-    scrapedAt         DateTime        @default(now())
-    isActive          Boolean         @default(true) @map("is_active")
-    createdAt         DateTime        @default(now())
-    updatedAt         DateTime        @updatedAt @map("updated_at")
+    id                 String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    winRate            Float
+    matches            Int
+    sourceChampionSlug String          @map("source_champion_slug")
+    sourceUrl          String
+    scrapedAt          DateTime        @default(now()) @map("scraped_at")
+    isActive           Boolean         @default(true) @map("is_active")
+    createdAt          DateTime        @default(now()) @map("created_at")
+    updatedAt          DateTime        @updatedAt @map("updated_at")
     // --- Relations ---
-    championMatchup   ChampionMatchup @relation(fields: [championMatchupId], references: [id], onDelete: Cascade)
-    championMatchupId String          @map("champion_matchup_id") @db.Uuid
-    source            Source          @relation(fields: [sourceId], references: [id])
-    sourceId          String          @map("source_id") @db.Uuid
+    championMatchup    ChampionMatchup @relation(fields: [championMatchupId], references: [id], onDelete: Cascade)
+    championMatchupId  String          @map("champion_matchup_id") @db.Uuid
+    source             Source          @relation(fields: [sourceId], references: [id])
+    sourceId           String          @map("source_id") @db.Uuid
     // -------------------
 
     @@unique([championMatchupId, sourceId])

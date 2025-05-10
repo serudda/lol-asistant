@@ -1,4 +1,4 @@
-import type { Account, Champion, PatchNote, User } from '@lol-assistant/db';
+import type { Account, Champion, PatchNote, Source, SourceMatchupStat, User } from '@lol-assistant/db';
 import type { ResponseStatus } from '../constants';
 
 export interface BaseResponse {
@@ -46,6 +46,15 @@ export type ChampionsResponse = ApiResponse<{ champions: Array<Champion> }>;
 export type BasicChampion = Pick<Champion, 'id' | 'name' | 'slug' | 'imageUrl'>;
 export type BasicChampionsResponse = ApiResponse<{ champions: Array<BasicChampion> }>;
 
+// Champion Matchup
+export type ChampionMatchupIdsResponse = ApiResponse<{ championMatchupIds: Array<string> }>;
+
 // Patch Note
 export type PatchNoteResponse = ApiResponse<{ patchNote: PatchNote }>;
 export type PatchNotesResponse = ApiResponse<{ patchNotes: Array<PatchNote> }>;
+
+// Source Matchup Stat
+export type SourceMatchupStatResponse = ApiResponse<{ sourceMatchupStat: SourceMatchupStat }>;
+
+// Source
+export type SourceResponse = ApiResponse<{ source: Source }>;

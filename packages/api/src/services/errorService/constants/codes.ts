@@ -2,16 +2,6 @@ export const ErrorCodes = {
   Account: {
     NotCreated: 'AccountNotCreated',
   },
-  Champion: {
-    AlreadyExists: 'AlreadyExists',
-    NoChampion: 'NoChampion',
-    NoChampions: 'NoChampions',
-    NotCreated: 'NotCreated',
-    NotUpdated: 'NotUpdated',
-  },
-  PatchNote: {
-    NotCreated: 'NotCreated',
-  },
   Common: {
     ConfigNotFound: 'ConfigNotFound',
     InvalidInput: 'InvalidInput',
@@ -30,5 +20,31 @@ export const ErrorCodes = {
     InvalidInput: 'InvalidInput',
     DatabaseError: 'DatabaseError',
     UnexpectedError: 'UnexpectedError',
+  },
+  Champion: {
+    AlreadyExists: 'AlreadyExists',
+    NoChampion: 'NoChampion',
+    NoChampions: 'NoChampions',
+    NotCreated: 'NotCreated',
+    NotUpdated: 'NotUpdated',
+    BaseChampionNotFound: 'BaseChampionNotFound',
+    OpponentChampionNotFound: 'OpponentChampionNotFound',
+  },
+  PatchNote: {
+    NoPatchNote: 'NoPatchNote',
+    NotCreated: 'NotCreated',
+  },
+  Source: {
+    NoSource: 'NoSource',
+    AlreadyExists: 'AlreadyExists',
+    NotCreated: 'NotCreated',
+  },
+  ChampionMatchup: {
+    AlreadyExists: 'ChampionMatchupAlreadyExists',
+    NotCreated: 'ChampionMatchupNotCreated',
+    NoChampionMatchup: 'NoChampionMatchup',
+  },
+  SourceStats: {
+    NoSourceMatchupStats: 'NoSourceMatchupStats',
   },
 } as const;

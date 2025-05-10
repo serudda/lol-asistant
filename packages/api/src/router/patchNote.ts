@@ -1,5 +1,9 @@
-import { createPatchNoteHandler, getLatestPatchNoteHandler } from '../controllers/patchNote.controller';
-import { createPatchNoteInput, getLatestPatchNoteInput } from '../schemas/patchNote.schema';
+import {
+  createPatchNoteHandler,
+  getLatestPatchNoteHandler,
+  getPatchNoteByVersionHandler,
+} from '../controllers/patchNote.controller';
+import { createPatchNoteInput, getLatestPatchNoteInput, getPatchNoteByVersionInput } from '../schemas/patchNote.schema';
 import { createTRPCRouter, publicProcedure } from '../trpc';
 
 export const patchNoteRouter = createTRPCRouter({
@@ -10,4 +14,8 @@ export const patchNoteRouter = createTRPCRouter({
   createPatchNote: publicProcedure
     .input(createPatchNoteInput)
     .mutation(({ ctx, input }) => createPatchNoteHandler({ ctx, input })),
+
+  getByVersion: publicProcedure
+    .input(getPatchNoteByVersionInput)
+    .query(({ ctx, input }) => getPatchNoteByVersionHandler({ ctx, input })),
 });
