@@ -87,5 +87,5 @@ export default recalculateChampMatchupStats;
   Example: `pnpm script:run recalculateChampMatchupStats patchVersion=14.1.1`
  
   This script recalculates the stats for all champion matchups
-  for a specific patch version.
+  for a specific patch version (weightedWinRate and totalMatches).
  */

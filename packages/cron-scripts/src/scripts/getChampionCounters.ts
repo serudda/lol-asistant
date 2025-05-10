@@ -198,7 +198,11 @@ export default getChampionCounters;
  
   Example: `pnpm script:run getChampionCounters patchVersion=14.1.1 championSlug=ahri role=mid rank=platinum`
  
-  This script fetches champion data from the League of
-  Legends Data Dragon API for a specific version, processes
-  it, and saves/updates it in the database.
+  This script fetches champion counters from the following sources:
+  - Mobalytics
+  - OP.GG
+  - U.GG
+
+  It then creates ChampionMatchup and SourceMatchupStat records for each counter.
+  It also recalculates the stats for all processed matchups (weightedWinRate and totalMatches).
  */
