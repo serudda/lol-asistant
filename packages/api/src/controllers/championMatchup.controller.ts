@@ -1,4 +1,4 @@
-import { ResponseStatus, type ChampionMatchupIdsResponse, type Params } from '../common';
+import { ResponseStatus, type ChampionCountersResponse, type ChampionMatchupIdsResponse, type Params } from '../common';
 import type {
   CreateChampionMatchupInputType,
   GetAllIdsByPatchVersionInputType,
@@ -205,7 +205,10 @@ export const getAllIdsByPatchVersionHandler = async ({
  *   RoleEnumType, rankTier: RankTierEnumType }
  * @returns Array of counters.
  */
-export const getChampionCountersHandler = async ({ ctx, input }: Params<GetChampionCountersInputType>) => {
+export const getChampionCountersHandler = async ({
+  ctx,
+  input,
+}: Params<GetChampionCountersInputType>): Promise<ChampionCountersResponse> => {
   const handlerId = 'getChampionCountersHandler';
   try {
     const { baseChampionId, role, rankTier } = input;
