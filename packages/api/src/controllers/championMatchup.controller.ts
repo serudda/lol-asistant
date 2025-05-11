@@ -18,7 +18,7 @@ const domain = 'CHAMPION_MATCHUP';
 export const createChampionMatchupHandler = async ({ ctx, input }: Params<CreateChampionMatchupInputType>) => {
   const handlerId = 'createChampionMatchupHandler';
   try {
-    const { patchNoteId, baseChampionId, opponentChampionId, role, weightedWinRate, totalMatches } = input;
+    const { patchNoteId, baseChampionId, opponentChampionId, role, rankTier, weightedWinRate, totalMatches } = input;
 
     // Check if base champion exists
     const baseChampion = await ctx.prisma.champion.findUnique({ where: { id: baseChampionId } });
@@ -49,10 +49,11 @@ export const createChampionMatchupHandler = async ({ ctx, input }: Params<Create
     // Check if matchup already exists (unique constraint)
     const existing = await ctx.prisma.championMatchup.findUnique({
       where: {
-        baseChampionId_opponentChampionId_role_patchNoteId: {
+        baseChampionId_opponentChampionId_role_rankTier_patchNoteId: {
           baseChampionId,
           opponentChampionId,
           role,
+          rankTier,
           patchNoteId,
         },
       },
@@ -73,6 +74,7 @@ export const createChampionMatchupHandler = async ({ ctx, input }: Params<Create
         baseChampionId,
         opponentChampionId,
         role,
+        rankTier,
         weightedWinRate,
         totalMatches,
       },
