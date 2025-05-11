@@ -2,6 +2,7 @@ import { ResponseStatus, type ChampionMatchupIdsResponse, type Params } from '..
 import type {
   CreateChampionMatchupInputType,
   GetAllIdsByPatchVersionInputType,
+  GetChampionCountersInputType,
 } from '../schemas/championMatchup.schema';
 import { ErrorCodes, ErrorMessages, errorResponse, handleError } from '../services';
 import { getPatchNoteByVersionHandler } from './patchNote.controller';
@@ -189,6 +190,85 @@ export const getAllIdsByPatchVersionHandler = async ({
       result: {
         status: ResponseStatus.SUCCESS,
         championMatchupIds: matchups.map((element) => element.id),
+      },
+    };
+  } catch (error: unknown) {
+    throw handleError(domain, handlerId, error);
+  }
+};
+
+/**
+ * Get counters list for a champion with optional filters.
+ *
+ * @param ctx Ctx.
+ * @param input { baseChampionId: string, role:
+ *   RoleEnumType, rankTier: RankTierEnumType }
+ * @returns Array of counters.
+ */
+export const getChampionCountersHandler = async ({ ctx, input }: Params<GetChampionCountersInputType>) => {
+  const handlerId = 'getChampionCountersHandler';
+  try {
+    const { baseChampionId, role, rankTier } = input;
+
+    // Check if champion exists
+    const champion = await ctx.prisma.champion.findUnique({ where: { id: baseChampionId } });
+    if (!champion) {
+      return errorResponse(domain, handlerId, ErrorCodes.Champion.NoChampion, ErrorMessages.Champion.NoChampion);
+    }
+
+    // Get all counters for the champion
+    const matchups = await ctx.prisma.championMatchup.findMany({
+      where: {
+        baseChampionId: baseChampionId,
+        role: role,
+        rankTier: rankTier,
+      },
+      include: {
+        opponentChampion: true,
+        sourceStats: {
+          include: { source: true },
+        },
+      },
+    });
+
+    // Check if there are any matchups
+    if (matchups.length === 0) {
+      return errorResponse(
+        domain,
+        handlerId,
+        ErrorCodes.ChampionMatchup.NoCounters,
+        ErrorMessages.ChampionMatchup.NoCounters,
+      );
+    }
+
+    // Map matchups to counters
+    const counters = matchups.map((matchup) => ({
+      opponentChampion: {
+        id: matchup.opponentChampion.id,
+        name: matchup.opponentChampion.name,
+        slug: matchup.opponentChampion.slug,
+        imageUrl: matchup.opponentChampion.imageUrl,
+      },
+      role: matchup.role,
+      rankTier: matchup.rankTier,
+      weightedWinRate: matchup.weightedWinRate,
+      totalMatches: matchup.totalMatches,
+      sourceStats: matchup.sourceStats.map((stat) => ({
+        winRate: stat.winRate,
+        matches: stat.matches,
+        sourceUrl: stat.sourceUrl,
+        source: {
+          name: stat.source.name,
+          logoUrl: stat.source.logoUrl,
+          baseUrl: stat.source.baseUrl,
+        },
+      })),
+    }));
+
+    return {
+      result: {
+        status: ResponseStatus.SUCCESS,
+        counters,
       },
     };
   } catch (error: unknown) {

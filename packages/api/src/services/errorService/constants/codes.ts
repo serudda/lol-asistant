@@ -43,6 +43,7 @@ export const ErrorCodes = {
     AlreadyExists: 'ChampionMatchupAlreadyExists',
     NotCreated: 'ChampionMatchupNotCreated',
     NoChampionMatchup: 'NoChampionMatchup',
+    NoCounters: 'NoCounters',
   },
   SourceStats: {
     NoSourceMatchupStats: 'NoSourceMatchupStats',
