@@ -1,5 +1,6 @@
 export * from './account.schema';
 export * from './champion.schema';
+export * from './championMatchup.schema';
 export * from './config.schema';
 export * from './patchNote.schema';
 export * from './source.schema';
