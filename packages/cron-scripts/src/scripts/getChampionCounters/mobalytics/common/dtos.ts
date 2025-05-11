@@ -7,7 +7,7 @@ import type { MobalyticsCountersOptionsData } from './types';
 
 export const mobalyticsApiCounterDto = (
   item: MobalyticsCountersOptionsData,
-  rank: MobalyticsRank,
+  rankTier: MobalyticsRank,
   role: MobalyticsRole,
   index: number,
 ): SourceCounter => {
@@ -30,9 +30,10 @@ export const mobalyticsApiCounterDto = (
   return {
     rank: index + 1,
     sourceChampionSlug,
-    champUrl: `${MOBALYTICS_BASE_URL}lol/champions/${sourceChampionSlug}/build/${lowerCaseRole}?rank=${rank}`,
+    champUrl: `${MOBALYTICS_BASE_URL}lol/champions/${sourceChampionSlug}/build/${lowerCaseRole}?rank=${rankTier}`,
     role: item.matchupRole,
     source: Sources.MOBALYTICS,
+    sourceRankTier: rankTier,
     counterWinRate: parseFloat(winRate.toFixed(1)),
     matches: totalMatches,
   };

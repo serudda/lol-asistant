@@ -1,8 +1,15 @@
 import * as React from 'react';
 import { ChampionCombobox } from '../components';
+import { trpc } from '../utils/api';
 
 export const PickChampPage: React.FC = () => {
   const [value, setValue] = React.useState('');
+
+  const { data: countersData } = trpc.championMatchup.getChampionCounters.useQuery({
+    baseChampionId: value,
+  });
+
+  console.log(countersData);
 
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col items-center">

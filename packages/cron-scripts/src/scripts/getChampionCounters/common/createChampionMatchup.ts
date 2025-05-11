@@ -1,6 +1,6 @@
 import { ResponseStatus } from '@lol-assistant/api';
 import { createClient } from '../../../utils/trpc-client';
-import type { InternalRole } from './constants';
+import type { InternalRank, InternalRole } from './constants';
 
 /**
  * Centralized function to get or create a ChampionMatchup
@@ -15,11 +15,13 @@ export const createChampionMatchup = async ({
   opponentChampionSlug,
   patchVersion,
   role,
+  rankTier,
 }: {
   baseChampionSlug: string;
   opponentChampionSlug: string;
   patchVersion: string;
   role: InternalRole;
+  rankTier: InternalRank;
 }): Promise<string> => {
   try {
     console.log(
@@ -53,6 +55,7 @@ export const createChampionMatchup = async ({
       baseChampionId: baseChampionResp.result.champion.id,
       opponentChampionId: opponentChampionResp.result.champion.id,
       role,
+      rankTier,
       weightedWinRate: 0,
       totalMatches: 0,
     });

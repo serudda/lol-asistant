@@ -5,7 +5,7 @@ import type { OPGGRank } from './constants';
 import { OPGG_BASE_URL } from './constants';
 import type { OPGGCountersOptionsData } from './types';
 
-export const opggChampCounterDto = (item: OPGGCountersOptionsData, rank: OPGGRank, id: number): SourceCounter => {
+export const opggChampCounterDto = (item: OPGGCountersOptionsData, rankTier: OPGGRank, id: number): SourceCounter => {
   const counterWinRate = parseFloat(item.counterWinRate);
 
   if (!counterWinRate) {
@@ -26,7 +26,8 @@ export const opggChampCounterDto = (item: OPGGCountersOptionsData, rank: OPGGRan
   return {
     rank: id,
     sourceChampionSlug,
-    champUrl: `${OPGG_BASE_URL}/lol/champions/${sourceChampionSlug}/build/${item.matchupRole.toLowerCase()}?tier=${rank}`,
+    sourceRankTier: rankTier,
+    champUrl: `${OPGG_BASE_URL}/lol/champions/${sourceChampionSlug}/build/${item.matchupRole.toLowerCase()}?tier=${rankTier}`,
     role: item.matchupRole,
     source: Sources.OP_GG,
     counterWinRate: 100 - counterWinRate, // op.gg shows winrate inverted, so we invert it
