@@ -51,8 +51,8 @@ export type ChampionMatchupIdsResponse = ApiResponse<{ championMatchupIds: Array
 export type ChampionCountersResponse = ApiResponse<{
   counters: Array<{
     opponentChampion: BasicChampion;
-    role: string | null;
-    rankTier: string | null;
+    role: string;
+    rankTier: string;
     weightedWinRate: number;
     totalMatches: number;
     sourceStats: Array<{
