@@ -34,7 +34,7 @@ export type CalculateChampionMatchupStatsInputType = TypeOf<typeof calculateCham
 // ------------------------------------------------------------
 
 export const getChampionCountersInput = z.object({
-  baseChampionId: z.string(),
+  opponentChampionSlug: z.string(),
   patchVersion: z.string().optional(),
   role: z.string().optional(),
   rankTier: rankTierEnum.optional(),

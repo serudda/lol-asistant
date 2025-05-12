@@ -7,7 +7,7 @@ export const PickChampPage: React.FC = () => {
   const [value, setValue] = React.useState('');
 
   const { data: countersData } = trpc.championMatchup.getChampionCounters.useQuery({
-    baseChampionId: value,
+    opponentChampionSlug: value,
   });
 
   const tableData: Array<CounterTableData> = useMemo(() => {

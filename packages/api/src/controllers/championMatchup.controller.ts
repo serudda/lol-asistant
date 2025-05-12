@@ -5,6 +5,7 @@ import type {
   GetChampionCountersInputType,
 } from '../schemas/championMatchup.schema';
 import { ErrorCodes, ErrorMessages, errorResponse, handleError } from '../services';
+import { getChampionBySlugHandler } from './champion.controller';
 import { getPatchNoteByVersionHandler } from './patchNote.controller';
 
 const domain = 'CHAMPION_MATCHUP';
@@ -211,18 +212,20 @@ export const getChampionCountersHandler = async ({
 }: Params<GetChampionCountersInputType>): Promise<ChampionCountersResponse> => {
   const handlerId = 'getChampionCountersHandler';
   try {
-    const { baseChampionId, role, rankTier } = input;
+    const { opponentChampionSlug, role, rankTier } = input;
 
     // Check if champion exists
-    const champion = await ctx.prisma.champion.findUnique({ where: { id: baseChampionId } });
-    if (!champion) {
+    const response = await getChampionBySlugHandler({ ctx, input: { slug: opponentChampionSlug } });
+    if (response.result.status !== ResponseStatus.SUCCESS) {
       return errorResponse(domain, handlerId, ErrorCodes.Champion.NoChampion, ErrorMessages.Champion.NoChampion);
     }
+
+    const champion = response.result.champion;
 
     // Get all counters for the champion
     const matchups = await ctx.prisma.championMatchup.findMany({
       where: {
-        baseChampionId: baseChampionId,
+        baseChampionId: champion?.id,
         role: role,
         rankTier: rankTier,
       },
