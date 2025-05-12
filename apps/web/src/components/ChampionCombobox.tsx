@@ -51,7 +51,7 @@ export const ChampionCombobox = ({
   const options: Array<ChampionComboboxOption> = React.useMemo(() => {
     if (!data?.result?.champions) return [];
     return data.result.champions.map((champ) => ({
-      value: champ.slug,
+      value: champ.id,
       label: champ.name,
       imageUrl: champ.imageUrl,
     }));

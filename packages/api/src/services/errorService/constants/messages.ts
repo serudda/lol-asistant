@@ -54,5 +54,6 @@ export const ErrorMessages: ErrorMessageType = {
     AlreadyExists: 'This champion matchup already exists',
     NotCreated: 'Could not create the champion matchup',
     NoChampionMatchup: 'Champion matchup not found',
+    NoCounters: 'No counters found for the champion',
   },
 };

@@ -23,6 +23,8 @@ export enum InternalRole {
   SUPPORT = 'support',
 }
 
+// Keeping separate InternalRank enum to avoid uppercase mismatch with Prisma RankTier
+// TODO: Refactor to use RankTier enum globally (see tech-debt ticket)
 export enum InternalRank {
   IRON = 'iron',
   BRONZE = 'bronze',

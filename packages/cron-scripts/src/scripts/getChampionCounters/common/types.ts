@@ -4,6 +4,7 @@ export interface SourceCounter {
   champUrl: string;
   role: string;
   source: string;
+  sourceRankTier: string;
   counterWinRate: number;
   matches: number;
 }

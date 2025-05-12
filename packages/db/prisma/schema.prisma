@@ -26,6 +26,23 @@ enum SubscriptionPlanSlug {
     plus
 }
 
+enum RankTier {
+    iron
+    bronze
+    silver
+    gold
+    platinum
+    platinumPlus
+    emerald
+    emeraldPlus
+    diamond
+    diamondPlus
+    master
+    masterPlus
+    grandmaster
+    challenger
+}
+
 // --------------------------------------------------
 // CORE MODELS
 // --------------------------------------------------
@@ -209,6 +226,7 @@ model ChampionMatchup {
     isActive           Boolean             @default(true) @map("is_active")
     createdAt          DateTime            @default(now()) @map("created_at")
     updatedAt          DateTime            @updatedAt @map("updated_at")
+    rankTier           RankTier            @map("rank_tier")
     // --- Relations ---
     patchNote          PatchNote           @relation(fields: [patchNoteId], references: [id])
     patchNoteId        String              @map("patch_note_id") @db.Uuid
@@ -221,17 +239,18 @@ model ChampionMatchup {
     sourceStats        SourceMatchupStat[]
     // -----------------
 
-    @@unique([baseChampionId, opponentChampionId, role, patchNoteId])
+    @@unique([baseChampionId, opponentChampionId, role, rankTier, patchNoteId])
     @@map("champion_matchups")
 }
 
 // Raw stats by source
 model SourceMatchupStat {
     id                 String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    winRate            Float
+    winRate            Float           @map("win_rate")
     matches            Int
     sourceChampionSlug String          @map("source_champion_slug")
-    sourceUrl          String
+    sourceRankTier     String          @map("source_rank_tier")
+    sourceUrl          String          @map("source_url")
     scrapedAt          DateTime        @default(now()) @map("scraped_at")
     isActive           Boolean         @default(true) @map("is_active")
     createdAt          DateTime        @default(now()) @map("created_at")

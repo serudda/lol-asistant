@@ -48,6 +48,25 @@ export type BasicChampionsResponse = ApiResponse<{ champions: Array<BasicChampio
 
 // Champion Matchup
 export type ChampionMatchupIdsResponse = ApiResponse<{ championMatchupIds: Array<string> }>;
+export type ChampionCountersResponse = ApiResponse<{
+  counters: Array<{
+    opponentChampion: BasicChampion;
+    role: string | null;
+    rankTier: string | null;
+    weightedWinRate: number;
+    totalMatches: number;
+    sourceStats: Array<{
+      winRate: number;
+      matches: number;
+      sourceUrl: string;
+      source: {
+        name: string;
+        logoUrl: string;
+        baseUrl: string;
+      };
+    }>;
+  }>;
+}>;
 
 // Patch Note
 export type PatchNoteResponse = ApiResponse<{ patchNote: PatchNote }>;

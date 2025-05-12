@@ -23,7 +23,7 @@ interface GetChampionCountersArgs {
   patchVersion: string;
   championSlug: string;
   role: InternalRole;
-  rank: InternalRank;
+  rankTier: InternalRank;
 }
 
 /**
@@ -34,7 +34,7 @@ export const getChampionCounters = async ({
   patchVersion,
   championSlug,
   role,
-  rank,
+  rankTier,
 }: GetChampionCountersArgs): Promise<void> => {
   console.log(`[${scriptId}] Starting get champion counters for version: ${patchVersion}`);
 
@@ -47,7 +47,7 @@ export const getChampionCounters = async ({
 
     // Get Mobalytics counters
     const mobalyticsRole = toMobalyticsRole(role);
-    const mobalyticsRank = toMobalyticsRank(rank);
+    const mobalyticsRank = toMobalyticsRank(rankTier);
     const mobalyticsChampionSlug = getChampionSlugForSource(championSlug, Sources.MOBALYTICS);
     console.log(`[${scriptId}] [Fetching Mobalytics] Fetching data for champion: ${mobalyticsChampionSlug}`);
     const mobalyticsData = await getMobalyticsCounters(mobalyticsChampionSlug, mobalyticsRole, mobalyticsRank);
@@ -59,6 +59,7 @@ export const getChampionCounters = async ({
           opponentChampionSlug: normalizeChampionSlugFromSource(counter.sourceChampionSlug, Sources.MOBALYTICS),
           patchVersion,
           role,
+          rankTier,
         });
 
         processedMatchupIds.add(championMatchupId);
@@ -82,7 +83,7 @@ export const getChampionCounters = async ({
 
     // Get OP.GG counters
     const opggRole = toOPGGRole(role);
-    const opggRank = toOPGGRank(rank);
+    const opggRank = toOPGGRank(rankTier);
     const opggChampionSlug = getChampionSlugForSource(championSlug, Sources.OP_GG);
     console.log(`[${scriptId}] [Fetching OP.GG] Fetching data for champion: ${opggChampionSlug}`);
     const opggData = await getOPGGCounters(opggChampionSlug, opggRole, opggRank);
@@ -94,6 +95,7 @@ export const getChampionCounters = async ({
           opponentChampionSlug: normalizeChampionSlugFromSource(counter.sourceChampionSlug, Sources.OP_GG),
           patchVersion,
           role,
+          rankTier,
         });
 
         processedMatchupIds.add(championMatchupId);
@@ -117,7 +119,7 @@ export const getChampionCounters = async ({
 
     // Get U.GG counters
     const uggRole = toUGGRole(role);
-    const uggRank = toUGGRank(rank);
+    const uggRank = toUGGRank(rankTier);
     const uggChampionSlug = getChampionSlugForSource(championSlug, Sources.U_GG);
     console.log(`[${scriptId}] [Fetching U.GG] Fetching data for champion: ${uggChampionSlug}`);
     const uggData = await getUGGCounters(uggChampionSlug, uggRole, uggRank);
@@ -129,6 +131,7 @@ export const getChampionCounters = async ({
           opponentChampionSlug: normalizeChampionSlugFromSource(counter.sourceChampionSlug, Sources.U_GG),
           patchVersion,
           role,
+          rankTier,
         });
 
         processedMatchupIds.add(championMatchupId);
@@ -194,9 +197,9 @@ export const getChampionCounters = async ({
 export default getChampionCounters;
 
 /*
-  Run the script `pnpm script:run getChampionCounters patchVersion=<game_version> championSlug=<champion_slug> role=<role> rank=<rank>`
+  Run the script `pnpm script:run getChampionCounters patchVersion=<game_version> championSlug=<champion_slug> role=<role> rankTier=<rank_tier>`
  
-  Example: `pnpm script:run getChampionCounters patchVersion=14.1.1 championSlug=ahri role=mid rank=platinum`
+  Example: `pnpm script:run getChampionCounters patchVersion=14.1.1 championSlug=ahri role=mid rankTier=platinum`
  
   This script fetches champion counters from the following sources:
   - Mobalytics

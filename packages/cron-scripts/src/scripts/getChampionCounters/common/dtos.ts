@@ -20,6 +20,7 @@ export const sourceCounterToSourceMatchupStatDto = (
     championMatchupId,
     sourceId,
     sourceChampionSlug: counter.sourceChampionSlug,
+    sourceRankTier: counter.sourceRankTier,
     winRate: counter.counterWinRate,
     matches: counter.matches,
     sourceUrl: counter.champUrl,
