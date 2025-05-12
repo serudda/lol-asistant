@@ -1,10 +1,73 @@
+import { useState } from 'react';
 import { Table } from '@lol-assistant/ui';
 import type { CounterTableData } from './types';
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+} from '@tanstack/react-table';
+import { ArrowUpDown } from 'lucide-react';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const table = tv({
   base: 'w-full',
 });
+
+const columns: ColumnDef<CounterTableData>[] = [
+  {
+    accessorKey: 'rank',
+    header: ({ column }) => {
+      return (
+        <div
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="flex cursor-pointer items-center gap-2"
+        >
+          Rank
+          <ArrowUpDown size={16} />
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: 'champion',
+    header: ({ column }) => {
+      return (
+        <div
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="flex cursor-pointer items-center gap-2"
+        >
+          Champion
+          <ArrowUpDown size={16} />
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: 'rankTier',
+    header: 'Rank Tier',
+  },
+  {
+    accessorKey: 'weightedWinRate',
+    header: ({ column }) => {
+      return (
+        <div
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="flex cursor-pointer items-center gap-2"
+        >
+          Win Rate
+          <ArrowUpDown size={16} />
+        </div>
+      );
+    },
+  },
+];
 
 interface CounterListProps extends VariantProps<typeof Table> {
   /**
@@ -24,30 +87,63 @@ interface CounterListProps extends VariantProps<typeof Table> {
  */
 export const CounterList = ({ className, data = [] }: CounterListProps) => {
   const classes = table({ className });
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
+
+  const counterTable = useReactTable({
+    data,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+    },
+  });
 
   return (
     <Table className={classes}>
       <Table.Header>
-        <Table.Row>
-          <Table.Head>Rank</Table.Head>
-          <Table.Head className="w-[150px]">Champion</Table.Head>
-          <Table.Head>Rank Tier</Table.Head>
-          <Table.Head>Role</Table.Head>
-          <Table.Head>Win Rate</Table.Head>
-          <Table.Head>Total Matches</Table.Head>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {data.map((element, index) => (
-          <Table.Row key={element.champion}>
-            <Table.Cell>{index + 1}</Table.Cell>
-            <Table.Cell className="font-medium">{element.champion}</Table.Cell>
-            <Table.Cell>{element.rankTier}</Table.Cell>
-            <Table.Cell>{element.role}</Table.Cell>
-            <Table.Cell className="text-right">{element.weightedWinRate}</Table.Cell>
-            <Table.Cell className="text-right">{element.totalMatches}</Table.Cell>
+        {counterTable.getHeaderGroups().map((headerGroup) => (
+          <Table.Row key={headerGroup.id}>
+            {headerGroup.headers.map((header) => {
+              return (
+                <Table.Head key={header.id} className="[&:has([role=checkbox])]:pl-3">
+                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                </Table.Head>
+              );
+            })}
           </Table.Row>
         ))}
+      </Table.Header>
+      <Table.Body>
+        {counterTable.getRowModel().rows?.length ? (
+          counterTable.getRowModel().rows.map((row) => (
+            <Table.Row key={row.id} data-state={row.getIsSelected() && 'selected'}>
+              {row.getVisibleCells().map((cell) => (
+                <Table.Cell key={cell.id} className="[&:has([role=checkbox])]:pl-3">
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </Table.Cell>
+              ))}
+            </Table.Row>
+          ))
+        ) : (
+          <Table.Row>
+            <Table.Cell colSpan={columns.length} className="h-24 text-center">
+              No results.
+            </Table.Cell>
+          </Table.Row>
+        )}
       </Table.Body>
     </Table>
   );

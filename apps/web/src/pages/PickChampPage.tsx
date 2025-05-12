@@ -12,7 +12,8 @@ export const PickChampPage: React.FC = () => {
 
   const tableData: Array<CounterTableData> = useMemo(() => {
     return (
-      countersData?.result?.counters?.map((counter) => ({
+      countersData?.result?.counters?.map((counter, index) => ({
+        rank: index + 1,
         champion: counter.opponentChampion.name,
         role: counter.role,
         rankTier: counter.rankTier,
