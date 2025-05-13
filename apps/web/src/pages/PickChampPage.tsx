@@ -15,6 +15,7 @@ export const PickChampPage: React.FC = () => {
       countersData?.result?.counters?.map((counter, index) => ({
         rank: index + 1,
         champion: counter.opponentChampion.name,
+        imageUrl: counter.opponentChampion.imageUrl ?? '',
         role: counter.role,
         rankTier: counter.rankTier,
         weightedWinRate: counter.weightedWinRate.toFixed(2),

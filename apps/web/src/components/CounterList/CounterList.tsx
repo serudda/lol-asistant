@@ -1,19 +1,15 @@
 import { useState } from 'react';
-import { Table } from '@lol-assistant/ui';
+import { Avatar, AvatarSize, Table } from '@lol-assistant/ui';
 import type { CounterTableData } from './types';
 import {
   ColumnDef,
-  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   SortingState,
   useReactTable,
-  VisibilityState,
 } from '@tanstack/react-table';
-import { ArrowUpDown } from 'lucide-react';
+import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const table = tv({
@@ -24,13 +20,19 @@ const columns: ColumnDef<CounterTableData>[] = [
   {
     accessorKey: 'rank',
     header: ({ column }) => {
+      const renderIcon = () => {
+        if (!column.getIsSorted()) return <ChevronsUpDown size={16} />;
+        if (column.getIsSorted() === 'asc') return <ChevronUp size={16} className="text-neutral-50" />;
+        return <ChevronDown size={16} className="text-neutral-50" />;
+      };
+
       return (
         <div
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           className="flex cursor-pointer items-center gap-2"
         >
           Rank
-          <ArrowUpDown size={16} />
+          {renderIcon()}
         </div>
       );
     },
@@ -38,13 +40,30 @@ const columns: ColumnDef<CounterTableData>[] = [
   {
     accessorKey: 'champion',
     header: ({ column }) => {
+      const renderIcon = () => {
+        if (!column.getIsSorted()) return <ChevronsUpDown size={16} />;
+        if (column.getIsSorted() === 'asc') return <ChevronUp size={16} className="text-neutral-50" />;
+        return <ChevronDown size={16} className="text-neutral-50" />;
+      };
+
       return (
         <div
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           className="flex cursor-pointer items-center gap-2"
         >
           Champion
-          <ArrowUpDown size={16} />
+          {renderIcon()}
+        </div>
+      );
+    },
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center gap-2">
+          <Avatar size={AvatarSize.sm}>
+            <Avatar.Image src={row.original.imageUrl} />
+            <Avatar.Fallback>{row.original.champion.slice(0, 1)}</Avatar.Fallback>
+          </Avatar>
+          <span className="text-sm font-medium">{row.original.champion}</span>
         </div>
       );
     },
@@ -56,13 +75,19 @@ const columns: ColumnDef<CounterTableData>[] = [
   {
     accessorKey: 'weightedWinRate',
     header: ({ column }) => {
+      const renderIcon = () => {
+        if (!column.getIsSorted()) return <ChevronsUpDown size={16} />;
+        if (column.getIsSorted() === 'asc') return <ChevronUp size={16} className="text-neutral-50" />;
+        return <ChevronDown size={16} className="text-neutral-50" />;
+      };
+
       return (
         <div
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           className="flex cursor-pointer items-center gap-2"
         >
           Win Rate
-          <ArrowUpDown size={16} />
+          {renderIcon()}
         </div>
       );
     },
@@ -88,26 +113,15 @@ interface CounterListProps extends VariantProps<typeof Table> {
 export const CounterList = ({ className, data = [] }: CounterListProps) => {
   const classes = table({ className });
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
 
   const counterTable = useReactTable({
     data,
     columns,
     onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
     },
   });
 
@@ -118,7 +132,7 @@ export const CounterList = ({ className, data = [] }: CounterListProps) => {
           <Table.Row key={headerGroup.id}>
             {headerGroup.headers.map((header) => {
               return (
-                <Table.Head key={header.id} className="[&:has([role=checkbox])]:pl-3">
+                <Table.Head key={header.id}>
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                 </Table.Head>
               );
@@ -129,11 +143,9 @@ export const CounterList = ({ className, data = [] }: CounterListProps) => {
       <Table.Body>
         {counterTable.getRowModel().rows?.length ? (
           counterTable.getRowModel().rows.map((row) => (
-            <Table.Row key={row.id} data-state={row.getIsSelected() && 'selected'}>
+            <Table.Row key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <Table.Cell key={cell.id} className="[&:has([role=checkbox])]:pl-3">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </Table.Cell>
+                <Table.Cell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</Table.Cell>
               ))}
             </Table.Row>
           ))
