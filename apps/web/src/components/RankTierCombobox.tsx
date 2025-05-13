@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { RankTier } from '@lol-assistant/db';
 import { Avatar, AvatarSize, Combobox, TriggerSize } from '@lol-assistant/ui';
 import { rankTierOptions } from '../constants';
 
@@ -11,12 +12,12 @@ interface RankTierComboboxProps {
   /**
    * The value of the champion.
    */
-  defaultValue?: string;
+  defaultValue?: RankTier;
 
   /**
    * The function to call when the value changes.
    */
-  onChange: (value: string) => void;
+  onChange: (value: RankTier) => void;
 
   /**
    * The placeholder of the combobox.
@@ -45,8 +46,8 @@ export const RankTierCombobox = ({
     return rankTierOptions.find((item) => item.value === defaultValue)?.label;
   }, [defaultValue, rankTierOptions]);
 
-  const handleSelect = (slug: string) => {
-    onChange?.(slug);
+  const handleSelect = (value: string) => {
+    onChange?.(value as RankTier);
     setOpen(false);
   };
 
