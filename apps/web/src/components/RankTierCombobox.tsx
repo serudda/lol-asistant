@@ -1,14 +1,14 @@
 import * as React from 'react';
+import { RankTier } from '@lol-assistant/db';
 import { Avatar, AvatarSize, Combobox, TriggerSize } from '@lol-assistant/ui';
-import { trpc } from '../utils/api';
+import { rankTierOptions } from '../constants';
+import { tv } from 'tailwind-variants';
 
-export interface ChampionComboboxOption {
-  value: string;
-  label: string;
-  imageUrl?: string | null;
-}
+const trigger = tv({
+  base: 'pl-1',
+});
 
-interface ChampionComboboxProps {
+interface RankTierComboboxProps {
   /**
    * The class name of the combobox.
    */
@@ -17,12 +17,12 @@ interface ChampionComboboxProps {
   /**
    * The value of the champion.
    */
-  defaultValue: string;
+  defaultValue?: RankTier;
 
   /**
    * The function to call when the value changes.
    */
-  onChange: (value: string) => void;
+  onChange: (value: RankTier) => void;
 
   /**
    * The placeholder of the combobox.
@@ -36,42 +36,36 @@ interface ChampionComboboxProps {
 }
 
 /**
- * A combobox for selecting a Champion.
+ * A combobox for selecting a rank tier.
  */
-export const ChampionCombobox = ({
+export const RankTierCombobox = ({
   defaultValue,
   onChange,
-  placeholder = 'Select a champion',
+  placeholder = 'Select a rank tier',
   disabled = false,
   className = '',
-}: ChampionComboboxProps) => {
-  const { data } = trpc.champion.getAllBasic.useQuery({});
+}: RankTierComboboxProps) => {
+  const classes = {
+    trigger: trigger({ className }),
+  };
+
   const [open, setOpen] = React.useState(false);
 
-  const options: Array<ChampionComboboxOption> = React.useMemo(() => {
-    if (!data?.result?.champions) return [];
-    return data.result.champions.map((champ) => ({
-      value: champ.slug,
-      label: champ.name,
-      imageUrl: champ.imageUrl,
-    }));
-  }, [data]);
-
   const selectedOption = React.useMemo(() => {
-    return options.find((item) => item.value === defaultValue);
+    return rankTierOptions.find((item) => item.value === defaultValue);
   }, [defaultValue]);
 
   const triggerValue = selectedOption ? (
-    <span className="flex items-center gap-2">
+    <span className="flex items-center gap-1.5">
       <Avatar size={AvatarSize.sm}>
-        <Avatar.Image src={selectedOption.imageUrl as string} />
+        <Avatar.Image src={selectedOption.imageUrl} />
       </Avatar>
       {selectedOption.label}
     </span>
   ) : undefined;
 
-  const handleSelect = (slug: string) => {
-    onChange?.(slug);
+  const handleSelect = (value: string) => {
+    onChange?.(value as RankTier);
     setOpen(false);
   };
 
@@ -80,19 +74,18 @@ export const ChampionCombobox = ({
       <Combobox.Trigger
         placeholder={placeholder}
         value={triggerValue}
-        size={TriggerSize.lg}
-        className={`w-full ${className}`}
+        size={TriggerSize.base}
+        className={classes.trigger}
         disabled={disabled}
       />
       <Combobox.Content className="w-full">
-        <Combobox.Search placeholder="Search a champion" />
+        <Combobox.Search placeholder="Search a rank tier" />
         <Combobox.List>
-          <Combobox.Empty>No champions found</Combobox.Empty>
-          {options.map((item) => (
+          <Combobox.Empty>No rank tiers found</Combobox.Empty>
+          {rankTierOptions.map((item) => (
             <Combobox.Item key={item.value} value={item.value} onSelect={handleSelect}>
               <Avatar size={AvatarSize.sm}>
                 <Avatar.Image src={item.imageUrl as string} />
-                <Avatar.Fallback>{item.label.slice(0, 2)}</Avatar.Fallback>
               </Avatar>
               {item.label}
             </Combobox.Item>

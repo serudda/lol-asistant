@@ -1,13 +1,16 @@
 import * as React from 'react';
 import { useMemo } from 'react';
-import { ChampionCombobox, CounterList, CounterTableData } from '../components';
+import { RankTier } from '@lol-assistant/db';
+import { ChampionCombobox, CounterList, CounterTableData, RankTierCombobox } from '../components';
 import { trpc } from '../utils/api';
 
 export const PickChampPage: React.FC = () => {
   const [value, setValue] = React.useState('');
+  const [rankTier, setRankTier] = React.useState<RankTier>(RankTier.iron);
 
   const { data: countersData } = trpc.championMatchup.getChampionCounters.useQuery({
     opponentChampionSlug: value,
+    rankTier,
   });
 
   const tableData: Array<CounterTableData> = useMemo(() => {
@@ -32,9 +35,12 @@ export const PickChampPage: React.FC = () => {
         <ChampionCombobox defaultValue={value} onChange={setValue} />
       </div>
 
+      <div className="w-full max-w-md mx-auto">
+        <RankTierCombobox defaultValue={rankTier} onChange={setRankTier} />
+      </div>
+
       {countersData && (
         <div className="w-full max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-center mb-8">Counters</h2>
           <CounterList data={tableData} />
         </div>
       )}
