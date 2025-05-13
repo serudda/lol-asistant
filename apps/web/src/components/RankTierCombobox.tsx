@@ -55,7 +55,7 @@ export const RankTierCombobox = ({
       <Combobox.Trigger
         placeholder={placeholder}
         value={getLabel}
-        size={TriggerSize.lg}
+        size={TriggerSize.base}
         className={`w-full ${className}`}
         disabled={disabled}
       />
