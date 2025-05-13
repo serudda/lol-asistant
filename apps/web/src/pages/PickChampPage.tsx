@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useMemo } from 'react';
-import { ChampionCombobox, CounterList, CounterTableData } from '../components';
+import { ChampionCombobox, CounterList, CounterTableData, RankTierCombobox } from '../components';
 import { trpc } from '../utils/api';
 
 export const PickChampPage: React.FC = () => {
@@ -34,7 +34,7 @@ export const PickChampPage: React.FC = () => {
 
       {countersData && (
         <div className="w-full max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-center mb-8">Counters</h2>
+          <RankTierCombobox onChange={() => {}} />
           <CounterList data={tableData} />
         </div>
       )}
