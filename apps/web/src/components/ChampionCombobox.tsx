@@ -51,7 +51,7 @@ export const ChampionCombobox = ({
   const options: Array<ChampionComboboxOption> = React.useMemo(() => {
     if (!data?.result?.champions) return [];
     return data.result.champions.map((champ) => ({
-      value: champ.id,
+      value: champ.slug,
       label: champ.name,
       imageUrl: champ.imageUrl,
     }));
@@ -61,8 +61,8 @@ export const ChampionCombobox = ({
     return options.find((item) => item.value === defaultValue)?.label;
   }, [defaultValue, options]);
 
-  const handleSelect = (value: string) => {
-    onChange?.(value);
+  const handleSelect = (slug: string) => {
+    onChange?.(slug);
     setOpen(false);
   };
 

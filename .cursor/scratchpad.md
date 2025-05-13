@@ -147,6 +147,18 @@ Puntos Clave y Directorios Principales:
 
 **[DONE] Integrar OP.GG counters -> ChampionMatchup + SourceMatchupStat (LOL-50)** - Refactor `createChampionMatchup` y `saveSourceMatchupStats` utilidades listas. - En `getChampionCounters.ts`: - Crear championMatchup por cada oponente de OP.GG. - Construir `entries` y llamar `saveSourceMatchupStats` una única vez. - _Success Criteria:_ Ejecutar `getChampionCounters` para Volibear jungle patch14.x crea ChampionMatchup y SourceMatchupStat records para todos los oponentes de OP.GG sin hardcodes ni duplicados.
 
+**[DONE] Feature: Obtener y Mostrar Counters al Seleccionar Campeón en Combobox - https://linear.app/lol-assistant/issue/LOL-38/get-counter-list-on-combobox-click**
+
+- (API) Definir Schemas (Zod) en `packages/api` para la petición y respuesta de counters de un campeón (input: `championId` o `championKey`; output: lista de `CounterChampionStat` con `championName`, `winRate`, `matchesPlayed`, `aggregatedScore`, etc.).
+- (API) Implementar tRPC router, controller y schema en `packages/api` para el endpoint `championMatchup.getCounters`. Este servicio consulta la BD (`ChampionMatchup`, `SourceMatchupStat`) y devuelve los counters.
+- (API) Definir y propagar códigos de error específicos (`CHAMPION_NOT_FOUND`, `NO_COUNTER_DATA`, `NO_COUNTERS`) para el endpoint.
+- (Frontend) Modificar el componente Combobox de selección de campeones para que, al seleccionar un campeón, se capture el identificador del mismo.
+- (Frontend) Implementar la lógica para invocar el nuevo endpoint tRPC `championMatchup.getCounters` desde el cliente cuando se selecciona un campeón.
+- (Frontend) Desarrollar/actualizar el componente o sección de la UI que mostrará la lista de campeones counter devuelta por la API, incluyendo sus estadísticas.
+- (Frontend) Manejar los estados de carga y error durante la petición y visualización de los datos de counters.
+
+- _Criterio de Éxito:_ Al seleccionar un campeón en el Combobox, se realiza una petición al backend que devuelve la lista de sus counter picks con estadísticas relevantes (ej. winrate, partidas, score agregado). Esta lista se muestra correctamente en la interfaz de usuario. Los errores (campeón sin datos, error de servidor) se manejan y se informa al usuario adecuadamente.
+
 ## Executor Comments or Assistance Requests
 
 - OP.GG fetcher ahora es robusto, extensible y alineado con el resto del sistema. El mapeo de enums internos permite agregar nuevas fuentes sin fricción. Listo para revisión/merge.

@@ -1,14 +1,28 @@
 import * as React from 'react';
-import { Avatar, AvatarSize } from '@lol-assistant/ui';
-import { ChampionCombobox } from '../components';
+import { useMemo } from 'react';
+import { ChampionCombobox, CounterList, CounterTableData } from '../components';
 import { trpc } from '../utils/api';
 
 export const PickChampPage: React.FC = () => {
   const [value, setValue] = React.useState('');
 
   const { data: countersData } = trpc.championMatchup.getChampionCounters.useQuery({
-    baseChampionId: value,
+    opponentChampionSlug: value,
   });
+
+  const tableData: Array<CounterTableData> = useMemo(() => {
+    return (
+      countersData?.result?.counters?.map((counter, index) => ({
+        rank: index + 1,
+        champion: counter.opponentChampion.name,
+        imageUrl: counter.opponentChampion.imageUrl ?? '',
+        role: counter.role,
+        rankTier: counter.rankTier,
+        weightedWinRate: counter.weightedWinRate.toFixed(2),
+        totalMatches: counter.totalMatches.toLocaleString(),
+      })) ?? []
+    );
+  }, [countersData]);
 
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col items-center">
@@ -19,36 +33,9 @@ export const PickChampPage: React.FC = () => {
       </div>
 
       {countersData && (
-        <div className="w-full max-w-md mx-auto">
+        <div className="w-full max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold text-center mb-8">Counters</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Champion</th>
-                <th>Role</th>
-                <th>Rank Tier</th>
-                <th>Weighted Win Rate</th>
-                <th>Total Matches</th>
-              </tr>
-            </thead>
-            <tbody>
-              {countersData?.result?.counters?.map((counter) => (
-                <tr key={counter.opponentChampion.id}>
-                  <td className="flex items-center gap-2">
-                    <Avatar size={AvatarSize.sm} isRounded>
-                      <Avatar.Image src={counter.opponentChampion.imageUrl as string} />
-                      <Avatar.Fallback>{counter.opponentChampion.name.slice(0, 2)}</Avatar.Fallback>
-                    </Avatar>
-                    {counter.opponentChampion.name}
-                  </td>
-                  <td>{counter.role}</td>
-                  <td>{counter.rankTier}</td>
-                  <td>{counter.weightedWinRate}</td>
-                  <td>{counter.totalMatches}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <CounterList data={tableData} />
         </div>
       )}
     </div>

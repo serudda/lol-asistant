@@ -220,7 +220,7 @@ model Champion {
 // Match-up between two Champions
 model ChampionMatchup {
     id                 String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    role               String?
+    role               String
     weightedWinRate    Float               @map("weighted_win_rate")
     totalMatches       Int                 @map("total_matches")
     isActive           Boolean             @default(true) @map("is_active")
