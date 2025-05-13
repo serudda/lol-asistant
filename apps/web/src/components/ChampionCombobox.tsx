@@ -57,9 +57,18 @@ export const ChampionCombobox = ({
     }));
   }, [data]);
 
-  const getLabel = React.useMemo(() => {
-    return options.find((item) => item.value === defaultValue)?.label;
-  }, [defaultValue, options]);
+  const selectedOption = React.useMemo(() => {
+    return options.find((item) => item.value === defaultValue);
+  }, [defaultValue]);
+
+  const triggerValue = selectedOption ? (
+    <span className="flex items-center gap-2">
+      <Avatar size={AvatarSize.sm}>
+        <Avatar.Image src={selectedOption.imageUrl as string} />
+      </Avatar>
+      {selectedOption.label}
+    </span>
+  ) : undefined;
 
   const handleSelect = (slug: string) => {
     onChange?.(slug);
@@ -70,7 +79,7 @@ export const ChampionCombobox = ({
     <Combobox open={open} onOpenChange={setOpen}>
       <Combobox.Trigger
         placeholder={placeholder}
-        value={getLabel}
+        value={triggerValue}
         size={TriggerSize.lg}
         className={`w-full ${className}`}
         disabled={disabled}

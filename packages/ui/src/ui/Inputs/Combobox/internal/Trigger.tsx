@@ -30,7 +30,7 @@ const icon = tv({
   base: 'text-white',
 });
 
-export interface TriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface TriggerProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'value'> {
   /**
    * Delegates the rendering of the item to its single child
    * element.
@@ -40,7 +40,7 @@ export interface TriggerProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
   /**
    * The value of the button.
    */
-  value?: string;
+  value?: React.ReactNode | string;
 
   /**
    * The size of the button.

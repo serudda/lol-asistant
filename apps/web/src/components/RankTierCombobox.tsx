@@ -2,6 +2,11 @@ import * as React from 'react';
 import { RankTier } from '@lol-assistant/db';
 import { Avatar, AvatarSize, Combobox, TriggerSize } from '@lol-assistant/ui';
 import { rankTierOptions } from '../constants';
+import { tv } from 'tailwind-variants';
+
+const trigger = tv({
+  base: 'pl-1',
+});
 
 interface RankTierComboboxProps {
   /**
@@ -40,11 +45,24 @@ export const RankTierCombobox = ({
   disabled = false,
   className = '',
 }: RankTierComboboxProps) => {
+  const classes = {
+    trigger: trigger({ className }),
+  };
+
   const [open, setOpen] = React.useState(false);
 
-  const getLabel = React.useMemo(() => {
-    return rankTierOptions.find((item) => item.value === defaultValue)?.label;
-  }, [defaultValue, rankTierOptions]);
+  const selectedOption = React.useMemo(() => {
+    return rankTierOptions.find((item) => item.value === defaultValue);
+  }, [defaultValue]);
+
+  const triggerValue = selectedOption ? (
+    <span className="flex items-center gap-1.5">
+      <Avatar size={AvatarSize.sm}>
+        <Avatar.Image src={selectedOption.imageUrl} />
+      </Avatar>
+      {selectedOption.label}
+    </span>
+  ) : undefined;
 
   const handleSelect = (value: string) => {
     onChange?.(value as RankTier);
@@ -55,9 +73,9 @@ export const RankTierCombobox = ({
     <Combobox open={open} onOpenChange={setOpen}>
       <Combobox.Trigger
         placeholder={placeholder}
-        value={getLabel}
+        value={triggerValue}
         size={TriggerSize.base}
-        className={`w-full ${className}`}
+        className={classes.trigger}
         disabled={disabled}
       />
       <Combobox.Content className="w-full">
