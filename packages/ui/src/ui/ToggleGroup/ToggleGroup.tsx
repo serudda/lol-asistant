@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { toggle as toggleClasses} from '../Buttons/Toggle/Toggle';
+import type { toggle as toggleClasses } from '../Buttons/Toggle/Toggle';
 import { ToggleAppearance, ToggleSize, ToggleVariant } from '../Buttons/Toggle/Toggle';
 import { Item } from './internal';
 import type { ToggleGroupSingleProps } from '@radix-ui/react-toggle-group';
@@ -29,12 +29,12 @@ export type ToggleGroupComponent = React.ForwardRefExoticComponent<
 const toggleGroup = tv({ base: 'flex items-center gap-1' });
 
 export const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(
-  ({ className, type, variant, size, children, ...props }, ref) => {
+  ({ className, type, variant, size, appearance, children, ...props }, ref) => {
     const classes = toggleGroup({ className });
 
     return (
       <Root ref={ref} {...props} className={classes} type={type}>
-        <ToggleGroupContext.Provider value={{ variant, size }}>{children}</ToggleGroupContext.Provider>
+        <ToggleGroupContext.Provider value={{ appearance, variant, size }}>{children}</ToggleGroupContext.Provider>
       </Root>
     );
   },

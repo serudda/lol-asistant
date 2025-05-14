@@ -22,9 +22,21 @@ export type ItemProps = React.ComponentPropsWithoutRef<typeof RadixItem> &
 /**
  * `Item` represents the item within the `ToggleGroup`.
  */
-export const Item = ({ className, variant: variantProp, size: sizeProp, children, ...props }: ItemProps) => {
+export const Item = ({
+  className,
+  variant: variantProp,
+  size: sizeProp,
+  appearance: appearanceProp,
+  children,
+  ...props
+}: ItemProps) => {
   const context = React.useContext(ToggleGroupContext);
-  const classes = toggleClasses({ variant: context.variant ?? variantProp, size: context.size ?? sizeProp, className });
+  const classes = toggleClasses({
+    variant: context.variant ?? variantProp,
+    size: context.size ?? sizeProp,
+    appearance: context.appearance ?? appearanceProp,
+    className,
+  });
 
   return (
     <RadixItem className={classes} {...props}>
