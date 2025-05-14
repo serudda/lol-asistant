@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Avatar, AvatarSize, Combobox, TriggerSize } from '@lol-assistant/ui';
-import { trpc } from '../utils/api';
+import { trpc } from '../../utils/api';
 
 export interface ChampionComboboxOption {
   value: string;

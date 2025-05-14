@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RankTier } from '@lol-assistant/db';
 import { Combobox, TriggerSize } from '@lol-assistant/ui';
-import { rankTierOptions } from '../constants';
+import { rankTierOptions } from './rankTierOptions';
 import { tv } from 'tailwind-variants';
 
 const trigger = tv({
