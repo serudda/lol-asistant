@@ -26,7 +26,7 @@ export type ToggleGroupComponent = React.ForwardRefExoticComponent<
   Item: typeof Item;
 };
 
-const toggleGroup = tv({ base: 'flex items-center gap-1' });
+const toggleGroup = tv({ base: 'flex items-center' });
 
 export const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>(
   ({ className, type, variant, size, appearance, children, ...props }, ref) => {

@@ -33,19 +33,44 @@ export const RoleToggleGroup = ({ defaultValue, onValueChange, className }: Role
       onValueChange={onValueChange}
       className={className}
     >
-      <ToggleGroup.Item key={LoLChampionRole.top} value={LoLChampionRole.top} aria-label="Top">
+      <ToggleGroup.Item
+        key={LoLChampionRole.top}
+        value={LoLChampionRole.top}
+        aria-label="Top"
+        className="rounded-l-md rounded-r-none -mr-px"
+      >
         <RoleIcon role={LoLChampionRole.top} className="size-8" />
       </ToggleGroup.Item>
-      <ToggleGroup.Item key={LoLChampionRole.jungle} value={LoLChampionRole.jungle} aria-label="Jungle">
+      <ToggleGroup.Item
+        key={LoLChampionRole.jungle}
+        value={LoLChampionRole.jungle}
+        aria-label="Jungle"
+        className="rounded-none -mr-px"
+      >
         <RoleIcon role={LoLChampionRole.jungle} className="size-8" />
       </ToggleGroup.Item>
-      <ToggleGroup.Item key={LoLChampionRole.mid} value={LoLChampionRole.mid} aria-label="Mid">
+      <ToggleGroup.Item
+        key={LoLChampionRole.mid}
+        value={LoLChampionRole.mid}
+        aria-label="Mid"
+        className="rounded-none -mr-px"
+      >
         <RoleIcon role={LoLChampionRole.mid} className="size-8" />
       </ToggleGroup.Item>
-      <ToggleGroup.Item key={LoLChampionRole.adc} value={LoLChampionRole.adc} aria-label="ADC">
+      <ToggleGroup.Item
+        key={LoLChampionRole.adc}
+        value={LoLChampionRole.adc}
+        aria-label="ADC"
+        className="rounded-none -mr-px"
+      >
         <RoleIcon role={LoLChampionRole.adc} className="size-8" />
       </ToggleGroup.Item>
-      <ToggleGroup.Item key={LoLChampionRole.support} value={LoLChampionRole.support} aria-label="Support">
+      <ToggleGroup.Item
+        key={LoLChampionRole.support}
+        value={LoLChampionRole.support}
+        aria-label="Support"
+        className="rounded-r-md rounded-l-none"
+      >
         <RoleIcon role={LoLChampionRole.support} className="size-8" />
       </ToggleGroup.Item>
     </ToggleGroup>
