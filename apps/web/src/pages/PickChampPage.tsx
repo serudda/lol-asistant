@@ -52,7 +52,7 @@ export const PickChampPage: React.FC = () => {
         <div className="flex gap-4">
           <RankTierCombobox defaultValue={rankTier} onChange={setRankTier} />
           <RoleToggleGroup defaultValue={role} onValueChange={setRole} />
-          <PatchCombobox onChange={setPatch} className="max-w-24" />
+          <PatchCombobox defaultValue={patch} onChange={setPatch} className="max-w-24" />
         </div>
 
         {/* Counters List */}

@@ -19,6 +19,11 @@ interface PatchComboboxProps {
   className?: string;
 
   /**
+   * The default value of the combobox.
+   */
+  defaultValue?: string;
+
+  /**
    * The function to call when the value changes.
    */
   onChange: (value: string) => void;
@@ -32,7 +37,7 @@ interface PatchComboboxProps {
 /**
  * A combobox for selecting a patch.
  */
-export const PatchCombobox = ({ onChange, disabled = false, className = '' }: PatchComboboxProps) => {
+export const PatchCombobox = ({ defaultValue, disabled = false, className = '', onChange }: PatchComboboxProps) => {
   const classes = {
     trigger: trigger({ className }),
   };
@@ -40,8 +45,6 @@ export const PatchCombobox = ({ onChange, disabled = false, className = '' }: Pa
   const [open, setOpen] = React.useState(false);
 
   const { data: patchNotes } = trpc.patchNote.getLastTwo.useQuery({});
-
-  console.log('patchNotes: ', patchNotes);
 
   const options: Array<PatchComboboxOption> = React.useMemo(() => {
     if (!patchNotes?.result?.patchNotes) return [];
@@ -52,8 +55,9 @@ export const PatchCombobox = ({ onChange, disabled = false, className = '' }: Pa
   }, [patchNotes]);
 
   const selectedOption = React.useMemo(() => {
-    return options[0];
-  }, [patchNotes]);
+    if (!defaultValue) return options[0];
+    return options.find((option) => option.value === defaultValue);
+  }, [defaultValue, options]);
 
   const handleSelect = (value: string) => {
     onChange?.(value);
