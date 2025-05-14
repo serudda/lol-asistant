@@ -212,7 +212,7 @@ export const getChampionCountersHandler = async ({
 }: Params<GetChampionCountersInputType>): Promise<ChampionCountersResponse> => {
   const handlerId = 'getChampionCountersHandler';
   try {
-    const { opponentChampionSlug, role, rankTier } = input;
+    const { opponentChampionSlug, role, rankTier, patchVersion } = input;
 
     // Check if champion exists
     const response = await getChampionBySlugHandler({ ctx, input: { slug: opponentChampionSlug } });
@@ -226,8 +226,11 @@ export const getChampionCountersHandler = async ({
     const matchups = await ctx.prisma.championMatchup.findMany({
       where: {
         baseChampionId: champion?.id,
-        role: role,
-        rankTier: rankTier,
+        role,
+        rankTier,
+        patchNote: {
+          patchVersion,
+        },
       },
       include: {
         opponentChampion: true,
