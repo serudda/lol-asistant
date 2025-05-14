@@ -15,7 +15,7 @@ export const toggle = tv({
     'inline-flex items-center justify-center gap-2',
     'rounded-md transition-colors',
     'disabled:pointer-events-none disabled:opacity-50',
-    '[&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+    '[&_svg]:pointer-events-none [&_svg]:shrink-0',
   ],
   variants: {
     appearance: {
@@ -23,9 +23,9 @@ export const toggle = tv({
       [ToggleAppearance.ghost]: '',
     },
     size: {
-      [ToggleSize.sm]: 'px-1 text-xs h-6 rounded',
-      [ToggleSize.base]: 'px-2 text-sm h-8 rounded',
-      [ToggleSize.lg]: 'px-3 text-base h-10 rounded',
+      [ToggleSize.sm]: 'px-1 text-xs h-6 rounded [&_svg]:size-4',
+      [ToggleSize.base]: 'px-1 text-sm h-8 rounded [&_svg]:size-6',
+      [ToggleSize.lg]: 'px-3 text-base h-10 rounded [&_svg]:size-8',
     },
     variant: {
       [ToggleVariant.primary]: '',
@@ -51,8 +51,8 @@ export const toggle = tv({
         'border border-gray-700/60',
         'text-white',
         'data-[state=off]:text-opacity-40',
-        'data-[state=on]:bg-gray-900 data-[state=on]:text-white data-[state=on]:text-opacity-100',
-        'hover:border-gray-700/60 hover:bg-gray-900 hover:data-[state=off]:text-white',
+        'data-[state=on]:bg-gray-800 data-[state=on]:text-white data-[state=on]:text-opacity-100',
+        'hover:border-gray-700/60 hover:bg-gray-800 hover:data-[state=off]:text-white',
       ],
     },
     {
