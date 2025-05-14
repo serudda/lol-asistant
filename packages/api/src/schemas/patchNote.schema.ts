@@ -22,6 +22,7 @@ export type GetLastTwoPatchNotesInputType = TypeOf<typeof getLastTwoPatchNotesIn
 export const createPatchNoteInput = z.object({
   summary: z.string(),
   patchVersion: z.string(),
+  riotPatch: z.string(),
   publishedDate: z.string(),
   embedding: z.array(z.number()),
 });

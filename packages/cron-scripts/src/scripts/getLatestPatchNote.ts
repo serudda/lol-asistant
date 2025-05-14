@@ -1,3 +1,4 @@
+import { riotToPatchVersion } from '@lol-assistant/api';
 import { summarizePatchHandler } from './getLatestPatchNote/ai/summarizePatch/handler';
 import { saveNewPatch } from './getLatestPatchNote/api/saveNewPatch';
 import { PATCH_TAG_URL } from './getLatestPatchNote/common/constants';
@@ -21,6 +22,21 @@ export const getLatestPatchNote = async (): Promise<void> => {
 
     // ------------------------------------------------------------
 
+    // Convert riot patch to canonical patch version
+    console.log(`[${scriptId}] [Converting] Converting riot patch to canonical patch version...`);
+    const riotPatch = patchNotes.patchVersion;
+    let patchVersion: string;
+    try {
+      patchVersion = riotToPatchVersion(riotPatch);
+    } catch (err) {
+      console.error(`[${scriptId}] Failed to convert riot patch to canonical:`, err);
+      return;
+    }
+
+    console.log(`[${scriptId}] Converted riot patch to canonical patch version: ${patchVersion}`);
+
+    // ------------------------------------------------------------
+
     // Summarize patch notes
     console.log(`[${scriptId}] [Summarizing] Summarizing patch notes...`);
     const { textOnly } = patchNotes;
@@ -30,7 +46,7 @@ export const getLatestPatchNote = async (): Promise<void> => {
 
     // Save patch notes to database
     console.log(`[${scriptId}] [Saving] Saving patch notes to database...`);
-    await saveNewPatch(summary, patchNotes.patchVersion, patchNotes.publishedDate);
+    await saveNewPatch(summary, patchVersion, riotPatch, patchNotes.publishedDate);
 
     // ------------------------------------------------------------
 

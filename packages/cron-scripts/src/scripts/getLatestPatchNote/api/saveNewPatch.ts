@@ -3,7 +3,12 @@ import { OpenAIEmbeddings } from '@langchain/openai';
 
 const embeddings = new OpenAIEmbeddings();
 
-export const saveNewPatch = async (summary: string, patchVersion: string, publishedDate: string): Promise<void> => {
+export const saveNewPatch = async (
+  summary: string,
+  patchVersion: string,
+  riotPatch: string,
+  publishedDate: string,
+): Promise<void> => {
   try {
     console.log('[Saving] - Creating embedding for patch notes...');
     const client = createClient();
@@ -13,6 +18,7 @@ export const saveNewPatch = async (summary: string, patchVersion: string, publis
     await client.patchNote.createPatchNote.mutate({
       summary,
       patchVersion,
+      riotPatch,
       publishedDate,
       embedding,
     });
