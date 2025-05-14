@@ -20,14 +20,20 @@ const trigger = tv({
       false: 'text-gray-300',
     },
     size: {
-      [TriggerSize.base]: 'h-8 px-3.5 text-sm',
-      [TriggerSize.lg]: 'h-10 px-3.5 text-base',
+      [TriggerSize.base]: 'h-8 pl-3.5 pr-2 text-sm',
+      [TriggerSize.lg]: 'h-10 pl-3.5 pr-3 text-base',
     },
   },
 });
 
 const icon = tv({
-  base: 'text-white',
+  base: 'text-white ml-auto',
+  variants: {
+    size: {
+      [TriggerSize.base]: 'size-4',
+      [TriggerSize.lg]: 'size-5',
+    },
+  },
 });
 
 export interface TriggerProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'value'> {
@@ -50,7 +56,7 @@ export interface TriggerProps extends Omit<React.ButtonHTMLAttributes<HTMLButton
   /**
    * The placeholder of the button.
    */
-  placeholder: string;
+  placeholder?: string;
 }
 
 /**
@@ -64,14 +70,14 @@ export const Trigger = forwardRef<HTMLButtonElement, TriggerProps>(
         size,
         className,
       }),
-      icon: icon(),
+      icon: icon({ size }),
     };
 
     return (
       <Popover.Trigger ref={ref} asChild>
         <button {...props} className={classes.trigger}>
           {value ?? placeholder}
-          <ChevronDown className={classes.icon} width={16} height={16} />
+          <ChevronDown className={classes.icon} />
         </button>
       </Popover.Trigger>
     );
