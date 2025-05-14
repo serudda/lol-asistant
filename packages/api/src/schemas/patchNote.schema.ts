@@ -7,6 +7,18 @@ export type GetLatestPatchNoteInputType = TypeOf<typeof getLatestPatchNoteInput>
 
 /*------------------------------------*/
 
+export const getPatchNoteByVersionInput = z.object({
+  patchVersion: z.string(),
+});
+export type GetPatchNoteByVersionInputType = TypeOf<typeof getPatchNoteByVersionInput>;
+
+/*------------------------------------*/
+
+export const getLastTwoPatchNotesInput = z.object({});
+export type GetLastTwoPatchNotesInputType = TypeOf<typeof getLastTwoPatchNotesInput>;
+
+/*------------------------------------*/
+
 export const createPatchNoteInput = z.object({
   summary: z.string(),
   patchVersion: z.string(),
@@ -15,12 +27,5 @@ export const createPatchNoteInput = z.object({
 });
 
 export type CreatePatchNoteInputType = TypeOf<typeof createPatchNoteInput>;
-
-/*------------------------------------*/
-
-export const getPatchNoteByVersionInput = z.object({
-  patchVersion: z.string(),
-});
-export type GetPatchNoteByVersionInputType = TypeOf<typeof getPatchNoteByVersionInput>;
 
 /*------------------------------------*/
