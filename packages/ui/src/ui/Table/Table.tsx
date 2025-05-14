@@ -6,7 +6,7 @@ const table = tv({
   base: ['w-full caption-bottom text-sm'],
 });
 
-export interface TableProps extends React.TableHTMLAttributes<HTMLTableElement>, VariantProps<typeof table> {}
+export type TableProps = React.TableHTMLAttributes<HTMLTableElement> & VariantProps<typeof table>;
 
 /**
  * Table is a container for displaying data efficiently.

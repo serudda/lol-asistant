@@ -4,7 +4,7 @@ import { ButtonAppearance, ButtonSize, ButtonVariant } from './types';
 import { Slot } from '@radix-ui/react-slot';
 import { tv, type VariantProps } from 'tailwind-variants';
 
-const button = tv({
+export const button = tv({
   base: [
     'inline-flex flex-shrink-0 items-center justify-center',
     'relative',

@@ -1,16 +1,18 @@
 import * as React from 'react';
 import { useMemo } from 'react';
-import { RankTier } from '@lol-assistant/db';
-import { ChampionCombobox, CounterList, CounterTableData, RankTierCombobox } from '../components';
+import { LoLChampionRole, RankTier } from '@lol-assistant/db';
+import { ChampionCombobox, CounterList, CounterTableData, RankTierCombobox, RoleToggleGroup } from '../components';
 import { trpc } from '../utils/api';
 
 export const PickChampPage: React.FC = () => {
   const [value, setValue] = React.useState('');
   const [rankTier, setRankTier] = React.useState<RankTier>(RankTier.iron);
+  const [role, setRole] = React.useState<LoLChampionRole>(LoLChampionRole.mid);
 
   const { data: countersData } = trpc.championMatchup.getChampionCounters.useQuery({
     opponentChampionSlug: value,
     rankTier,
+    role,
   });
 
   const tableData: Array<CounterTableData> = useMemo(() => {
@@ -35,15 +37,21 @@ export const PickChampPage: React.FC = () => {
         <ChampionCombobox defaultValue={value} onChange={setValue} />
       </div>
 
-      <div className="w-full max-w-md mx-auto">
-        <RankTierCombobox defaultValue={rankTier} onChange={setRankTier} />
-      </div>
-
-      {countersData && (
-        <div className="w-full max-w-3xl mx-auto">
-          <CounterList data={tableData} />
+      <div className="flex flex-col gap-4 w-full max-w-3xl">
+        <hr className="w-full my-8 border-t border-gray-800" />
+        {/* Filters */}
+        <div className="flex gap-4">
+          <RankTierCombobox defaultValue={rankTier} onChange={setRankTier} />
+          <RoleToggleGroup defaultValue={role} onValueChange={setRole} />
         </div>
-      )}
+
+        {/* Counters List */}
+        {countersData && (
+          <div className="w-full max-w-3xl mx-auto">
+            <CounterList data={tableData} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

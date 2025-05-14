@@ -43,6 +43,14 @@ enum RankTier {
     challenger
 }
 
+enum LoLChampionRole {
+    top
+    jungle
+    mid
+    adc
+    support
+}
+
 // --------------------------------------------------
 // CORE MODELS
 // --------------------------------------------------
@@ -220,13 +228,13 @@ model Champion {
 // Match-up between two Champions
 model ChampionMatchup {
     id                 String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    role               String
+    role               LoLChampionRole     @default(mid)
     weightedWinRate    Float               @map("weighted_win_rate")
     totalMatches       Int                 @map("total_matches")
     isActive           Boolean             @default(true) @map("is_active")
     createdAt          DateTime            @default(now()) @map("created_at")
     updatedAt          DateTime            @updatedAt @map("updated_at")
-    rankTier           RankTier            @map("rank_tier")
+    rankTier           RankTier            @default(iron) @map("rank_tier")
     // --- Relations ---
     patchNote          PatchNote           @relation(fields: [patchNoteId], references: [id])
     patchNoteId        String              @map("patch_note_id") @db.Uuid

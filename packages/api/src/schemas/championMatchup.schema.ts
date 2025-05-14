@@ -1,8 +1,11 @@
-import { RankTier } from '@prisma/client';
+import { LoLChampionRole, RankTier } from '@prisma/client';
 import { z, type TypeOf } from 'zod';
 
 export const rankTierEnum = z.nativeEnum(RankTier);
 export type RankTierEnumType = TypeOf<typeof rankTierEnum>;
+
+export const roleEnum = z.nativeEnum(LoLChampionRole);
+export type RoleEnumType = TypeOf<typeof roleEnum>;
 
 // ------------------------------------------------------------
 
@@ -17,7 +20,7 @@ export const createChampionMatchupInput = z.object({
   patchNoteId: z.string(),
   baseChampionId: z.string(),
   opponentChampionId: z.string(),
-  role: z.string(),
+  role: roleEnum,
   rankTier: rankTierEnum,
   weightedWinRate: z.number().default(0),
   totalMatches: z.number().default(0),
@@ -36,7 +39,7 @@ export type CalculateChampionMatchupStatsInputType = TypeOf<typeof calculateCham
 export const getChampionCountersInput = z.object({
   opponentChampionSlug: z.string(),
   patchVersion: z.string().optional(),
-  role: z.string().optional(),
+  role: roleEnum.optional(),
   rankTier: rankTierEnum.optional(),
 });
 export type GetChampionCountersInputType = TypeOf<typeof getChampionCountersInput>;

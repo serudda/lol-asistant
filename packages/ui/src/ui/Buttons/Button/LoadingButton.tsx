@@ -1,4 +1,4 @@
-import { Spinner, SpinnerSize } from '../Spinner/Spinner';
+import { Spinner, SpinnerSize } from '../../Spinner/Spinner';
 import type { ButtonProps } from './Button';
 import { Button } from './Button';
 

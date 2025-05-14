@@ -3,7 +3,7 @@ import { LoadingButton } from './LoadingButton';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof Button> = {
-  title: 'UI Components/Button',
+  title: 'UI Components/Buttons/Button',
   component: Button,
   argTypes: {
     size: {

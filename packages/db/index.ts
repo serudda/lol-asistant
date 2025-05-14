@@ -10,5 +10,5 @@ export const prisma =
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
-export { RankTier, SubscriptionFrequency, SubscriptionPlanSlug } from '@prisma/client';
+export { LoLChampionRole, Prisma, RankTier, SubscriptionFrequency, SubscriptionPlanSlug } from '@prisma/client';
 export * from './common';
