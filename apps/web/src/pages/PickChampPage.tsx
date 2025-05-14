@@ -7,11 +7,12 @@ import { trpc } from '../utils/api';
 export const PickChampPage: React.FC = () => {
   const [value, setValue] = React.useState('');
   const [rankTier, setRankTier] = React.useState<RankTier>(RankTier.iron);
-  const [role, setRole] = React.useState<LoLChampionRole>(LoLChampionRole.top);
+  const [role, setRole] = React.useState<LoLChampionRole>(LoLChampionRole.mid);
 
   const { data: countersData } = trpc.championMatchup.getChampionCounters.useQuery({
     opponentChampionSlug: value,
     rankTier,
+    role,
   });
 
   const tableData: Array<CounterTableData> = useMemo(() => {
