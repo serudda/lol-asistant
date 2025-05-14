@@ -35,7 +35,7 @@ export const RoleToggleGroup = ({ defaultValue, onValueChange, className }: Role
     >
       {roleOptions.map((role) => (
         <ToggleGroup.Item key={role.value} value={role.value} aria-label={role.label}>
-          <img src={role.imageUrl} alt={role.label} className="w-4 h-4" />
+          <img src={role.imageUrl} alt={role.label} className="w-4 h-4 flex-shrink-0" />
         </ToggleGroup.Item>
       ))}
     </ToggleGroup>
