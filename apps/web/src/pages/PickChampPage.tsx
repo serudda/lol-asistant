@@ -1,18 +1,27 @@
 import * as React from 'react';
 import { useMemo } from 'react';
 import { LoLChampionRole, RankTier } from '@lol-assistant/db';
-import { ChampionCombobox, CounterList, CounterTableData, RankTierCombobox, RoleToggleGroup } from '../components';
+import {
+  ChampionCombobox,
+  CounterList,
+  CounterTableData,
+  PatchCombobox,
+  RankTierCombobox,
+  RoleToggleGroup,
+} from '../components';
 import { trpc } from '../utils/api';
 
 export const PickChampPage: React.FC = () => {
   const [value, setValue] = React.useState('');
   const [rankTier, setRankTier] = React.useState<RankTier>(RankTier.iron);
   const [role, setRole] = React.useState<LoLChampionRole>(LoLChampionRole.mid);
+  const [patch, setPatch] = React.useState<string>('');
 
   const { data: countersData } = trpc.championMatchup.getChampionCounters.useQuery({
     opponentChampionSlug: value,
     rankTier,
     role,
+    patchVersion: patch,
   });
 
   const tableData: Array<CounterTableData> = useMemo(() => {
@@ -43,6 +52,7 @@ export const PickChampPage: React.FC = () => {
         <div className="flex gap-4">
           <RankTierCombobox defaultValue={rankTier} onChange={setRankTier} />
           <RoleToggleGroup defaultValue={role} onValueChange={setRole} />
+          <PatchCombobox onChange={setPatch} className="max-w-24" />
         </div>
 
         {/* Counters List */}
