@@ -1,7 +1,6 @@
 import { ToggleAppearance, ToggleSize, ToggleVariant } from '../Buttons';
 import { ToggleGroup } from './ToggleGroup';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Bold } from 'lucide-react';
 
 const meta: Meta<typeof ToggleGroup> = {
   title: 'UI Components/ToggleGroup',
@@ -28,7 +27,6 @@ type Story = StoryObj<typeof ToggleGroup>;
 export const Default: Story = {
   args: {
     type: 'single',
-    children: <Bold className="size-4" />,
     onValueChange: (value) => console.log('Value changed: ', value),
   },
   render: function Render(args) {

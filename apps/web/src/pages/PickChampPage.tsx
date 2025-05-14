@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { useMemo } from 'react';
-import { RankTier } from '@lol-assistant/db';
-import { ChampionCombobox, CounterList, CounterTableData, RankTierCombobox } from '../components';
+import { LoLChampionRole, RankTier } from '@lol-assistant/db';
+import { Button, ButtonSize, ButtonVariant } from '@lol-assistant/ui';
+import { ChampionCombobox, CounterList, CounterTableData, RankTierCombobox, RoleToggleGroup } from '../components';
 import { trpc } from '../utils/api';
 
 export const PickChampPage: React.FC = () => {
   const [value, setValue] = React.useState('');
   const [rankTier, setRankTier] = React.useState<RankTier>(RankTier.iron);
+  const [role, setRole] = React.useState<LoLChampionRole>(LoLChampionRole.top);
 
   const { data: countersData } = trpc.championMatchup.getChampionCounters.useQuery({
     opponentChampionSlug: value,
@@ -38,6 +40,14 @@ export const PickChampPage: React.FC = () => {
       <div className="w-full max-w-md mx-auto">
         <RankTierCombobox defaultValue={rankTier} onChange={setRankTier} />
       </div>
+
+      <div className="w-full max-w-md mx-auto">
+        <RoleToggleGroup defaultValue={role} onValueChange={setRole} />
+      </div>
+
+      <Button variant={ButtonVariant.primary} size={ButtonSize.lg}>
+        Pick Champ
+      </Button>
 
       {countersData && (
         <div className="w-full max-w-3xl mx-auto">
