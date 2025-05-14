@@ -10,7 +10,7 @@ import {
 import { Root } from '@radix-ui/react-toggle';
 import { tv, type VariantProps } from 'tailwind-variants';
 
-const toggle = tv({
+export const toggle = tv({
   base: [
     'inline-flex items-center justify-center gap-2',
     'rounded-md transition-colors',
@@ -119,3 +119,6 @@ export const Toggle = React.forwardRef<HTMLButtonElement, ToggleProps>(
 );
 
 Toggle.displayName = 'Toggle';
+
+export { ToggleAppearance, ToggleSize, ToggleVariant };
+export type { ToggleAppearanceType, ToggleSizeType, ToggleVariantType };
