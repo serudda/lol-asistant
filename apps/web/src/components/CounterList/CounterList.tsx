@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { LoLChampionRole } from '@lol-assistant/db';
 import { Avatar, AvatarSize, Table } from '@lol-assistant/ui';
 import { RoleIcon } from '../RoleIcon/RoleIcon';
-import type { CounterTableData } from './types';
+import type { ChampionCounterRow, SourceStat } from './types';
 import {
   ColumnDef,
   flexRender,
@@ -18,22 +18,22 @@ const table = tv({
   base: 'w-full table-fixed',
 });
 
-const columns: ColumnDef<CounterTableData>[] = [
+// Factory returning the static column definitions
+const getStaticColumns = (): ColumnDef<ChampionCounterRow>[] => [
   {
     accessorKey: 'rank',
     size: 5,
     header: ({ column }) => {
+      const isAsc = column.getIsSorted() === 'asc';
+
       const renderIcon = () => {
         if (!column.getIsSorted()) return <ChevronsUpDown size={16} />;
-        if (column.getIsSorted() === 'asc') return <ChevronUp size={16} className="text-neutral-50" />;
+        if (isAsc) return <ChevronUp size={16} className="text-neutral-50" />;
         return <ChevronDown size={16} className="text-neutral-50" />;
       };
 
       return (
-        <div
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="flex cursor-pointer items-center gap-2"
-        >
+        <div onClick={() => column.toggleSorting(isAsc)} className="flex cursor-pointer items-center gap-2">
           Rank
           {renderIcon()}
         </div>
@@ -44,17 +44,16 @@ const columns: ColumnDef<CounterTableData>[] = [
     accessorKey: 'champion',
     size: 40,
     header: ({ column }) => {
+      const isAsc = column.getIsSorted() === 'asc';
+
       const renderIcon = () => {
         if (!column.getIsSorted()) return <ChevronsUpDown size={16} />;
-        if (column.getIsSorted() === 'asc') return <ChevronUp size={16} className="text-neutral-50" />;
+        if (isAsc) return <ChevronUp size={16} className="text-neutral-50" />;
         return <ChevronDown size={16} className="text-neutral-50" />;
       };
 
       return (
-        <div
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="flex cursor-pointer items-center gap-2"
-        >
+        <div onClick={() => column.toggleSorting(isAsc)} className="flex cursor-pointer items-center gap-2">
           Champion
           {renderIcon()}
         </div>
@@ -85,20 +84,19 @@ const columns: ColumnDef<CounterTableData>[] = [
     },
   },
   {
-    accessorKey: 'weightedWinRate',
+    accessorKey: 'overallWinRate',
     size: 50,
     header: ({ column }) => {
+      const isAsc = column.getIsSorted() === 'asc';
+
       const renderIcon = () => {
         if (!column.getIsSorted()) return <ChevronsUpDown size={16} />;
-        if (column.getIsSorted() === 'asc') return <ChevronUp size={16} className="text-neutral-50" />;
+        if (isAsc) return <ChevronUp size={16} className="text-neutral-50" />;
         return <ChevronDown size={16} className="text-neutral-50" />;
       };
 
       return (
-        <div
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="flex cursor-pointer items-center gap-2"
-        >
+        <div onClick={() => column.toggleSorting(isAsc)} className="flex cursor-pointer items-center gap-2">
           Win Rate
           {renderIcon()}
         </div>
@@ -116,7 +114,7 @@ interface CounterListProps extends VariantProps<typeof Table> {
   /**
    * The data to display in the table.
    */
-  data?: Array<CounterTableData>;
+  data?: Array<ChampionCounterRow>;
 }
 
 /**
@@ -126,6 +124,47 @@ interface CounterListProps extends VariantProps<typeof Table> {
 export const CounterList = ({ className, data = [] }: CounterListProps) => {
   const classes = table({ className });
   const [sorting, setSorting] = useState<SortingState>([]);
+
+  // Collect dynamic keys (Sources like Mobalytics, etc.)
+  const sourceKeys = useMemo(() => {
+    const keys = new Set<string>();
+    data.forEach((row) => {
+      row.sourceStats.forEach((stat) => keys.add(stat.name));
+    });
+    return Array.from(keys);
+  }, [data]);
+
+  // Dynamic columns for each provider
+  const sourceColumns: ColumnDef<ChampionCounterRow>[] = sourceKeys.map((key) => ({
+    id: key,
+    header: () => {
+      // Try to get icon from first row (all rows expected to have same icon per provider)
+      const firstRow = data[0] as ChampionCounterRow | undefined;
+      const stat = firstRow?.sourceStats.find((s) => s.name === key);
+      return (
+        <div className="flex items-center gap-1 justify-center">
+          {stat?.iconUrl && <img src={stat.iconUrl} alt={key} className="size-4 inline-block" />}
+          <span>{key}</span>
+        </div>
+      );
+    },
+    accessorFn: (row) => row.sourceStats.find((s) => s.name === key) || null,
+    cell: ({ getValue }) => {
+      const stat = getValue() as SourceStat | null;
+      if (!stat) return null;
+      return (
+        <div className="flex flex-col items-start">
+          <span className="font-medium">{stat.winRate.toFixed(2)}%</span>
+          <span className="text-xs text-gray-400">{stat.matches.toLocaleString()} matches</span>
+        </div>
+      );
+    },
+    size: 60,
+  }));
+
+  const columns = useMemo<ColumnDef<ChampionCounterRow>[]>(() => {
+    return [...getStaticColumns(), ...sourceColumns];
+  }, [sourceColumns]);
 
   const counterTable = useReactTable({
     data,
@@ -143,13 +182,11 @@ export const CounterList = ({ className, data = [] }: CounterListProps) => {
       <Table.Header>
         {counterTable.getHeaderGroups().map((headerGroup) => (
           <Table.Row key={headerGroup.id}>
-            {headerGroup.headers.map((header) => {
-              return (
-                <Table.Head key={header.id} style={{ width: `${header.column.getSize()}px` }}>
-                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                </Table.Head>
-              );
-            })}
+            {headerGroup.headers.map((header) => (
+              <Table.Head key={header.id} style={{ width: `${header.column.getSize()}px` }}>
+                {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+              </Table.Head>
+            ))}
           </Table.Row>
         ))}
       </Table.Header>
@@ -174,4 +211,4 @@ export const CounterList = ({ className, data = [] }: CounterListProps) => {
   );
 };
 
-export { type CounterTableData };
+export { type ChampionCounterRow };

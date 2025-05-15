@@ -2,7 +2,7 @@ import * as React from 'react';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const thead = tv({
-  base: ['h-10 px-2 cursor-default', 'text-primary-200 text-left align-middle font-medium'],
+  base: ['h-10 px-2 cursor-default', 'text-primary-200 text-left align-middle font-medium select-none'],
 });
 
 export interface THeadProps extends React.ThHTMLAttributes<HTMLTableCellElement>, VariantProps<typeof thead> {}
