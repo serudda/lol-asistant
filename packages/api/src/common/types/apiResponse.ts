@@ -71,6 +71,7 @@ export type ChampionCountersResponse = ApiResponse<{
 // Patch Note
 export type PatchNoteResponse = ApiResponse<{ patchNote: PatchNote }>;
 export type PatchNotesResponse = ApiResponse<{ patchNotes: Array<PatchNote> }>;
+export type LastTwoPatchNotesResponse = ApiResponse<{ patchNotes: Array<PatchNote> }>;
 
 // Source Matchup Stat
 export type SourceMatchupStatResponse = ApiResponse<{ sourceMatchupStat: SourceMatchupStat }>;

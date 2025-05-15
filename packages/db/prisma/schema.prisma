@@ -38,7 +38,6 @@ enum RankTier {
     diamond
     diamondPlus
     master
-    masterPlus
     grandmaster
     challenger
 }
@@ -192,7 +191,8 @@ model Source {
 // Game Patch (release by Riot Games)
 model PatchNote {
     id            String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    patchVersion  String                 @map("patch_version")
+    patchVersion  String                 @map("patch_version") // DDragon canonical (ej. 15.10.1)
+    riotPatch     String                 @map("riot_patch") // Riot canonical (ej. 25-10)
     publishedDate String                 @map("published_date")
     summary       String
     embedding     Unsupported("vector")?

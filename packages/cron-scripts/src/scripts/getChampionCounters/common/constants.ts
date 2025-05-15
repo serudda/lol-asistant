@@ -1,3 +1,4 @@
+import { LoLChampionRole, RankTier } from '@lol-assistant/db';
 import { MobalyticsRank, MobalyticsRole } from '../mobalytics/common/constants';
 import { OPGGRank, OPGGRole } from '../opgg/common/constants';
 import { UGGRank, UGGRole } from '../ugg/common/constants';
@@ -14,157 +15,151 @@ export const SourceUrls = {
   [Sources.U_GG]: 'https://u.gg',
 };
 
-// Internal canonical enums
-export enum InternalRole {
-  TOP = 'top',
-  JUNGLE = 'jungle',
-  MID = 'mid',
-  ADC = 'adc',
-  SUPPORT = 'support',
-}
-
-// Keeping separate InternalRank enum to avoid uppercase mismatch with Prisma RankTier
-// TODO: Refactor to use RankTier enum globally (see tech-debt ticket)
-export enum InternalRank {
-  IRON = 'iron',
-  BRONZE = 'bronze',
-  SILVER = 'silver',
-  GOLD = 'gold',
-  PLATINUM = 'platinum',
-  EMERALD = 'emerald',
-  DIAMOND = 'diamond',
-  MASTER = 'master',
-  GRANDMASTER = 'grandmaster',
-  CHALLENGER = 'challenger',
-}
-
-export const toMobalyticsRole = (role: InternalRole): MobalyticsRole => {
+export const toMobalyticsRole = (role: LoLChampionRole): MobalyticsRole => {
   switch (role) {
-    case InternalRole.TOP:
+    case LoLChampionRole.top:
       return MobalyticsRole.TOP;
-    case InternalRole.JUNGLE:
+    case LoLChampionRole.jungle:
       return MobalyticsRole.JUNGLE;
-    case InternalRole.MID:
+    case LoLChampionRole.mid:
       return MobalyticsRole.MID;
-    case InternalRole.ADC:
+    case LoLChampionRole.adc:
       return MobalyticsRole.ADC;
-    case InternalRole.SUPPORT:
+    case LoLChampionRole.support:
       return MobalyticsRole.SUPPORT;
     default:
       throw new Error('[toMobalyticsRole] Unknown internal role:', role);
   }
 };
 
-export const toMobalyticsRank = (rank: InternalRank): MobalyticsRank => {
+export const toMobalyticsRank = (rank: RankTier): MobalyticsRank => {
   switch (rank) {
-    case InternalRank.IRON:
-      return MobalyticsRank.IRON;
-    case InternalRank.BRONZE:
-      return MobalyticsRank.BRONZE;
-    case InternalRank.SILVER:
-      return MobalyticsRank.SILVER;
-    case InternalRank.GOLD:
-      return MobalyticsRank.GOLD;
-    case InternalRank.PLATINUM:
-      return MobalyticsRank.PLATINUM;
-    case InternalRank.DIAMOND:
-      return MobalyticsRank.DIAMOND;
-    case InternalRank.MASTER:
-      return MobalyticsRank.MASTER;
-    case InternalRank.GRANDMASTER:
-      return MobalyticsRank.GRANDMASTER;
-    case InternalRank.CHALLENGER:
-      return MobalyticsRank.CHALLENGER;
+    case RankTier.iron:
+      return MobalyticsRank.iron;
+    case RankTier.bronze:
+      return MobalyticsRank.bronze;
+    case RankTier.silver:
+      return MobalyticsRank.silver;
+    case RankTier.gold:
+      return MobalyticsRank.gold;
+    case RankTier.platinum:
+      return MobalyticsRank.platinum;
+    case RankTier.platinumPlus:
+      return MobalyticsRank.platinumPlus;
+    case RankTier.emerald:
+      return MobalyticsRank.emerald;
+    case RankTier.emeraldPlus:
+      return MobalyticsRank.emeraldPlus;
+    case RankTier.diamond:
+      return MobalyticsRank.diamond;
+    case RankTier.diamondPlus:
+      return MobalyticsRank.diamondPlus;
+    case RankTier.master:
+      return MobalyticsRank.master;
+    case RankTier.grandmaster:
+      return MobalyticsRank.grandmaster;
     default:
       throw new Error(`[toMobalyticsRank] Unknown internal rank: ${rank}`);
   }
 };
 
 // Mappers for OP.GG
-export const toOPGGRole = (role: InternalRole): OPGGRole => {
+export const toOPGGRole = (role: LoLChampionRole): OPGGRole => {
   switch (role) {
-    case InternalRole.TOP:
-      return OPGGRole.TOP;
-    case InternalRole.JUNGLE:
-      return OPGGRole.JUNGLE;
-    case InternalRole.MID:
-      return OPGGRole.MID;
-    case InternalRole.ADC:
-      return OPGGRole.ADC;
-    case InternalRole.SUPPORT:
-      return OPGGRole.SUPPORT;
+    case LoLChampionRole.top:
+      return OPGGRole.top;
+    case LoLChampionRole.jungle:
+      return OPGGRole.jungle;
+    case LoLChampionRole.mid:
+      return OPGGRole.mid;
+    case LoLChampionRole.adc:
+      return OPGGRole.adc;
+    case LoLChampionRole.support:
+      return OPGGRole.support;
     default:
       throw new Error('[toOPGGRole] Unknown internal role:', role);
   }
 };
 
-export const toOPGGRank = (rank: InternalRank): OPGGRank => {
+export const toOPGGRank = (rank: RankTier): OPGGRank => {
   switch (rank) {
-    case InternalRank.IRON:
-      return OPGGRank.IRON;
-    case InternalRank.BRONZE:
-      return OPGGRank.BRONZE;
-    case InternalRank.SILVER:
-      return OPGGRank.SILVER;
-    case InternalRank.GOLD:
-      return OPGGRank.GOLD;
-    case InternalRank.PLATINUM:
-      return OPGGRank.PLATINUM;
-    case InternalRank.EMERALD:
-      return OPGGRank.EMERALD;
-    case InternalRank.DIAMOND:
-      return OPGGRank.DIAMOND;
-    case InternalRank.MASTER:
-      return OPGGRank.MASTER;
-    case InternalRank.GRANDMASTER:
-      return OPGGRank.GRANDMASTER;
-    case InternalRank.CHALLENGER:
-      return OPGGRank.CHALLENGER;
+    case RankTier.iron:
+      return OPGGRank.iron;
+    case RankTier.bronze:
+      return OPGGRank.bronze;
+    case RankTier.silver:
+      return OPGGRank.silver;
+    case RankTier.gold:
+      return OPGGRank.gold;
+    case RankTier.platinum:
+      return OPGGRank.platinum;
+    case RankTier.platinumPlus:
+      return OPGGRank.platinumPlus;
+    case RankTier.emerald:
+      return OPGGRank.emerald;
+    case RankTier.emeraldPlus:
+      return OPGGRank.emeraldPlus;
+    case RankTier.diamond:
+      return OPGGRank.diamond;
+    case RankTier.diamondPlus:
+      return OPGGRank.diamondPlus;
+    case RankTier.master:
+      return OPGGRank.master;
+    case RankTier.grandmaster:
+      return OPGGRank.grandmaster;
+    case RankTier.challenger:
+      return OPGGRank.challenger;
     default:
       throw new Error('[toOPGGRank] Unknown internal rank:', rank);
   }
 };
 
 // Mappers for U.GG
-export const toUGGRole = (role: InternalRole): UGGRole => {
+export const toUGGRole = (role: LoLChampionRole): UGGRole => {
   switch (role) {
-    case InternalRole.TOP:
-      return UGGRole.TOP;
-    case InternalRole.JUNGLE:
-      return UGGRole.JUNGLE;
-    case InternalRole.MID:
-      return UGGRole.MID;
-    case InternalRole.ADC:
-      return UGGRole.ADC;
-    case InternalRole.SUPPORT:
-      return UGGRole.SUPPORT;
+    case LoLChampionRole.top:
+      return UGGRole.top;
+    case LoLChampionRole.jungle:
+      return UGGRole.jungle;
+    case LoLChampionRole.mid:
+      return UGGRole.mid;
+    case LoLChampionRole.adc:
+      return UGGRole.adc;
+    case LoLChampionRole.support:
+      return UGGRole.support;
     default:
       throw new Error('[toUGGRole] Unknown internal role:', role);
   }
 };
 
-export const toUGGRank = (rank: InternalRank): UGGRank => {
+export const toUGGRank = (rank: RankTier): UGGRank => {
   switch (rank) {
-    case InternalRank.IRON:
-      return UGGRank.IRON;
-    case InternalRank.BRONZE:
-      return UGGRank.BRONZE;
-    case InternalRank.SILVER:
-      return UGGRank.SILVER;
-    case InternalRank.GOLD:
-      return UGGRank.GOLD;
-    case InternalRank.PLATINUM:
-      return UGGRank.PLATINUM;
-    case InternalRank.EMERALD:
-      return UGGRank.EMERALD;
-    case InternalRank.DIAMOND:
-      return UGGRank.DIAMOND;
-    case InternalRank.MASTER:
-      return UGGRank.MASTER;
-    case InternalRank.GRANDMASTER:
-      return UGGRank.GRANDMASTER;
-    case InternalRank.CHALLENGER:
-      return UGGRank.CHALLENGER;
+    case RankTier.iron:
+      return UGGRank.iron;
+    case RankTier.bronze:
+      return UGGRank.bronze;
+    case RankTier.silver:
+      return UGGRank.silver;
+    case RankTier.gold:
+      return UGGRank.gold;
+    case RankTier.platinum:
+      return UGGRank.platinum;
+    case RankTier.platinumPlus:
+      return UGGRank.platinumPlus;
+    case RankTier.emerald:
+      return UGGRank.emerald;
+    case RankTier.emeraldPlus:
+      return UGGRank.emeraldPlus;
+    case RankTier.diamond:
+      return UGGRank.diamond;
+    case RankTier.diamondPlus:
+      return UGGRank.diamondPlus;
+    case RankTier.master:
+      return UGGRank.master;
+    case RankTier.grandmaster:
+      return UGGRank.grandmaster;
+    case RankTier.challenger:
+      return UGGRank.challenger;
     default:
       throw new Error('[toUGGRank] Unknown internal rank:', rank);
   }

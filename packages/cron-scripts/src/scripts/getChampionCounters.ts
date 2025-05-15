@@ -1,5 +1,4 @@
 import { createClient } from '../utils/trpc-client';
-import type { InternalRank, InternalRole } from './getChampionCounters/common/constants';
 import {
   getChampionSlugForSource,
   normalizeChampionSlugFromSource,
@@ -16,14 +15,15 @@ import { saveSourceMatchupStats } from './getChampionCounters/common/saveSourceM
 import { getMobalyticsCounters } from './getChampionCounters/mobalytics/getMobalyticsCounters';
 import { getOPGGCounters } from './getChampionCounters/opgg/getOPGGCounters';
 import { getUGGCounters } from './getChampionCounters/ugg/getUGGCounters';
+import type { LoLChampionRole, RankTier } from '@prisma/client';
 
 const scriptId = '🛠️  getChampionCounters';
 
 interface GetChampionCountersArgs {
   patchVersion: string;
   championSlug: string;
-  role: InternalRole;
-  rankTier: InternalRank;
+  role: LoLChampionRole;
+  rankTier: RankTier;
 }
 
 /**

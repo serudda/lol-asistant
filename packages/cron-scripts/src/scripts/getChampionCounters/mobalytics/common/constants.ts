@@ -2,15 +2,20 @@ export const MOBALYTICS_BASE_URL = 'https://mobalytics.gg/';
 export const MOBALYTICS_ENDPOINT = `${MOBALYTICS_BASE_URL}api/lol/graphql/v1/query`;
 
 export enum MobalyticsRank {
-  IRON = 'Iron',
-  BRONZE = 'Bronze',
-  SILVER = 'Silver',
-  GOLD = 'Gold',
-  PLATINUM = 'Platinum',
-  DIAMOND = 'Diamond',
-  MASTER = 'Master',
-  GRANDMASTER = 'Grandmaster',
-  CHALLENGER = 'Challenger',
+  iron = 'Iron',
+  bronze = 'Bronze',
+  silver = 'Silver',
+  gold = 'Gold',
+  platinum = 'Platinum',
+  platinumPlus = 'Platinum+',
+  emerald = 'Emerald',
+  emeraldPlus = 'Emerald+',
+  diamond = 'Diamond',
+  diamondPlus = 'Diamond+',
+  diamondTwoPlus = 'Diamond2+',
+  master = 'Master',
+  masterPlus = 'Master+',
+  grandmaster = 'Grandmaster',
 }
 
 export enum MobalyticsRole {

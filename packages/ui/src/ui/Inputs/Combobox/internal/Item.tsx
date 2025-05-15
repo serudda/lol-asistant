@@ -7,7 +7,7 @@ const item = tv({
     'relative flex cursor-default gap-2',
     'select-none items-center rounded-sm py-3 px-4 text-sm outline-none',
     'data-[disabled=true]:pointer-events-none data-[selected=true]:bg-gray-500 data-[selected=true]:text-gray-50',
-    'data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+    'data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   ],
 });
 

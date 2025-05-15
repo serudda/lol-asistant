@@ -1,6 +1,11 @@
-import type { PatchNoteResponse } from '../common';
+import type { LastTwoPatchNotesResponse, PatchNoteResponse } from '../common';
 import { ResponseStatus, type Params } from '../common';
-import type { CreatePatchNoteInputType, GetLatestPatchNoteInputType } from '../schemas/patchNote.schema';
+import type {
+  CreatePatchNoteInputType,
+  GetLastTwoPatchNotesInputType,
+  GetLatestPatchNoteInputType,
+  GetPatchNoteByVersionInputType,
+} from '../schemas/patchNote.schema';
 import { ErrorCodes, ErrorMessages, errorResponse, handleError } from '../services';
 
 // Id domain to handle errors
@@ -43,7 +48,7 @@ export const createPatchNoteHandler = async ({
 }: Params<CreatePatchNoteInputType>): Promise<PatchNoteResponse> => {
   const handlerId = 'createPatchNoteHandler';
   try {
-    const { summary, patchVersion, publishedDate, embedding } = input;
+    const { summary, patchVersion, riotPatch, publishedDate, embedding } = input;
 
     // Start transaction
     return await ctx.prisma.$transaction(async (tx) => {
@@ -52,6 +57,7 @@ export const createPatchNoteHandler = async ({
         data: {
           summary,
           patchVersion,
+          riotPatch,
           publishedDate,
         },
       });
@@ -83,13 +89,31 @@ export const createPatchNoteHandler = async ({
 export const getPatchNoteByVersionHandler = async ({
   ctx,
   input,
-}: Params<{ patchVersion: string }>): Promise<PatchNoteResponse> => {
+}: Params<GetPatchNoteByVersionInputType>): Promise<PatchNoteResponse> => {
   const handlerId = 'getPatchNoteByVersionHandler';
   try {
     const patchNote = await ctx.prisma.patchNote.findFirst({ where: { patchVersion: input.patchVersion } });
     if (!patchNote)
       return errorResponse(domain, handlerId, ErrorCodes.PatchNote.NoPatchNote, ErrorMessages.PatchNote.NoPatchNote);
     return { result: { status: ResponseStatus.SUCCESS, patchNote } };
+  } catch (error: unknown) {
+    throw handleError(domain, handlerId, error);
+  }
+};
+
+/**
+ * Get the last two patch notes.
+ *
+ * @param ctx - Context with Prisma client.
+ * @returns Last two patch notes.
+ */
+export const getLastTwoPatchNotesHandler = async ({
+  ctx,
+}: Params<GetLastTwoPatchNotesInputType>): Promise<LastTwoPatchNotesResponse> => {
+  const handlerId = 'getLastTwoPatchNotesHandler';
+  try {
+    const patchNotes = await ctx.prisma.patchNote.findMany({ orderBy: { publishedDate: 'desc' }, take: 2 });
+    return { result: { status: ResponseStatus.SUCCESS, patchNotes } };
   } catch (error: unknown) {
     throw handleError(domain, handlerId, error);
   }

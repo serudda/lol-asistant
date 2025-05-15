@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RankTier } from '@lol-assistant/db';
-import { Avatar, AvatarSize, Combobox, TriggerSize } from '@lol-assistant/ui';
-import { rankTierOptions } from '../constants';
+import { Combobox, TriggerSize } from '@lol-assistant/ui';
+import { rankTierOptions } from './rankTierOptions';
 import { tv } from 'tailwind-variants';
 
 const trigger = tv({
@@ -57,9 +57,7 @@ export const RankTierCombobox = ({
 
   const triggerValue = selectedOption ? (
     <span className="flex items-center gap-1.5">
-      <Avatar size={AvatarSize.sm}>
-        <Avatar.Image src={selectedOption.imageUrl} />
-      </Avatar>
+      {selectedOption.icon}
       {selectedOption.label}
     </span>
   ) : undefined;
@@ -84,9 +82,7 @@ export const RankTierCombobox = ({
           <Combobox.Empty>No rank tiers found</Combobox.Empty>
           {rankTierOptions.map((item) => (
             <Combobox.Item key={item.value} value={item.value} onSelect={handleSelect}>
-              <Avatar size={AvatarSize.sm}>
-                <Avatar.Image src={item.imageUrl as string} />
-              </Avatar>
+              {item.icon}
               {item.label}
             </Combobox.Item>
           ))}

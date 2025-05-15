@@ -1,6 +1,6 @@
 import { ResponseStatus } from '@lol-assistant/api';
 import { createClient } from '../../../utils/trpc-client';
-import type { InternalRank, InternalRole } from './constants';
+import type { LoLChampionRole, RankTier } from '@prisma/client';
 
 /**
  * Centralized function to get or create a ChampionMatchup
@@ -20,8 +20,8 @@ export const createChampionMatchup = async ({
   baseChampionSlug: string;
   opponentChampionSlug: string;
   patchVersion: string;
-  role: InternalRole;
-  rankTier: InternalRank;
+  role: LoLChampionRole;
+  rankTier: RankTier;
 }): Promise<string> => {
   try {
     console.log(
