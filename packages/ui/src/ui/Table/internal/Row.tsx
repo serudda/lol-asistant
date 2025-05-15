@@ -2,7 +2,7 @@ import * as React from 'react';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const trow = tv({
-  base: ['border-b border-neutral-700 transition-colors hover:bg-neutral-700/50 data-[state=selected]:bg-neutral-700'],
+  base: ['border-b border-gray-800 transition-colors'],
 });
 
 export interface TRowProps extends React.HTMLAttributes<HTMLTableRowElement>, VariantProps<typeof trow> {}

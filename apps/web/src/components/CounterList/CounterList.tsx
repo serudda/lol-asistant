@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { LoLChampionRole } from '@lol-assistant/db';
 import { Avatar, AvatarSize, Table } from '@lol-assistant/ui';
+import { RoleIcon } from '../RoleIcon/RoleIcon';
 import type { CounterTableData } from './types';
 import {
   ColumnDef,
@@ -13,12 +15,13 @@ import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const table = tv({
-  base: 'w-full',
+  base: 'w-full table-fixed',
 });
 
 const columns: ColumnDef<CounterTableData>[] = [
   {
     accessorKey: 'rank',
+    size: 5,
     header: ({ column }) => {
       const renderIcon = () => {
         if (!column.getIsSorted()) return <ChevronsUpDown size={16} />;
@@ -39,6 +42,7 @@ const columns: ColumnDef<CounterTableData>[] = [
   },
   {
     accessorKey: 'champion',
+    size: 40,
     header: ({ column }) => {
       const renderIcon = () => {
         if (!column.getIsSorted()) return <ChevronsUpDown size={16} />;
@@ -69,11 +73,20 @@ const columns: ColumnDef<CounterTableData>[] = [
     },
   },
   {
-    accessorKey: 'rankTier',
-    header: 'Rank Tier',
+    accessorKey: 'role',
+    header: 'Role',
+    size: 5,
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center gap-2">
+          <RoleIcon role={row.original.role as LoLChampionRole} className="size-5" />
+        </div>
+      );
+    },
   },
   {
     accessorKey: 'weightedWinRate',
+    size: 50,
     header: ({ column }) => {
       const renderIcon = () => {
         if (!column.getIsSorted()) return <ChevronsUpDown size={16} />;
@@ -132,7 +145,7 @@ export const CounterList = ({ className, data = [] }: CounterListProps) => {
           <Table.Row key={headerGroup.id}>
             {headerGroup.headers.map((header) => {
               return (
-                <Table.Head key={header.id}>
+                <Table.Head key={header.id} style={{ width: `${header.column.getSize()}px` }}>
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                 </Table.Head>
               );
