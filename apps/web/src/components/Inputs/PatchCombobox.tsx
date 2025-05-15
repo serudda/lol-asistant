@@ -73,10 +73,10 @@ export const PatchCombobox = ({ defaultValue, disabled = false, className = '', 
         disabled={disabled}
       />
       <Combobox.Content className="w-full">
-        <Combobox.List>
+        <Combobox.List className="p-1.5">
           <Combobox.Empty>No patches found</Combobox.Empty>
           {options.map((item) => (
-            <Combobox.Item key={item.value} value={item.value} onSelect={handleSelect}>
+            <Combobox.Item className="px-2 py-1.5" key={item.value} value={item.value} onSelect={handleSelect}>
               {item.label}
             </Combobox.Item>
           ))}

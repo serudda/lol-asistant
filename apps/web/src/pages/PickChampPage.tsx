@@ -76,7 +76,7 @@ export const PickChampPage: React.FC = () => {
             className="max-w-52"
           />
           <RoleToggleGroup defaultValue={role} onValueChange={setRole} />
-          <RankTierCombobox defaultValue={rankTier} onChange={setRankTier} className="max-w-40" />
+          <RankTierCombobox defaultValue={rankTier} onChange={setRankTier} className="max-w-44" />
           <PatchCombobox defaultValue={patch} onChange={setPatch} className="max-w-24" />
         </div>
 

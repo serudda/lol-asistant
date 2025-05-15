@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Button, ButtonSize } from '../../Button/Button';
+import { Button, ButtonSize } from '../../Buttons';
 import { Combobox, TriggerSize } from './Combobox';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Check } from 'lucide-react';

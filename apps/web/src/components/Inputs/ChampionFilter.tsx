@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Avatar, AvatarSize, Combobox, TriggerSize } from '@lol-assistant/ui';
-import { Asterisk } from 'lucide-react';
 import { tv } from 'tailwind-variants';
 
 const input = tv({
@@ -66,6 +65,9 @@ export const ChampionFilter = ({
     return options.find((item) => item.value === defaultValue);
   }, [defaultValue, options]);
 
+  // Extend options to add a "All champions" option
+  const extendedOptions = React.useMemo(() => [{ value: 'all', label: 'All champions' }, ...options], [options]);
+
   const triggerValue = selectedOption ? (
     <span className="flex items-center gap-2">
       <Avatar size={AvatarSize.xs}>
@@ -76,7 +78,8 @@ export const ChampionFilter = ({
   ) : undefined;
 
   const handleSelect = (slug: string) => {
-    onChange?.(slug);
+    const value = slug === 'all' ? '' : slug;
+    onChange?.(value);
     setOpen(false);
   };
 
@@ -93,11 +96,7 @@ export const ChampionFilter = ({
         <Combobox.Search placeholder="Search a champion" />
         <Combobox.List>
           <Combobox.Empty>No champions found</Combobox.Empty>
-          <Combobox.Item value="" onSelect={handleSelect}>
-            <Asterisk className="size-6" />
-            All champions
-          </Combobox.Item>
-          {options.map((item) => (
+          {extendedOptions.map((item) => (
             <Combobox.Item key={item.value} value={item.value} onSelect={handleSelect}>
               <Avatar size={AvatarSize.sm}>
                 <Avatar.Image src={item.imageUrl as string} />

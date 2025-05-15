@@ -81,7 +81,7 @@ export const RankTierCombobox = ({
         <Combobox.List>
           <Combobox.Empty>No rank tiers found</Combobox.Empty>
           {rankTierOptions.map((item) => (
-            <Combobox.Item key={item.value} value={item.value} onSelect={handleSelect}>
+            <Combobox.Item className="p-1.5" key={item.value} value={item.value} onSelect={handleSelect}>
               {item.icon}
               {item.label}
             </Combobox.Item>

@@ -5,18 +5,18 @@ import { Search as SearchIcon } from 'lucide-react';
 import { tv } from 'tailwind-variants';
 
 const container = tv({
-  base: 'flex items-center border-b border-neutral-500 px-3',
+  base: 'flex items-center border-b border-gray-700/40 px-3',
 });
 
 const input = tv({
   base: [
-    'flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none',
-    'placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
+    'flex leading-none h-10 w-full rounded-md bg-transparent pb-1 text-sm outline-none',
+    'placeholder:text-gray-400 disabled:cursor-not-allowed disabled:opacity-50',
   ],
 });
 
 const icon = tv({
-  base: 'mr-2 shrink-0 opacity-50',
+  base: 'mr-3 shrink-0 opacity-50 mb-1',
 });
 
 export interface SearchProps extends ComponentProps<typeof Command.Input> {
@@ -40,7 +40,7 @@ export const Search = forwardRef<HTMLInputElement, SearchProps>(({ className, ..
 
   return (
     <div className={classes.container}>
-      <SearchIcon className={classes.icon} size={16} />
+      <SearchIcon className={classes.icon} size={18} />
       <Command.Input ref={ref} className={classes.input} {...props} />
     </div>
   );
