@@ -8,13 +8,14 @@ const root = tv({
   base: ['relative flex shrink-0 overflow-hidden'],
   variants: {
     size: {
+      [AvatarSize.xs]: ['h-4 w-4 text-xs'],
       [AvatarSize.sm]: ['h-6 w-6 text-xs'],
       [AvatarSize.base]: ['h-8 w-8 text-sm'],
       [AvatarSize.lg]: ['h-10 w-10 text-lg'],
     },
     rounded: {
       true: ['rounded-full'],
-      false: ['rounded'],
+      false: ['rounded-none'],
     },
   },
 });
@@ -37,7 +38,7 @@ export interface AvatarProps extends RadixAvatarProps, VariantProps<typeof root>
  *
  * @see https://www.uiguideline.com/components/avatar
  */
-export const Avatar = ({ size = AvatarSize.base, isRounded = true, ...props }: AvatarProps) => {
+export const Avatar = ({ size = AvatarSize.base, isRounded = false, ...props }: AvatarProps) => {
   const classes = root({ size, rounded: isRounded });
   return <Root {...props} className={classes} />;
 };

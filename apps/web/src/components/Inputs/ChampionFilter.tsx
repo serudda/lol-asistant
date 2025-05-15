@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { Avatar, AvatarSize, Combobox, TriggerSize } from '@lol-assistant/ui';
+import { Asterisk } from 'lucide-react';
 import { tv } from 'tailwind-variants';
 
 const input = tv({
-  base: '',
+  base: 'pl-2',
 });
 
 export interface ChampionFilterOption {
@@ -67,7 +68,7 @@ export const ChampionFilter = ({
 
   const triggerValue = selectedOption ? (
     <span className="flex items-center gap-2">
-      <Avatar size={AvatarSize.sm}>
+      <Avatar size={AvatarSize.xs}>
         <Avatar.Image src={selectedOption.imageUrl as string} />
       </Avatar>
       {selectedOption.label}
@@ -93,6 +94,7 @@ export const ChampionFilter = ({
         <Combobox.List>
           <Combobox.Empty>No champions found</Combobox.Empty>
           <Combobox.Item value="" onSelect={handleSelect}>
+            <Asterisk className="size-6" />
             All champions
           </Combobox.Item>
           {options.map((item) => (

@@ -28,7 +28,7 @@ export const PickChampPage: React.FC = () => {
   });
 
   const tableData: Array<CounterTableData> = useMemo(() => {
-    // Guard: no data yet
+    // No data yet
     if (!countersData?.result?.counters) return [];
 
     // Optional filtering by champion slug ("" means no filter)
@@ -73,7 +73,7 @@ export const PickChampPage: React.FC = () => {
             options={filterOptions}
             defaultValue={championFilter}
             onChange={setChampionFilter}
-            className="max-w-48"
+            className="max-w-52"
           />
           <RoleToggleGroup defaultValue={role} onValueChange={setRole} />
           <RankTierCombobox defaultValue={rankTier} onChange={setRankTier} className="max-w-40" />
