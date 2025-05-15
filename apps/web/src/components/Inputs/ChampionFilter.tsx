@@ -1,14 +1,18 @@
 import * as React from 'react';
 import { Avatar, AvatarSize, Combobox, TriggerSize } from '@lol-assistant/ui';
-import { trpc } from '../../utils/api';
+import { tv } from 'tailwind-variants';
 
-export interface ChampionComboboxOption {
+const input = tv({
+  base: '',
+});
+
+export interface ChampionFilterOption {
   value: string;
   label: string;
   imageUrl?: string | null;
 }
 
-interface ChampionComboboxProps {
+interface ChampionFilterProps {
   /**
    * The class name of the combobox.
    */
@@ -18,6 +22,11 @@ interface ChampionComboboxProps {
    * The value of the champion.
    */
   defaultValue: string;
+
+  /**
+   * The options of the combobox.
+   */
+  options: Array<ChampionFilterOption>;
 
   /**
    * The function to call when the value changes.
@@ -36,30 +45,25 @@ interface ChampionComboboxProps {
 }
 
 /**
- * A combobox for selecting a Champion.
+ * This.
  */
-export const ChampionCombobox = ({
+export const ChampionFilter = ({
   defaultValue,
+  options = [],
   onChange,
-  placeholder = 'Select a champion',
+  placeholder = 'All champions',
   disabled = false,
   className = '',
-}: ChampionComboboxProps) => {
-  const { data } = trpc.champion.getAllBasic.useQuery({});
-  const [open, setOpen] = React.useState(false);
+}: ChampionFilterProps) => {
+  const classes = input({
+    className,
+  });
 
-  const options: Array<ChampionComboboxOption> = React.useMemo(() => {
-    if (!data?.result?.champions) return [];
-    return data.result.champions.map((champ) => ({
-      value: champ.slug,
-      label: champ.name,
-      imageUrl: champ.imageUrl,
-    }));
-  }, [data]);
+  const [open, setOpen] = React.useState(false);
 
   const selectedOption = React.useMemo(() => {
     return options.find((item) => item.value === defaultValue);
-  }, [defaultValue]);
+  }, [defaultValue, options]);
 
   const triggerValue = selectedOption ? (
     <span className="flex items-center gap-2">
@@ -80,14 +84,17 @@ export const ChampionCombobox = ({
       <Combobox.Trigger
         placeholder={placeholder}
         value={triggerValue}
-        size={TriggerSize.lg}
-        className={`w-full ${className}`}
+        size={TriggerSize.base}
+        className={classes}
         disabled={disabled}
       />
       <Combobox.Content className="w-full">
         <Combobox.Search placeholder="Search a champion" />
         <Combobox.List>
           <Combobox.Empty>No champions found</Combobox.Empty>
+          <Combobox.Item value="" onSelect={handleSelect}>
+            All champions
+          </Combobox.Item>
           {options.map((item) => (
             <Combobox.Item key={item.value} value={item.value} onSelect={handleSelect}>
               <Avatar size={AvatarSize.sm}>
