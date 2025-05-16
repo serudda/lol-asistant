@@ -28,6 +28,8 @@ export const PickChampPage: React.FC = () => {
     patchVersion: patch,
   });
 
+  const { data: sourcesData } = trpc.source.getAll.useQuery({});
+
   const tableData: Array<ChampionCounterRow> = useMemo(() => {
     // No data yet
     if (!countersData?.result?.counters) return [];
@@ -42,7 +44,7 @@ export const PickChampPage: React.FC = () => {
       const sourceStats: SourceStat[] = counter.sourceStats.map((stat) => ({
         slug: stat.source.name.toLowerCase().replace(/\s+/g, '-'),
         name: stat.source.name,
-        iconUrl: stat.source.logoUrl,
+        logoUrl: stat.source.logoUrl,
         winRate: stat.winRate,
         matches: stat.matches,
         sourceUrl: stat.sourceUrl,
@@ -95,9 +97,9 @@ export const PickChampPage: React.FC = () => {
         </div>
 
         {/* Counters List */}
-        {countersData && (
+        {countersData && sourcesData?.result?.sources && (
           <div className="w-full">
-            <CounterList data={tableData} />
+            <CounterList data={tableData} sources={sourcesData.result.sources} />
           </div>
         )}
       </div>

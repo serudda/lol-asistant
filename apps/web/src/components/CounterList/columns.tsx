@@ -1,4 +1,4 @@
-import { LoLChampionRole } from '@lol-assistant/db';
+import { LoLChampionRole, type Source } from '@lol-assistant/db';
 import { Avatar, AvatarSize } from '@lol-assistant/ui';
 import { RoleIcon } from '../RoleIcon/RoleIcon';
 import type { ChampionCounterRow } from './types';
@@ -100,11 +100,9 @@ export const getStaticColumns = (): ColumnDef<ChampionCounterRow>[] => [
   },
 ];
 
-export const getSourceColumns = (data: ChampionCounterRow[]): ColumnDef<ChampionCounterRow>[] => {
-  // Collect unique source names
-  const sourceKeys = Array.from(new Set(data.flatMap((row) => row.sourceStats.map((stat) => stat.name))));
-  return sourceKeys.map((key) => ({
-    id: key,
+export const getSourceColumns = (sources: Array<Source>): Array<ColumnDef<ChampionCounterRow>> => {
+  return sources.map((source) => ({
+    id: source.name,
     size: 35,
     header: ({ column }) => {
       const isAsc = column.getIsSorted() === 'asc';
@@ -113,23 +111,20 @@ export const getSourceColumns = (data: ChampionCounterRow[]): ColumnDef<Champion
         if (isAsc) return <ChevronUp size={16} className="text-neutral-50" />;
         return <ChevronDown size={16} className="text-neutral-50" />;
       };
-
-      const firstRow = data[0] as ChampionCounterRow | undefined;
-      const stat = firstRow?.sourceStats.find((s) => s.name === key);
       return (
         <div className="flex items-center gap-1 justify-center" onClick={() => column.toggleSorting(isAsc)}>
-          {stat?.logoUrl && <img src={stat.logoUrl} alt={key} className="size-4 inline-block" />}
-          <span>{key}</span>
+          {source.logoUrl && <img src={source.logoUrl} alt={source.name} className="size-5 inline-block mr-1" />}
+          <span>{source.name}</span>
           {renderIcon()}
         </div>
       );
     },
     accessorFn: (row) => {
-      const stat = row.sourceStats.find((s) => s.name === key);
+      const stat = row.sourceStats.find((s) => s.name === source.name);
       return stat ? stat.winRate : null;
     },
     cell: ({ row }) => {
-      const stat = row.original.sourceStats.find((s) => s.name === key);
+      const stat = row.original.sourceStats.find((s) => s.name === source.name);
       if (!stat) return null;
       return (
         <div className="flex flex-col text-center">
