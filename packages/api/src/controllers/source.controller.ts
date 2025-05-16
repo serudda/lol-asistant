@@ -1,5 +1,10 @@
 import { ResponseStatus, type Params, type SourceResponse } from '../common';
-import type { CreateSourceInputType, GetSourceByIdInputType, GetSourceBySlugInputType } from '../schemas/source.schema';
+import type {
+  CreateSourceInputType,
+  GetAllSourcesInputType,
+  GetSourceByIdInputType,
+  GetSourceBySlugInputType,
+} from '../schemas/source.schema';
 import { ErrorCodes, ErrorMessages, errorResponse, handleError } from '../services';
 
 // Domain identifier for error handling
@@ -87,6 +92,27 @@ export const createSourceHandler = async ({ ctx, input }: Params<CreateSourceInp
     if (!source) return errorResponse(domain, handlerId, ErrorCodes.Source.NotCreated, ErrorMessages.Source.NotCreated);
 
     return { result: { status: ResponseStatus.SUCCESS, source } };
+  } catch (error: unknown) {
+    throw handleError(domain, handlerId, error);
+  }
+};
+
+/**
+ * Get all sources (mobalytics, op.gg, etc).
+ *
+ * @param ctx Ctx.
+ * @returns Array of sources.
+ */
+export const getAllSourcesHandler = async ({ ctx }: Params<GetAllSourcesInputType>) => {
+  const handlerId = 'getAllSourcesHandler';
+  try {
+    const sources = await ctx.prisma.source.findMany({ where: { isActive: true } });
+    return {
+      result: {
+        status: ResponseStatus.SUCCESS,
+        sources,
+      },
+    };
   } catch (error: unknown) {
     throw handleError(domain, handlerId, error);
   }

@@ -1,98 +1,14 @@
-import { useState } from 'react';
-import { Avatar, AvatarSize, Table } from '@lol-assistant/ui';
-import type { CounterTableData } from './types';
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-} from '@tanstack/react-table';
-import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { type Source } from '@lol-assistant/db';
+import { Table } from '@lol-assistant/ui';
+import { getSourceColumns, getStaticColumns } from './columns';
+import type { ChampionCounterRow } from './types';
+import { flexRender, getCoreRowModel, getSortedRowModel, SortingState, useReactTable } from '@tanstack/react-table';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const table = tv({
-  base: 'w-full',
+  base: 'w-full table-fixed',
 });
-
-const columns: ColumnDef<CounterTableData>[] = [
-  {
-    accessorKey: 'rank',
-    header: ({ column }) => {
-      const renderIcon = () => {
-        if (!column.getIsSorted()) return <ChevronsUpDown size={16} />;
-        if (column.getIsSorted() === 'asc') return <ChevronUp size={16} className="text-neutral-50" />;
-        return <ChevronDown size={16} className="text-neutral-50" />;
-      };
-
-      return (
-        <div
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="flex cursor-pointer items-center gap-2"
-        >
-          Rank
-          {renderIcon()}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: 'champion',
-    header: ({ column }) => {
-      const renderIcon = () => {
-        if (!column.getIsSorted()) return <ChevronsUpDown size={16} />;
-        if (column.getIsSorted() === 'asc') return <ChevronUp size={16} className="text-neutral-50" />;
-        return <ChevronDown size={16} className="text-neutral-50" />;
-      };
-
-      return (
-        <div
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="flex cursor-pointer items-center gap-2"
-        >
-          Champion
-          {renderIcon()}
-        </div>
-      );
-    },
-    cell: ({ row }) => {
-      return (
-        <div className="flex items-center gap-2">
-          <Avatar size={AvatarSize.sm}>
-            <Avatar.Image src={row.original.imageUrl} />
-            <Avatar.Fallback>{row.original.champion.slice(0, 1)}</Avatar.Fallback>
-          </Avatar>
-          <span className="text-sm font-medium">{row.original.champion}</span>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: 'rankTier',
-    header: 'Rank Tier',
-  },
-  {
-    accessorKey: 'weightedWinRate',
-    header: ({ column }) => {
-      const renderIcon = () => {
-        if (!column.getIsSorted()) return <ChevronsUpDown size={16} />;
-        if (column.getIsSorted() === 'asc') return <ChevronUp size={16} className="text-neutral-50" />;
-        return <ChevronDown size={16} className="text-neutral-50" />;
-      };
-
-      return (
-        <div
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="flex cursor-pointer items-center gap-2"
-        >
-          Win Rate
-          {renderIcon()}
-        </div>
-      );
-    },
-  },
-];
 
 interface CounterListProps extends VariantProps<typeof Table> {
   /**
@@ -103,16 +19,25 @@ interface CounterListProps extends VariantProps<typeof Table> {
   /**
    * The data to display in the table.
    */
-  data?: Array<CounterTableData>;
+  data?: Array<ChampionCounterRow>;
+
+  /**
+   * The sources to pass to getSourceColumns.
+   */
+  sources?: Array<Source>;
 }
 
 /**
  * This is the table that displays the counter champions
  * list.
  */
-export const CounterList = ({ className, data = [] }: CounterListProps) => {
+export const CounterList = ({ className, data = [], sources = [] }: CounterListProps) => {
   const classes = table({ className });
   const [sorting, setSorting] = useState<SortingState>([]);
+
+  const columns = useMemo(() => {
+    return [...getStaticColumns(), ...getSourceColumns(sources)];
+  }, [sources, data]);
 
   const counterTable = useReactTable({
     data,
@@ -127,16 +52,14 @@ export const CounterList = ({ className, data = [] }: CounterListProps) => {
 
   return (
     <Table className={classes}>
-      <Table.Header>
+      <Table.Header className="px-3">
         {counterTable.getHeaderGroups().map((headerGroup) => (
           <Table.Row key={headerGroup.id}>
-            {headerGroup.headers.map((header) => {
-              return (
-                <Table.Head key={header.id}>
-                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                </Table.Head>
-              );
-            })}
+            {headerGroup.headers.map((header) => (
+              <Table.Head className="h-14 first:pl-4" key={header.id} style={{ width: `${header.column.getSize()}px` }}>
+                {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+              </Table.Head>
+            ))}
           </Table.Row>
         ))}
       </Table.Header>
@@ -161,4 +84,4 @@ export const CounterList = ({ className, data = [] }: CounterListProps) => {
   );
 };
 
-export { type CounterTableData };
+export { type ChampionCounterRow };

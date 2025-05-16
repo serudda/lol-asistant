@@ -2,15 +2,16 @@ import * as React from 'react';
 import { useMemo } from 'react';
 import { LoLChampionRole, RankTier } from '@lol-assistant/db';
 import {
+  ChampionCounterRow,
   ChampionFilter,
   ChampionFilterOption,
   ChampionSearchBar,
   CounterList,
-  CounterTableData,
   PatchCombobox,
   RankTierCombobox,
   RoleToggleGroup,
 } from '../components';
+import type { SourceStat } from '../components/CounterList/types';
 import { trpc } from '../utils/api';
 
 export const PickChampPage: React.FC = () => {
@@ -27,7 +28,9 @@ export const PickChampPage: React.FC = () => {
     patchVersion: patch,
   });
 
-  const tableData: Array<CounterTableData> = useMemo(() => {
+  const { data: sourcesData } = trpc.source.getAll.useQuery({});
+
+  const tableData: Array<ChampionCounterRow> = useMemo(() => {
     // No data yet
     if (!countersData?.result?.counters) return [];
 
@@ -36,15 +39,28 @@ export const PickChampPage: React.FC = () => {
       ? countersData.result.counters.filter((counter) => counter.opponentChampion.slug === championFilter)
       : countersData.result.counters;
 
-    return filteredCounters.map((counter, index) => ({
-      rank: index + 1,
-      champion: counter.opponentChampion.name,
-      imageUrl: counter.opponentChampion.imageUrl ?? '',
-      role: counter.role,
-      rankTier: counter.rankTier,
-      weightedWinRate: counter.weightedWinRate.toFixed(2),
-      totalMatches: counter.totalMatches.toLocaleString(),
-    }));
+    return filteredCounters.map((counter, index) => {
+      // Build dynamic provider columns (e.g. Mobalytics, U.GG, etc.)
+      const sourceStats: SourceStat[] = counter.sourceStats.map((stat) => ({
+        slug: stat.source.name.toLowerCase().replace(/\s+/g, '-'),
+        name: stat.source.name,
+        logoUrl: stat.source.logoUrl,
+        winRate: stat.winRate,
+        matches: stat.matches,
+        sourceUrl: stat.sourceUrl,
+      }));
+
+      return {
+        rank: index + 1,
+        champion: counter.opponentChampion.name,
+        imageUrl: counter.opponentChampion.imageUrl ?? '',
+        role: counter.role,
+        rankTier: counter.rankTier,
+        overallWinRate: counter.weightedWinRate.toFixed(2),
+        totalMatches: counter.totalMatches.toLocaleString(),
+        sourceStats,
+      } as ChampionCounterRow;
+    });
   }, [countersData, championFilter]);
 
   const filterOptions: Array<ChampionFilterOption> = useMemo(() => {
@@ -58,7 +74,7 @@ export const PickChampPage: React.FC = () => {
   }, [countersData]);
 
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col max-w-3xl">
+    <div className="container mx-auto px-4 py-8 flex flex-col max-w-5xl">
       <h1 className="text-3xl text-left font-bold mb-4">Pick a Champ</h1>
 
       <div className="w-full">
@@ -81,9 +97,9 @@ export const PickChampPage: React.FC = () => {
         </div>
 
         {/* Counters List */}
-        {countersData && (
+        {countersData && sourcesData?.result?.sources && (
           <div className="w-full">
-            <CounterList data={tableData} />
+            <CounterList data={tableData} sources={sourcesData.result.sources} />
           </div>
         )}
       </div>
