@@ -50,6 +50,7 @@ export type BasicChampionsResponse = ApiResponse<{ champions: Array<BasicChampio
 export type ChampionMatchupIdsResponse = ApiResponse<{ championMatchupIds: Array<string> }>;
 export type ChampionCountersResponse = ApiResponse<{
   counters: Array<{
+    rank: number;
     opponentChampion: BasicChampion;
     role: string;
     rankTier: string;
