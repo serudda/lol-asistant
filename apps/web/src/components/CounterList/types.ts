@@ -1,7 +1,7 @@
 export type SourceStat = {
   slug: string; // e.g. 'mobalytics'
   name: string;
-  iconUrl?: string;
+  logoUrl?: string;
   winRate: number;
   matches: number;
   sourceUrl?: string;

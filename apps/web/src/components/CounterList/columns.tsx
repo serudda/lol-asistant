@@ -26,7 +26,7 @@ export const getStaticColumns = (): ColumnDef<ChampionCounterRow>[] => [
   },
   {
     accessorKey: 'champion',
-    size: 40,
+    size: 60,
     header: ({ column }) => {
       const isAsc = column.getIsSorted() === 'asc';
       const renderIcon = () => {
@@ -54,7 +54,7 @@ export const getStaticColumns = (): ColumnDef<ChampionCounterRow>[] => [
   {
     accessorKey: 'role',
     header: 'Role',
-    size: 5,
+    size: 10,
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <RoleIcon role={row.original.role as LoLChampionRole} className="size-5" />
@@ -63,7 +63,7 @@ export const getStaticColumns = (): ColumnDef<ChampionCounterRow>[] => [
   },
   {
     accessorKey: 'overallWinRate',
-    size: 50,
+    size: 30,
     header: ({ column }) => {
       const isAsc = column.getIsSorted() === 'asc';
       const renderIcon = () => {
@@ -72,12 +72,16 @@ export const getStaticColumns = (): ColumnDef<ChampionCounterRow>[] => [
         return <ChevronDown size={16} className="text-neutral-50" />;
       };
       return (
-        <div onClick={() => column.toggleSorting(isAsc)} className="flex cursor-pointer items-center gap-2">
+        <div
+          className="flex cursor-pointer items-center justify-center gap-2"
+          onClick={() => column.toggleSorting(isAsc)}
+        >
           Win Rate
           {renderIcon()}
         </div>
       );
     },
+    cell: ({ getValue }) => <span className="block w-full text-center font-medium">{getValue() as string}</span>,
   },
 ];
 
@@ -86,13 +90,22 @@ export const getSourceColumns = (data: ChampionCounterRow[]): ColumnDef<Champion
   const sourceKeys = Array.from(new Set(data.flatMap((row) => row.sourceStats.map((stat) => stat.name))));
   return sourceKeys.map((key) => ({
     id: key,
-    header: () => {
+    size: 40,
+    header: ({ column }) => {
+      const isAsc = column.getIsSorted() === 'asc';
+      const renderIcon = () => {
+        if (!column.getIsSorted()) return <ChevronsUpDown size={16} />;
+        if (isAsc) return <ChevronUp size={16} className="text-neutral-50" />;
+        return <ChevronDown size={16} className="text-neutral-50" />;
+      };
+
       const firstRow = data[0] as ChampionCounterRow | undefined;
       const stat = firstRow?.sourceStats.find((s) => s.name === key);
       return (
-        <div className="flex items-center gap-1 justify-center">
-          {stat?.iconUrl && <img src={stat.iconUrl} alt={key} className="size-4 inline-block" />}
+        <div className="flex items-center gap-1 justify-center" onClick={() => column.toggleSorting(isAsc)}>
+          {stat?.logoUrl && <img src={stat.logoUrl} alt={key} className="size-4 inline-block" />}
           <span>{key}</span>
+          {renderIcon()}
         </div>
       );
     },
@@ -100,13 +113,13 @@ export const getSourceColumns = (data: ChampionCounterRow[]): ColumnDef<Champion
     cell: ({ getValue }) => {
       const stat = getValue() as SourceStat | null;
       if (!stat) return null;
+
       return (
-        <div className="flex flex-col items-start">
+        <div className="flex flex-col text-center">
           <span className="font-medium">{stat.winRate.toFixed(2)}%</span>
-          <span className="text-xs text-gray-400">{stat.matches.toLocaleString()} matches</span>
+          <span className="text-xs text-gray-500">{stat.matches.toLocaleString()} matches</span>
         </div>
       );
     },
-    size: 60,
   }));
 };
