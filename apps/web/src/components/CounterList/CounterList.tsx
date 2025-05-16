@@ -7,7 +7,7 @@ import { flexRender, getCoreRowModel, getSortedRowModel, SortingState, useReactT
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const table = tv({
-  base: 'w-full table-fixed',
+  base: 'w-full table-fixed border-collapse border border-gray-800',
 });
 
 interface CounterListProps extends VariantProps<typeof Table> {
@@ -52,7 +52,7 @@ export const CounterList = ({ className, data = [], sources = [] }: CounterListP
 
   return (
     <Table className={classes}>
-      <Table.Header className="px-3">
+      <Table.Header className="sticky top-0 z-10 bg-gray-950">
         {counterTable.getHeaderGroups().map((headerGroup) => (
           <Table.Row key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
@@ -74,8 +74,9 @@ export const CounterList = ({ className, data = [], sources = [] }: CounterListP
           ))
         ) : (
           <Table.Row>
-            <Table.Cell colSpan={columns.length} className="h-24 text-center">
-              No results.
+            <Table.Cell colSpan={columns.length} className="text-center py-16">
+              <img src="/assets/images/no-results.png" alt="No results" className="size-60 mx-auto" />
+              <span className="text-gray-500 text-xl font-medium">Sorry, but no results were found.</span>
             </Table.Cell>
           </Table.Row>
         )}

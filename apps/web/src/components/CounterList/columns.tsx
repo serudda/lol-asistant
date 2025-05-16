@@ -24,12 +24,20 @@ export const getStaticColumns = (): ColumnDef<ChampionCounterRow>[] => [
         return <ChevronDown size={16} className="text-neutral-50" />;
       };
       return (
-        <div onClick={() => column.toggleSorting(isAsc)} className="flex cursor-pointer items-center gap-2">
+        <div
+          className="flex cursor-pointer items-center justify-center gap-2"
+          onClick={() => column.toggleSorting(isAsc)}
+        >
           Rank
           {renderIcon()}
         </div>
       );
     },
+    cell: ({ row }) => (
+      <div className="flex items-center justify-center gap-2">
+        <span className="text-sm font-medium">{row.original.rank}</span>
+      </div>
+    ),
   },
   {
     accessorKey: 'champion',
@@ -60,10 +68,16 @@ export const getStaticColumns = (): ColumnDef<ChampionCounterRow>[] => [
   },
   {
     accessorKey: 'role',
-    header: 'Role',
+    header: () => {
+      return (
+        <div className="flex flex-col items-center justify-center cursor-pointer gap-1">
+          <span className="flex items-center gap-2">Role</span>
+        </div>
+      );
+    },
     size: 10,
     cell: ({ row }) => (
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-center gap-2">
         <RoleIcon role={row.original.role as LoLChampionRole} className="size-5" />
       </div>
     ),
@@ -127,10 +141,16 @@ export const getSourceColumns = (sources: Array<Source>): Array<ColumnDef<Champi
       const stat = row.original.sourceStats.find((s) => s.name === source.name);
       if (!stat) return null;
       return (
-        <div className="flex flex-col text-center">
+        <a
+          href={stat.sourceUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex flex-col text-center p-3 rounded-md hover:bg-gray-500/20 cursor-pointer transition-colors"
+          title={`See ${row.original.champion} counters on ${source.name}`}
+        >
           <span className="font-medium">{stat.winRate.toFixed(2)}%</span>
           <span className="text-xs text-gray-500">{stat.matches.toLocaleString()} games</span>
-        </div>
+        </a>
       );
     },
   }));

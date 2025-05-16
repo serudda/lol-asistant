@@ -59,7 +59,7 @@ export const ChampionSearchBar = ({
 
   const selectedOption = React.useMemo(() => {
     return options.find((item) => item.value === defaultValue);
-  }, [defaultValue]);
+  }, [defaultValue, options]);
 
   const triggerValue = selectedOption ? (
     <span className="flex items-center gap-2">
