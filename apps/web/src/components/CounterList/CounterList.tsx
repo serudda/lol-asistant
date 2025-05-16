@@ -52,7 +52,7 @@ export const CounterList = ({ className, data = [], sources = [] }: CounterListP
 
   return (
     <Table className={classes}>
-      <Table.Header className="px-3">
+      <Table.Header className="px-3 sticky top-0 z-10 bg-neutral-900">
         {counterTable.getHeaderGroups().map((headerGroup) => (
           <Table.Row key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
