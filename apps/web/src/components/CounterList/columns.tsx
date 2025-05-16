@@ -5,6 +5,13 @@ import type { ChampionCounterRow, SourceStat } from './types';
 import { ColumnDef } from '@tanstack/react-table';
 import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react';
 
+// Assign a bg color green to the overallWinRate column when it's above 50%, and a red bg color when it's below 50%
+const getOverallWinRateBgColor = (overallWinRate: number) => {
+  if (overallWinRate > 50) return 'bg-emerald-500/10';
+  if (overallWinRate < 50) return 'bg-red-500/10';
+  return 'bg-gray-500/20';
+};
+
 export const getStaticColumns = (): ColumnDef<ChampionCounterRow>[] => [
   {
     accessorKey: 'rank',
@@ -26,7 +33,7 @@ export const getStaticColumns = (): ColumnDef<ChampionCounterRow>[] => [
   },
   {
     accessorKey: 'champion',
-    size: 60,
+    size: 45,
     header: ({ column }) => {
       const isAsc = column.getIsSorted() === 'asc';
       const renderIcon = () => {
@@ -63,7 +70,7 @@ export const getStaticColumns = (): ColumnDef<ChampionCounterRow>[] => [
   },
   {
     accessorKey: 'overallWinRate',
-    size: 30,
+    size: 40,
     header: ({ column }) => {
       const isAsc = column.getIsSorted() === 'asc';
       const renderIcon = () => {
@@ -73,15 +80,23 @@ export const getStaticColumns = (): ColumnDef<ChampionCounterRow>[] => [
       };
       return (
         <div
-          className="flex cursor-pointer items-center justify-center gap-2"
+          className="flex flex-col items-center justify-center cursor-pointer gap-1"
           onClick={() => column.toggleSorting(isAsc)}
         >
-          Win Rate
-          {renderIcon()}
+          <span className="flex items-center gap-2">Overall {renderIcon()}</span>
         </div>
       );
     },
-    cell: ({ getValue }) => <span className="block w-full text-center font-medium">{getValue() as string}</span>,
+    cell: ({ row }) => (
+      <div
+        className={`flex flex-col items-center text-center p-3 rounded-md ${getOverallWinRateBgColor(
+          parseFloat(row.original.overallWinRate),
+        )}`}
+      >
+        <span className="font-medium">{row.original.overallWinRate}% WR</span>
+        <span className="text-xs text-gray-300">{row.original.totalMatches} total games</span>
+      </div>
+    ),
   },
 ];
 
@@ -90,7 +105,7 @@ export const getSourceColumns = (data: ChampionCounterRow[]): ColumnDef<Champion
   const sourceKeys = Array.from(new Set(data.flatMap((row) => row.sourceStats.map((stat) => stat.name))));
   return sourceKeys.map((key) => ({
     id: key,
-    size: 40,
+    size: 35,
     header: ({ column }) => {
       const isAsc = column.getIsSorted() === 'asc';
       const renderIcon = () => {
@@ -102,7 +117,10 @@ export const getSourceColumns = (data: ChampionCounterRow[]): ColumnDef<Champion
       const firstRow = data[0] as ChampionCounterRow | undefined;
       const stat = firstRow?.sourceStats.find((s) => s.name === key);
       return (
-        <div className="flex items-center gap-1 justify-center" onClick={() => column.toggleSorting(isAsc)}>
+        <div
+          className="flex cursor-pointer items-center gap-1 justify-center"
+          onClick={() => column.toggleSorting(isAsc)}
+        >
           {stat?.logoUrl && <img src={stat.logoUrl} alt={key} className="size-4 inline-block" />}
           <span>{key}</span>
           {renderIcon()}
@@ -117,7 +135,7 @@ export const getSourceColumns = (data: ChampionCounterRow[]): ColumnDef<Champion
       return (
         <div className="flex flex-col text-center">
           <span className="font-medium">{stat.winRate.toFixed(2)}%</span>
-          <span className="text-xs text-gray-500">{stat.matches.toLocaleString()} matches</span>
+          <span className="text-xs text-gray-500">{stat.matches.toLocaleString()} games</span>
         </div>
       );
     },

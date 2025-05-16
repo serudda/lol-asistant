@@ -2,7 +2,7 @@ import * as React from 'react';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const tcell = tv({
-  base: ['p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]'],
+  base: ['p-2 align-middle'],
 });
 
 export interface TCellProps extends React.TdHTMLAttributes<HTMLTableCellElement>, VariantProps<typeof tcell> {}
