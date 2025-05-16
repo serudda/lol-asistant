@@ -16,10 +16,10 @@ import type { SourceStat } from '../components/CounterList/types';
 import { trpc } from '../utils/api';
 
 export const PickChampPage: React.FC = () => {
-  const [searchValue, setSearchValue] = React.useState('');
+  const [searchValue, setSearchValue] = React.useState('volibear');
   const [rankTier, setRankTier] = React.useState<RankTier>(RankTier.iron);
-  const [role, setRole] = React.useState<LoLChampionRole>(LoLChampionRole.mid);
-  const [patch, setPatch] = React.useState<string>('');
+  const [role, setRole] = React.useState<LoLChampionRole>(LoLChampionRole.jungle);
+  const [patch, setPatch] = React.useState<string>('15.10.1');
   const [championFilter, setChampionFilter] = React.useState<string>('');
 
   const { data: countersData, isLoading: isCountersLoading } = trpc.championMatchup.getChampionCounters.useQuery({
