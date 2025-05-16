@@ -250,29 +250,32 @@ export const getChampionCountersHandler = async ({
       );
     }
 
-    // Map matchups to counters
-    const counters = matchups.map((matchup) => ({
-      opponentChampion: {
-        id: matchup.opponentChampion.id,
-        name: matchup.opponentChampion.name,
-        slug: matchup.opponentChampion.slug,
-        imageUrl: matchup.opponentChampion.imageUrl,
-      },
-      role: matchup.role,
-      rankTier: matchup.rankTier,
-      weightedWinRate: matchup.weightedWinRate,
-      totalMatches: matchup.totalMatches,
-      sourceStats: matchup.sourceStats.map((stat) => ({
-        winRate: stat.winRate,
-        matches: stat.matches,
-        sourceUrl: stat.sourceUrl,
-        source: {
-          name: stat.source.name,
-          logoUrl: stat.source.logoUrl,
-          baseUrl: stat.source.baseUrl,
+    // Map matchups to counters, sort by weightedWinRate descending, and add rank
+    const counters = matchups
+      .sort((a, b) => b.weightedWinRate - a.weightedWinRate)
+      .map((matchup, idx) => ({
+        rank: idx + 1,
+        opponentChampion: {
+          id: matchup.opponentChampion.id,
+          name: matchup.opponentChampion.name,
+          slug: matchup.opponentChampion.slug,
+          imageUrl: matchup.opponentChampion.imageUrl,
         },
-      })),
-    }));
+        role: matchup.role,
+        rankTier: matchup.rankTier,
+        weightedWinRate: matchup.weightedWinRate,
+        totalMatches: matchup.totalMatches,
+        sourceStats: matchup.sourceStats.map((stat) => ({
+          winRate: stat.winRate,
+          matches: stat.matches,
+          sourceUrl: stat.sourceUrl,
+          source: {
+            name: stat.source.name,
+            logoUrl: stat.source.logoUrl,
+            baseUrl: stat.source.baseUrl,
+          },
+        })),
+      }));
 
     return {
       result: {
