@@ -11,6 +11,7 @@ import {
   RankTierCombobox,
   RoleToggleGroup,
 } from '../components';
+import { CounterListSkeleton } from '../components/CounterList/Skeleton';
 import type { SourceStat } from '../components/CounterList/types';
 import { trpc } from '../utils/api';
 
@@ -21,14 +22,14 @@ export const PickChampPage: React.FC = () => {
   const [patch, setPatch] = React.useState<string>('');
   const [championFilter, setChampionFilter] = React.useState<string>('');
 
-  const { data: countersData } = trpc.championMatchup.getChampionCounters.useQuery({
+  const { data: countersData, isLoading: isCountersLoading } = trpc.championMatchup.getChampionCounters.useQuery({
     opponentChampionSlug: searchValue,
     rankTier,
     role,
     patchVersion: patch,
   });
 
-  const { data: sourcesData } = trpc.source.getAll.useQuery({});
+  const { data: sourcesData, isLoading: isSourcesLoading } = trpc.source.getAll.useQuery({});
 
   const tableData: Array<ChampionCounterRow> = useMemo(() => {
     // No data yet
@@ -73,6 +74,18 @@ export const PickChampPage: React.FC = () => {
     );
   }, [countersData]);
 
+  const renderList = () => {
+    if (isCountersLoading || isSourcesLoading) return <CounterListSkeleton />;
+
+    if (!countersData || !sourcesData) return null;
+
+    return (
+      <div className="w-full">
+        <CounterList data={tableData} sources={sourcesData.result.sources} />
+      </div>
+    );
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col max-w-5xl">
       <h1 className="text-3xl text-left font-bold mb-4">Pick a Champ</h1>
@@ -97,11 +110,7 @@ export const PickChampPage: React.FC = () => {
         </div>
 
         {/* Counters List */}
-        {countersData && sourcesData?.result?.sources && (
-          <div className="w-full">
-            <CounterList data={tableData} sources={sourcesData.result.sources} />
-          </div>
-        )}
+        {renderList()}
       </div>
     </div>
   );
