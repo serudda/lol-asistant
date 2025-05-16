@@ -1,7 +1,7 @@
 import { LoLChampionRole } from '@lol-assistant/db';
 import { Avatar, AvatarSize } from '@lol-assistant/ui';
 import { RoleIcon } from '../RoleIcon/RoleIcon';
-import type { ChampionCounterRow, SourceStat } from './types';
+import type { ChampionCounterRow } from './types';
 import { ColumnDef } from '@tanstack/react-table';
 import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react';
 
@@ -117,21 +117,20 @@ export const getSourceColumns = (data: ChampionCounterRow[]): ColumnDef<Champion
       const firstRow = data[0] as ChampionCounterRow | undefined;
       const stat = firstRow?.sourceStats.find((s) => s.name === key);
       return (
-        <div
-          className="flex cursor-pointer items-center gap-1 justify-center"
-          onClick={() => column.toggleSorting(isAsc)}
-        >
+        <div className="flex items-center gap-1 justify-center" onClick={() => column.toggleSorting(isAsc)}>
           {stat?.logoUrl && <img src={stat.logoUrl} alt={key} className="size-4 inline-block" />}
           <span>{key}</span>
           {renderIcon()}
         </div>
       );
     },
-    accessorFn: (row) => row.sourceStats.find((s) => s.name === key) || null,
-    cell: ({ getValue }) => {
-      const stat = getValue() as SourceStat | null;
+    accessorFn: (row) => {
+      const stat = row.sourceStats.find((s) => s.name === key);
+      return stat ? stat.winRate : null;
+    },
+    cell: ({ row }) => {
+      const stat = row.original.sourceStats.find((s) => s.name === key);
       if (!stat) return null;
-
       return (
         <div className="flex flex-col text-center">
           <span className="font-medium">{stat.winRate.toFixed(2)}%</span>
