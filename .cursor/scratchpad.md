@@ -29,7 +29,20 @@ Si bien el MVP se enfocará exclusivamente en la funcionalidad de _counter picks
     - El metajuego de League of Legends cambia constantemente. Se necesitará un mecanismo para mantener los datos actualizados (probablemente _cron jobs_). Definir la frecuencia y el proceso de actualización es clave. Una buena opción podria ser los Cron Jobs de Vercel.
 
 4.  **Experiencia de Usuario (UX) en Tiempo Real:**
+
     - La aplicación debe ser extremadamente rápida y fácil de usar durante la breve fase de selección de campeón. El rendimiento y la claridad de la interfaz son cruciales.
+
+5.  **Escalabilidad y Rendimiento de la Adquisición de Datos (MVP Strategy):**
+
+    - El enfoque actual de scraping secuencial para todas las combinaciones de campeones (aprox. 160+), roles (hasta 5 por campeón), rank tiers (aprox. 7-10 significativos) y fuentes de datos (3 iniciales) presenta un desafío de escalabilidad. Esto resulta en `Campeones * Roles * Tiers * Fuentes` instancias de scraping.
+    - Un proceso tan exhaustivo puede tomar días en lugar de horas, excediendo la ventana de actualización semanal deseada de 5-8 horas.
+    - **Estrategia MVP:** Para lograr un MVP funcional rápidamente y gestionar la carga de trabajo, se enfoca la adquisición de datos en dos niveles de Elo representativos: uno para "Low Elo" (ej. `BRONZE`) y uno para "High Elo" (ej. `PLATINUM`). El usuario final interactuará con estas categorías abstractas ("Low Elo", "High Elo") sin necesidad de conocer los tiers específicos subyacentes.
+    - Se mantienen las estrategias de paralelización y manejo de errores, pero aplicadas a un conjunto de datos mucho menor.
+
+6.  **Filtrado de Combinaciones Inválidas por las Fuentes:**
+    - Se ha observado que algunas fuentes de datos (ej. Mobalytics, OP.GG) directamente no proveen información o bloquean el acceso para combinaciones de campeón/rol extremadamente infrecuentes o consideradas inviables (ej. Ahri Jungla).
+    - Este comportamiento de las fuentes puede ser utilizado a nuestro favor para omitir proactivamente el intento de scraping para dichas combinaciones, reduciendo el número total de peticiones y el tiempo de procesamiento.
+    - Es necesario identificar si este filtrado es consistente entre fuentes o si alguna fuente podría aún tener datos para estas combinaciones raras.
 
 ## High-Level Task Breakdown
 
@@ -42,7 +55,29 @@ Si bien el MVP se enfocará exclusivamente en la funcionalidad de _counter picks
 **Fase 2: Investigación y Adquisición de Datos**
 
 1.  **Investigar Fuentes de Datos:** Analizar Mobalytics, OP.GG y U.GG para determinar la mejor estrategia de extracción de datos (API vs. Scraping). Priorizar la búsqueda de APIs (públicas u ocultas).
-2.  **Implementar Fetchers de Datos:** Crear funciones o scripts (probablemente en `packages/cron-scripts` o `packages/api`) para obtener los datos de _counter picks_ y _winrates_ de cada una de las 3 fuentes.
+
+    - Confirmar hallazgos: Mobalytics (API pública disponible), U.GG (requiere scraping), OP.GG (requiere scraping).
+
+2.  **Definir Estrategia de Adquisición para MVP (Dos Tiers Representativos):**
+    - Seleccionar un (1) `RankTier` específico de Prisma para representar "Low Elo" (ej. `BRONZE`).
+    - Seleccionar un (1) `RankTier` específico de Prisma para representar "High Elo" (ej. `PLATINUM`).
+    - La adquisición de datos mediante `orchestrateMatchupStats` se configurará para obtener datos _exclusivamente_ para estas dos combinaciones de tier para todos los campeones y roles seleccionados.
+    - El modelo de datos `ChampionMatchup` no cambia y seguirá almacenando el `RankTier` específico (`BRONZE` o `PLATINUM`).
+    - Considerar la posibilidad de que algunas fuentes (ej. Mobalytics, OP.GG) ya filtren/bloqueen combinaciones campeón/rol muy infrecuentes (ej. Ahri Jungla). Si es posible identificar un patrón o lista de estas combinaciones no soportadas por las fuentes mayoritarias, se podrían omitir proactivamente para ahorrar recursos, siempre y cuando no comprometa la exhaustividad de datos válidos de otras fuentes.
+    - _Criterio de Éxito:_ Documento de estrategia que defina los dos `RankTier` seleccionados para representar "Low Elo" y "High Elo". El script orquestador está configurado para procesar solo estos dos tiers. Se mantiene la ventana de tiempo de 5-8 horas para la actualización (ahora más factible).
+3.  **Diseñar e Implementar Arquitectura de Scraping Paralelizado (Enfocada en MVP):**
+    - Investigar y seleccionar un mecanismo para ejecutar tareas de scraping en paralelo (ej. job queues como BullMQ con workers en Node.js, ejecución concurrente de funciones serverless si aplica al stack).
+    - Implementar workers de scraping para cada fuente de datos (Mobalytics, OP.GG, U.GG) capaces de procesar una combinación específica (campeón, rol, tier) de forma aislada.
+    - Configurar un gestor de colas (si se usa esa aproximación) para distribuir las tareas de scraping a los workers.
+    - Limitar el número de workers concurrentes _por fuente de datos específica_ para evitar sobrecargar sus servidores (ej. configurable, N workers para U.GG, M para OP.GG).
+    - _Criterio de Éxito:_ Capacidad de ejecutar N tareas de scraping concurrentemente, con pruebas preliminares que demuestren una reducción significativa del tiempo total estimado en comparación con un enfoque secuencial, y con límites de concurrencia por fuente implementados.
+4.  **Implementar Gestión Avanzada de Rate Limiting, Reintentos y Errores:**
+    - Para cada fuente, implementar mecanismos robustos de backoff exponencial y un número configurable de reintentos en caso de errores HTTP (429, 5xx) o fallos de parsing.
+    - Considerar el uso de proxies rotativos si es estrictamente necesario y las políticas de las fuentes lo permiten (evaluar coste/beneficio y legalidad).
+    - Añadir delays configurables y realistas entre peticiones por worker para cada fuente, para no sobrecargar los servidores de origen y simular un comportamiento más humano.
+    - Manejo detallado de errores para identificar selectores rotos o cambios inesperados en la estructura HTML.
+    - _Criterio de Éxito:_ El sistema de scraping puede manejar errores transitorios y límites de tasa de forma robusta, reintentando automáticamente y registrando fallos persistentes sin detener todo el proceso. Las configuraciones de delay y reintentos son ajustables.
+5.  **Implementar Fetchers de Datos:** Crear funciones o scripts (probablemente en `packages/cron-scripts` o `packages/api`) para obtener los datos de _counter picks_ y _winrates_ de cada una de las 3 fuentes, utilizando la arquitectura paralela y las estrategias de manejo de errores definidas.
 
 **Fase 3: Almacenamiento y Procesamiento de Datos**
 
@@ -65,10 +100,25 @@ Si bien el MVP se enfocará exclusivamente en la funcionalidad de _counter picks
 
 1.  **Script - Obtener Notas del Parche:** Desarrollar un script para obtener información sobre los nuevos parches de League of Legends (identificar fuente: ¿API de Riot, web oficial?). Almacenar información relevante en la BD si es necesario para referencia o para disparar otras actualizaciones.
 2.  **Script - Actualizar Datos Base de Campeones:** Crear/adaptar un script para actualizar la información fundamental de los campeones (estadísticas base, habilidades, etc.) si la aplicación lo requiere, posiblemente usando datos oficiales (ej. Riot Data Dragon) o basándose en las notas del parche.
-3.  **Script - Actualizar Datos de Counters/Winrates:** Desarrollar el script principal (en `packages/cron-scripts`) que orqueste la ejecución de los _fetchers_ de la Fase 2 (Mobalytics, OP.GG, U.GG) y actualice los datos de _counter picks_ y _winrates_ en la base de datos. Este es el corazón de la actualización periódica.
-4.  **Configurar Cron Jobs:** Configurar un servicio de Cron (ej. Vercel Cron Jobs) para ejecutar los scripts anteriores.
-    - El script de _counters/winrates_ (Paso 3) debería ejecutarse con una frecuencia regular (ej. diaria o cada pocas horas) para mantener los datos frescos.
-    - Los scripts de notas del parche y datos base de campeones (Pasos 1 y 2) podrían ejecutarse con menor frecuencia o activarse idealmente tras la detección de un nuevo parche (ciclo típico de ~15 días), o simplemente ejecutarse también de forma regular (ej. diaria) si la detección es compleja.
+3.  **Script - Orquestar Actualización de Datos de Counters/Winrates (Enfocado en MVP):**
+    - Desarrollar/modificar el script principal (`orchestrateMatchupStats.ts`) que:
+      - Genere combinaciones (campeón, rol) para los _dos tiers representativos_ definidos en la Fase 2.2.
+      - Envíe estas combinaciones como tareas a la cola de scraping (implementada en la Fase 2.3).
+    - Este script será el corazón de la actualización periódica de datos de counters.
+    - _Criterio de Éxito:_ El script puede iniciar, gestionar y completar el proceso de scraping y guardado para todas las combinaciones prioritarias de forma automatizada, dentro de la ventana de tiempo objetivo una vez optimizado.
+4.  **Configurar Cron Jobs:** Configurar un servicio de Cron (ej. Vercel Cron Jobs, GitHub Actions, o un scheduler en el propio servidor) para ejecutar los scripts anteriores.
+    - El script de _counters/winrates_ (Paso 3) debería ejecutarse con una frecuencia regular (ej. al menos una vez por semana, o idealmente tras cada parche mayor) para mantener los datos frescos.
+    - Los scripts de notas del parche y datos base de campeones (Pasos 1 y 2) podrían ejecutarse con menor frecuencia o activarse idealmente tras la detección de un nuevo parche.
+    - Considerar programar los cron jobs más intensivos (como la actualización de counters) durante horas de bajo tráfico para los servidores de las fuentes de datos, si es factible y detectable.
+5.  **Monitoreo y Alertas del Proceso de Actualización de Datos:**
+    - Implementar logging detallado para todo el proceso de scraping y guardado, incluyendo:
+      - Tiempo de inicio y fin del proceso general.
+      - Número de combinaciones procesadas, exitosas y fallidas.
+      - Tiempos por fuente de datos y por worker (si aplica).
+      - Errores específicos encontrados y reintentos realizados.
+    - Configurar alertas (e.g., email, Discord/Slack Webhooks) si el proceso de actualización falla completamente, o si excede significativamente el tiempo esperado (ej. > 8 horas).
+    - Considerar un dashboard básico (puede ser tan simple como logs estructurados enviados a un servicio de logging) para supervisar la salud y rendimiento del proceso.
+    - _Criterio de Éxito:_ Un sistema de logs y alertas que permita supervisar la salud y rendimiento del proceso de actualización de datos, y que notifique proactivamente en caso de problemas críticos o degradación del rendimiento.
 
 **Fase 7: Pruebas y Despliegue**
 
@@ -158,6 +208,8 @@ Puntos Clave y Directorios Principales:
 - (Frontend) Manejar los estados de carga y error durante la petición y visualización de los datos de counters.
 
 - _Criterio de Éxito:_ Al seleccionar un campeón en el Combobox, se realiza una petición al backend que devuelve la lista de sus counter picks con estadísticas relevantes (ej. winrate, partidas, score agregado). Esta lista se muestra correctamente en la interfaz de usuario. Los errores (campeón sin datos, error de servidor) se manejan y se informa al usuario adecuadamente.
+
+**[WIP] Implement simple concurrency utility in cron-scripts - internal** - Crear `src/utils/concurrency.ts` con función `mapWithConcurrency` sin dependencias externas. - Soportar límite de concurrencia configurable y manejo de errores sin detener otros trabajos. - _Criterio de Éxito:_ Puedo importar `mapWithConcurrency` y procesar un array de 20 promesas con concurrencia 3, completando en ~n/3 tiempo sin errores de tipos.
 
 ## Executor Comments or Assistance Requests
 
