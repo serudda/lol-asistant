@@ -1,3 +1,3 @@
-import baseConfig from '../../tooling/eslint-config/src/react.js';
+import baseConfig from '@lol-assistant/eslint-config';
 
 export default [...baseConfig];

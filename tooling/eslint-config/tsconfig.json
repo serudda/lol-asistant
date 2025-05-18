@@ -1,5 +1,8 @@
 {
   "extends": "@lol-assistant/typescript-config/base.json",
   "include": ["."],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "moduleResolution": "bundler"
+  }
 }

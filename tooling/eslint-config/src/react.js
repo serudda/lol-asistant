@@ -1,4 +1,4 @@
-import tsParser from '@typescript-eslint/parser';
+import * as tsParser from '@typescript-eslint/parser';
 import reactPlugin from 'eslint-plugin-react';
 import hooksPlugin from 'eslint-plugin-react-hooks';
 
