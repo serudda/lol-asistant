@@ -138,7 +138,8 @@ export const getSourceColumns = (sources: Array<Source>): Array<ColumnDef<Champi
     },
     cell: ({ row }) => {
       const stat = row.original.sourceStats.find((s) => s.name === source.name);
-      if (!stat) return <div className="flex flex-col text-center p-3 rounded-md">No found</div>;
+      if (!stat)
+        return <div className="flex flex-col text-center text-gray-400 select-none p-3 rounded-md">No found</div>;
 
       return (
         <a
@@ -146,7 +147,7 @@ export const getSourceColumns = (sources: Array<Source>): Array<ColumnDef<Champi
           target="_blank"
           rel="noopener noreferrer"
           className="flex flex-col text-center p-3 rounded-md hover:bg-gray-500/20 cursor-pointer transition-colors"
-          title={`See ${row.original.champion} counters on ${source.name}`}
+          title={`See ${row.original.champion} on ${source.name}`}
         >
           <span className="font-medium">{stat.winRate.toFixed(2)}%</span>
         </a>
