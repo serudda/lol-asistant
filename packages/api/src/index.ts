@@ -7,8 +7,10 @@ import express from 'express';
 
 export * from './common';
 export { appRouter, type AppRouter } from './root';
+export * from './schemas';
 export { configService, ErrorCodes, ErrorMessages } from './services';
 export { createTRPCContext } from './trpc';
+export * from './utils';
 
 /**
  * Inference helpers for input types.

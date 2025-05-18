@@ -1,4 +1,8 @@
-import { prisma } from '@lol-assistant/db';
+import type { Config } from '@lol-assistant/db';
+import * as db from '@lol-assistant/db';
+
+// Destructure prisma from the DB module for compatibility
+const { prisma } = db;
 
 class ConfigService {
   private globalConfigCache = new Map<string, string>();
@@ -14,7 +18,7 @@ class ConfigService {
     if (now - this.lastCacheUpdate < this.cacheTTL && this.globalConfigCache.size > 0) return;
 
     // Load configurations from the database
-    const configs = await prisma.config.findMany();
+    const configs: Config[] = await prisma.config.findMany();
     // Clear the cache before reloading
     this.globalConfigCache.clear();
     configs.forEach((config) => {

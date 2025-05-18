@@ -1,0 +1,11 @@
+{
+  "extends": "@lol-assistant/typescript-config/react.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@common": ["src/common"]
+    }
+  },
+  "include": ["src/**/*", ".storybook/**/*", "vite.config.ts"],
+  "exclude": ["node_modules"]
+}

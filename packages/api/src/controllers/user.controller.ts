@@ -1,4 +1,4 @@
-import { Response, TRPCErrorCode, type Params, type UserResponse } from '../common';
+import { ResponseStatus, TRPCErrorCode, type Params, type UserResponse } from '../common';
 import type {
   CreateUserInputType,
   GetUserByEmailInputType,
@@ -34,7 +34,7 @@ export const getUserByIdHandler = async ({ ctx, input }: Params<GetUserByIdInput
 
     return {
       result: {
-        status: Response.SUCCESS,
+        status: ResponseStatus.SUCCESS,
         user,
       },
     };
@@ -92,7 +92,7 @@ export const getUserByEmailHandler = async ({ ctx, input }: Params<GetUserByEmai
 
     return {
       result: {
-        status: Response.SUCCESS,
+        status: ResponseStatus.SUCCESS,
         user,
       },
     };
@@ -154,7 +154,7 @@ export const getUserByUsernameHandler = async ({
 
     return {
       result: {
-        status: Response.SUCCESS,
+        status: ResponseStatus.SUCCESS,
         user,
       },
     };
@@ -213,7 +213,7 @@ export const createUserHandler = async ({ ctx, input }: Params<CreateUserInputTy
 
     return {
       result: {
-        status: Response.SUCCESS,
+        status: ResponseStatus.SUCCESS,
         user,
       },
     };

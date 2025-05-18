@@ -1,6 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
+// --------------------------------------------------
+// GENERATOR & DATASOURCE
+// --------------------------------------------------
 generator client {
     provider = "prisma-client-js"
 }
@@ -11,6 +11,9 @@ datasource db {
     directUrl = env("DIRECT_URL")
 }
 
+// --------------------------------------------------
+// ENUMS
+// --------------------------------------------------
 enum SubscriptionFrequency {
     day
     week
@@ -23,11 +26,33 @@ enum SubscriptionPlanSlug {
     plus
 }
 
-// NextAuth.js Models
-// NOTE: When using postgresql, mysql or sqlserver, 
-// uncomment the @db.Text annotations below
-// @see https://next-auth.js.org/schemas/models
+enum RankTier {
+    iron
+    bronze
+    silver
+    gold
+    platinum
+    platinumPlus
+    emerald
+    emeraldPlus
+    diamond
+    diamondPlus
+    master
+    grandmaster
+    challenger
+}
 
+enum LoLChampionRole {
+    top
+    jungle
+    mid
+    adc
+    support
+}
+
+// --------------------------------------------------
+// CORE MODELS
+// --------------------------------------------------
 model Config {
     id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     key       String   @unique
@@ -127,10 +152,6 @@ model SubscriptionPlan {
 
 model Subscription {
     id                 String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    user               User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId             String                @unique @map("user_id") @db.Uuid
-    subscriptionPlan   SubscriptionPlan      @relation(fields: [subscriptionPlanId], references: [id], onDelete: Cascade)
-    subscriptionPlanId String                @map("subscription_plan_id") @db.Uuid
     frequency          SubscriptionFrequency @default(month)
     isActive           Boolean               @default(true) @map("is_active")
     renewsAt           DateTime?             @map("renews_at")
@@ -138,64 +159,117 @@ model Subscription {
     endsAt             DateTime?             @map("ends_at")
     createdAt          DateTime              @default(now()) @map("created_at")
     updatedAt          DateTime              @updatedAt @map("updated_at")
+    // --- Relations ---
+    user               User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId             String                @unique @map("user_id") @db.Uuid
+    subscriptionPlan   SubscriptionPlan      @relation(fields: [subscriptionPlanId], references: [id], onDelete: Cascade)
+    subscriptionPlanId String                @map("subscription_plan_id") @db.Uuid
+    // -----------------
 
     @@map("subscriptions")
 }
 
+// --------------------------------------------------
+// LoL-SPECIFIC MODELS
+// --------------------------------------------------
+
+// Provider Website to get raw stats (e.g. "mobalytics", "u-gg", "op-gg")
+model Source {
+    id        String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    slug      String              @unique // "mobalytics", "u-gg", "op-gg"
+    name      String
+    logoUrl   String              @map("logo_url")
+    baseUrl   String              @map("base_url")
+    isActive  Boolean             @default(true) @map("is_active")
+    stats     SourceMatchupStat[]
+    createdAt DateTime            @default(now()) @map("created_at")
+    updatedAt DateTime            @updatedAt @map("updated_at")
+
+    @@map("sources")
+}
+
+// Game Patch (release by Riot Games)
 model PatchNote {
     id            String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    patchVersion  String
-    date          DateTime
+    patchVersion  String                 @map("patch_version") // DDragon canonical (ej. 15.10.1)
+    riotPatch     String                 @map("riot_patch") // Riot canonical (ej. 25-10)
+    publishedDate String                 @map("published_date")
     summary       String
     embedding     Unsupported("vector")?
     isActive      Boolean                @default(true) @map("is_active")
-    createdAt     DateTime               @default(now())
+    createdAt     DateTime               @default(now()) @map("created_at")
     updatedAt     DateTime               @updatedAt @map("updated_at")
-    champCounters ChampCounter[]
+    matchups      ChampionMatchup[]
 
     @@map("patch_notes")
 }
 
+// League of Legends Champion
 model Champion {
-    id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    name     String  @unique
-    slug     String  @unique
-    imageUrl String? // URL al icono o splash
-    stats    Json?
-    spells   Json?
-    passive  Json?
-
-    isActive  Boolean  @default(true) @map("is_active")
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt @map("updated_at")
-
-    countersAgainst ChampCounter[] @relation("CounterBy") // Champions that counter me (I'm the base)
-    strongAgainst   ChampCounter[] @relation("CounterTo") // Champions that I counter (I'm the counter)
+    id                 String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    name               String            @unique
+    slug               String            @unique
+    imageUrl           String?           @map("image_url")
+    stats              Json?
+    spells             Json?
+    passive            Json?
+    lastPatchVersion   String?           @map("last_patch_version")
+    isActive           Boolean           @default(true) @map("is_active")
+    createdAt          DateTime          @default(now())
+    updatedAt          DateTime          @updatedAt @map("updated_at")
+    // --- Relations ---
+    matchupsAsBase     ChampionMatchup[] @relation("MatchupBase")
+    matchupsAsOpponent ChampionMatchup[] @relation("MatchupOpponent")
+    // -----------------
 
     @@map("champions")
 }
 
-model ChampCounter {
-    id     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    source String
-    rank   Int
+// Match-up between two Champions
+model ChampionMatchup {
+    id                 String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    role               LoLChampionRole     @default(mid)
+    weightedWinRate    Float               @map("weighted_win_rate")
+    totalMatches       Int                 @map("total_matches")
+    isActive           Boolean             @default(true) @map("is_active")
+    createdAt          DateTime            @default(now()) @map("created_at")
+    updatedAt          DateTime            @updatedAt @map("updated_at")
+    rankTier           RankTier            @default(iron) @map("rank_tier")
+    // --- Relations ---
+    patchNote          PatchNote           @relation(fields: [patchNoteId], references: [id])
+    patchNoteId        String              @map("patch_note_id") @db.Uuid
+    // Selected Champion (base)
+    baseChampion       Champion            @relation("MatchupBase", fields: [baseChampionId], references: [id])
+    baseChampionId     String              @map("base_champion_id") @db.Uuid
+    // Opponent Champion
+    opponentChampion   Champion            @relation("MatchupOpponent", fields: [opponentChampionId], references: [id])
+    opponentChampionId String              @map("opponent_champion_id") @db.Uuid
+    sourceStats        SourceMatchupStat[]
+    // -----------------
 
-    baseChampion   Champion @relation("CounterBy", fields: [baseChampionId], references: [id])
-    baseChampionId String   @map("base_champion_id") @db.Uuid
+    @@unique([baseChampionId, opponentChampionId, role, rankTier, patchNoteId])
+    @@map("champion_matchups")
+}
 
-    counterChampion   Champion @relation("CounterTo", fields: [counterChampionId], references: [id])
-    counterChampionId String   @map("counter_champion_id") @db.Uuid
+// Raw stats by source
+model SourceMatchupStat {
+    id                 String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    winRate            Float           @map("win_rate")
+    matches            Int
+    sourceChampionSlug String          @map("source_champion_slug")
+    sourceRankTier     String          @map("source_rank_tier")
+    sourceUrl          String          @map("source_url")
+    scrapedAt          DateTime        @default(now()) @map("scraped_at")
+    isActive           Boolean         @default(true) @map("is_active")
+    createdAt          DateTime        @default(now()) @map("created_at")
+    updatedAt          DateTime        @updatedAt @map("updated_at")
+    // --- Relations ---
+    championMatchup    ChampionMatchup @relation(fields: [championMatchupId], references: [id], onDelete: Cascade)
+    championMatchupId  String          @map("champion_matchup_id") @db.Uuid
+    source             Source          @relation(fields: [sourceId], references: [id])
+    sourceId           String          @map("source_id") @db.Uuid
+    // -------------------
 
-    role    String?
-    winRate Float
-    matches Int
-
-    patchNote   PatchNote @relation(fields: [patchNoteId], references: [id])
-    patchNoteId String    @map("patch_note_id") @db.Uuid
-
-    isActive  Boolean  @default(true) @map("is_active")
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt @map("updated_at")
-
-    @@map("champ_counters")
+    @@unique([championMatchupId, sourceId])
+    @@map("source_matchup_stats")
 }

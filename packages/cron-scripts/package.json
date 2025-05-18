@@ -1,0 +1,37 @@
+{
+  "name": "@lol-assistant/cron-scripts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint . --ext .ts",
+    "clean": "rm -rf dist",
+    "script:run": "DOTENV_CONFIG_PATH=../../.env.local node --require dotenv/config --experimental-specifier-resolution=node --loader ts-node/esm src/run.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "@lol-assistant/eslint-config": "workspace:*",
+    "@lol-assistant/typescript-config": "workspace:*",
+    "@types/node": "^22.7.4",
+    "dotenv": "^16.0.3",
+    "eslint": "^9.11.1",
+    "globals": "^15.15.0",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "8.7.0"
+  },
+  "dependencies": {
+    "@langchain/core": "^0.3.49",
+    "@langchain/openai": "^0.5.7",
+    "@lol-assistant/api": "workspace:*",
+    "@lol-assistant/db": "workspace:*",
+    "@trpc/client": "^10.45.2",
+    "axios": "^1.9.0",
+    "cheerio": "^1.0.0",
+    "dedent": "^1.5.3",
+    "superjson": "1.9.1",
+    "ts-node": "^10.9.2"
+  }
+}

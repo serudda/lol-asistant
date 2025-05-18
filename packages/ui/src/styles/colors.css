@@ -1,0 +1,13 @@
+:root {
+  --color-primary-50: 0.98 0.02 262.06; /* #e1f1ff */
+  --color-primary-100: 0.95 0.04 262.06; /* #beddff */
+  --color-primary-200: 0.88 0.08 262.06; /* #7fb0ff */
+  --color-primary-300: 0.79 0.13 262.06; /* #437dff */
+  --color-primary-400: 0.68 0.18 262.06; /* #194bff */
+  --color-primary-500: 0.52 0.22 262.06; /* #021ac7 - base color */
+  --color-primary-600: 0.46 0.21 262.06; /* #001197 */
+  --color-primary-700: 0.4 0.19 262.06; /* #000a68 */
+  --color-primary-800: 0.33 0.16 262.06; /* #00063c */
+  --color-primary-900: 0.26 0.12 262.06; /* #00031c */
+  --color-primary-950: 0.21 0.09 262.06; /* #00020d */
+}

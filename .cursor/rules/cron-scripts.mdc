@@ -1,0 +1,51 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Cron Scripts Architecture
+
+The project uses a hybrid architecture for background tasks:
+
+## Local Scripts in packages/cron-scripts
+
+- [packages/cron-scripts/](mdc:packages/cron-scripts) contains all script logic
+- Scripts are located in `src/scripts/` directory
+- Runner in `src/run.ts` allows local execution via CLI
+
+## Script Execution
+
+To run a script locally:
+```bash
+pnpm --filter @lol-assistant/cron-scripts run start <script-name> [params]
+```
+
+Parameters can be passed as key-value pairs:
+```bash
+pnpm --filter @lol-assistant/cron-scripts run start sample-script timestamp=true message="Custom message"
+```
+
+## Vercel Cron Jobs
+
+For scheduled execution, the project uses Vercel Cron Jobs:
+
+- API endpoints in `api/crons/` directory
+- Each endpoint imports and executes script logic from `packages/cron-scripts`
+- Scheduled in `vercel.json` configuration
+- Protected with `CRON_SECRET` environment variable
+
+## Script Development Guide
+
+1. Create script logic in `packages/cron-scripts/src/scripts/<script-name>.ts`
+2. Export default function that contains the core logic
+3. For scheduled execution, create endpoint in `api/crons/<script-name>.ts`
+4. Configure cron schedule in `vercel.json`
+
+Example script structure:
+```typescript
+// File: packages/cron-scripts/src/scripts/sample-script.ts
+export default async function sampleScript(params: Record<string, string>) {
+  // Script logic here
+  return { success: true, message: "Script executed successfully" };
+}
+```

@@ -1,0 +1,46 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Coding Conventions
+
+This project follows specific coding conventions to maintain consistency.
+
+## TypeScript
+
+- Use TypeScript for all code
+- Ensure proper typing for all functions and variables
+- Follow the TypeScript configurations in [tsconfig.json](mdc:tsconfig.json)
+
+## Code Style
+
+- The project uses ESLint and Prettier for code formatting
+- Configuration: [prettier.config.mjs](mdc:prettier.config.mjs) and [eslint.config.mjs](mdc:eslint.config.mjs)
+- Sort imports using the configured import sorter
+- All the comments and inner code is written in English
+
+## Package Management
+
+- Use PNPM for package management
+- Configure dependencies with workspace protocol for internal packages: `"workspace:*"`
+- Match dependency versions with the root package.json where possible
+
+## Testing Principles
+
+- Follow Test-Driven Development (TDD) approach
+- Write tests that clearly specify functional behavior
+- Test each feature before moving to the next task
+
+## Error Handling
+
+- Include useful debugging information in program output
+- Document solutions to errors and bugs in the "Lessons" section of the scratchpad
+- Handle errors appropriately in both synchronous and asynchronous code
+
+## Security Considerations
+
+- Never hardcode secrets or credentials
+- Use environment variables for sensitive information
+- Run security audits when vulnerabilities are detected
+- Always ask before using force commands like `-force` with git

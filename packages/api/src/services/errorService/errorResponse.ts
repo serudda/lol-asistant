@@ -1,9 +1,9 @@
-import { Response } from '../../common';
+import { ResponseStatus } from '../../common';
 import type { ErrorResponse } from './types';
 
 export const errorResponse = (domain: string, handler: string, code: string, message: string): ErrorResponse => ({
   result: {
-    status: Response.ERROR,
+    status: ResponseStatus.ERROR,
     error: {
       code,
       domain,
