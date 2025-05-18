@@ -7,7 +7,7 @@ export const trpc = createTRPCReact<AppRouter>();
 
 const getBaseUrl = () => {
   if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
-  return `http://localhost:4000`;
+  return `https://lol-asistant-web.vercel.app/`;
 };
 
 export const trpcClient = trpc.createClient({

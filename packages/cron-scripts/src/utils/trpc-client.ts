@@ -12,7 +12,7 @@ export const createClient = () => {
     transformer: superjson,
     links: [
       httpBatchLink({
-        url: process.env.API_URL ?? 'http://localhost:4000/api/trpc',
+        url: process.env.API_URL ?? 'https://lol-asistant-web.vercel.app/api/trpc',
       }),
     ],
   });
