@@ -1,8 +1,6 @@
-// import { LoLChampionRole, type Source } from '@lol-assistant/db';
-
+import type { LoLChampionRole } from '@lol-assistant/db';
+import { type Source } from '@lol-assistant/db';
 import { Avatar, AvatarSize } from '@lol-assistant/ui';
-import type { LoLChampionRole } from '../../utils/api';
-import { type Source } from '../../utils/api';
 import { RoleIcon } from '../RoleIcon/RoleIcon';
 import type { ChampionCounterRow } from './types';
 import type { ColumnDef } from '@tanstack/react-table';

@@ -1,6 +1,4 @@
-// import { RankTier } from '@lol-assistant/db';
-
-import { RankTier } from '../../utils/api';
+import { RankTier } from '@lol-assistant/db';
 
 // ---------------------------------------------------------------------------
 // SVG definitions

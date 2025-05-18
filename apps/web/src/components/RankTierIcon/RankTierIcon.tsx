@@ -1,7 +1,6 @@
 import * as React from 'react';
-import type { RankTier } from '../../utils/api';
+import type { RankTier } from '@lol-assistant/db';
 import { ICON_PATHS } from './catalog';
-// import { RankTier } from '@lol-assistant/db';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const svg = tv({

@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
-// import { type Source } from '@lol-assistant/db';
+import { type Source } from '@lol-assistant/db';
 import { Table } from '@lol-assistant/ui';
-import { type Source } from '../../utils/api';
 import { getSourceColumns, getStaticColumns } from './columns';
 import type { ChampionCounterRow } from './types';
 import type { SortingState } from '@tanstack/react-table';
