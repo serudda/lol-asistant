@@ -1,3 +1,5 @@
+import { ResponseStatus } from '@lol-assistant/api/src/common';
+import { createClient } from '../utils/trpc-client';
 import {
   getChampionSlugForSource,
   normalizeChampionSlugFromSource,
@@ -9,6 +11,7 @@ import { createChampionMatchup } from './getChampionCounters/common/createChampi
 import { saveSourceMatchupStats } from './getChampionCounters/common/saveSourceMatchupStats';
 import { getOPGGCounters } from './getChampionCounters/opgg/getOPGGCounters';
 import type { LoLChampionRole, RankTier } from '@prisma/client';
+import dedent from 'dedent';
 
 const scriptId = '🛠️  getOPGGMatchupStats';
 
@@ -35,6 +38,29 @@ export const getOPGGMatchupStats = async ({
   const processedMatchupIds = new Set<string>();
 
   try {
+    // Use the centralized TRPC client
+    const client = createClient();
+
+    // Early skip if already exists this matchup stat
+    const skipResp = await client.sourceMatchupStat.alreadyExists.query({
+      baseChampionSlug: championSlug,
+      role,
+      rankTier,
+      patchVersion,
+      sourceSlug: Sources.OP_GG,
+    });
+    if (skipResp.result.status === ResponseStatus.SUCCESS && skipResp.result.exists) {
+      console.log(
+        dedent`
+        ********* SKIPPING *********
+        [${scriptId}] Stats already present for ** ${championSlug}, ${role}, ${rankTier}, ${patchVersion} **, skipping.
+        ****************************`,
+      );
+      return;
+    }
+
+    // ----------------------------
+
     // Get OP.GG counters
     const opggRole = toOPGGRole(role);
     const opggRank = toOPGGRank(rankTier);

@@ -76,6 +76,7 @@ export type LastTwoPatchNotesResponse = ApiResponse<{ patchNotes: Array<PatchNot
 
 // Source Matchup Stat
 export type SourceMatchupStatResponse = ApiResponse<{ sourceMatchupStat: SourceMatchupStat }>;
+export type AlreadyExistsSourceMatchupStatResponse = ApiResponse<{ exists: boolean }>;
 
 // Source
 export type SourceResponse = ApiResponse<{ source: Source }>;

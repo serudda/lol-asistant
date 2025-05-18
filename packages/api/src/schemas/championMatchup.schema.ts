@@ -1,11 +1,5 @@
-import { LoLChampionRole, RankTier } from '@prisma/client';
+import { rankTierEnum, roleEnum } from './types';
 import { z, type TypeOf } from 'zod';
-
-export const rankTierEnum = z.nativeEnum(RankTier);
-export type RankTierEnumType = TypeOf<typeof rankTierEnum>;
-
-export const roleEnum = z.nativeEnum(LoLChampionRole);
-export type RoleEnumType = TypeOf<typeof roleEnum>;
 
 // ------------------------------------------------------------
 

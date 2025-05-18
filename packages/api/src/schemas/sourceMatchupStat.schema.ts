@@ -1,3 +1,4 @@
+import { rankTierEnum, roleEnum } from './types';
 import { z, type TypeOf } from 'zod';
 
 /*------------------------------------*/
@@ -15,3 +16,12 @@ export const createSourceMatchupStatInput = z.object({
 export type CreateSourceMatchupStatInputType = TypeOf<typeof createSourceMatchupStatInput>;
 
 /*------------------------------------*/
+
+export const alreadyExistsSourceMatchupStatsInput = z.object({
+  baseChampionSlug: z.string(),
+  role: roleEnum,
+  rankTier: rankTierEnum,
+  patchVersion: z.string(),
+  sourceSlug: z.string(),
+});
+export type AlreadyExistsSourceMatchupStatInputType = TypeOf<typeof alreadyExistsSourceMatchupStatsInput>;
