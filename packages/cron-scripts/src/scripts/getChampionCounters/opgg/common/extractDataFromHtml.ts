@@ -21,30 +21,26 @@ import * as cheerio from 'cheerio';
  */
 export const extractDataFromHtml = (html: string, role: OPGGRole, rank: OPGGRank): Array<SourceCounter> => {
   const $ = cheerio.load(html);
+  // Find the first <aside> with <ul><li> children (robust to class changes)
+  const aside = $('aside')
+    .filter((_, el) => $(el).find('ul > li').length > 0)
+    .first();
+  if (aside.length === 0) throw new Error('[extractFromHtml] No counters section found');
 
-  // Find the aside section containing the counters
-  const aside = $('aside.hidden.md\\:block');
-  if (aside.length === 0) {
-    throw new Error('[extractFromHtml] Could not find the counters section in the HTML');
-  }
-
-  // Find all champion list items
-  const championItems = aside.find('ul > li');
   const counters: Array<SourceCounter> = [];
-
-  championItems.each((_, element) => {
-    const $el = $(element);
-
-    // Extract champion name
-    const champion = $el.find('span.text-gray-900').text().trim();
-    if (!champion) return; // Skip if no champion name found
-
-    // Extract win rate - try multiple selectors and handle empty cases
-    const winRateElement = $el.find('strong.text-xs');
-    const counterWinRate = winRateElement.text().trim().replace('%', '');
-
-    // Extract number of games
-    const games = $el.find('span.text-gray-600').last().text().trim().replace(/,/g, '');
+  aside.find('ul > li').each((_, el) => {
+    const $el = $(el);
+    const spans = $el.find('span');
+    const strongs = $el.find('strong');
+    const champion = spans.first().text().trim();
+    if (!champion) {
+      // Log for debugging if structure changes
+      console.warn('[extractFromHtml] No champion name found in <li>:', $el.html());
+      return;
+    }
+    const counterWinRate = strongs.first().text().replace('%', '').trim();
+    const gamesRaw = spans.last().text().trim();
+    const games = gamesRaw.includes(',') ? Number(gamesRaw.replace(/,/g, '')) : Number(gamesRaw);
 
     counters.push(
       opggChampCounterDto(
@@ -52,7 +48,7 @@ export const extractDataFromHtml = (html: string, role: OPGGRole, rank: OPGGRank
           matchupSlug: champion,
           matchupRole: role,
           counterWinRate,
-          games: parseInt(games),
+          games,
         },
         rank,
         0,
@@ -60,7 +56,6 @@ export const extractDataFromHtml = (html: string, role: OPGGRole, rank: OPGGRank
     );
   });
 
-  // Sort and assign ranks in one step
   return counters
     .sort((a, b) => b.counterWinRate - a.counterWinRate)
     .map((counter, index) => ({
