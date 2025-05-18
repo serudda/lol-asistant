@@ -21,7 +21,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky",
     "build:storybook": "turbo run build:storybook --filter=@lol-assistant/ui",
-    "postinstall": "pnpm db:generate"
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@commitlint/cli": "^19.5.0",
