@@ -24,7 +24,7 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "^db:generate"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": []
     },
