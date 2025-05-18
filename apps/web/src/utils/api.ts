@@ -3,6 +3,9 @@ import { httpBatchLink, loggerLink } from '@trpc/client';
 import { createTRPCReact } from '@trpc/react-query';
 import superjson from 'superjson';
 
+// Export prisma types (db models)
+export * from '@prisma/client';
+
 export const trpc = createTRPCReact<AppRouter>();
 
 const getBaseUrl = () => {

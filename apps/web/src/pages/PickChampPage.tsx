@@ -1,18 +1,11 @@
 import * as React from 'react';
 import { useMemo } from 'react';
-import { LoLChampionRole, RankTier } from '@lol-assistant/db';
-import {
-  ChampionCounterRow,
-  ChampionFilter,
-  ChampionFilterOption,
-  ChampionSearchBar,
-  CounterList,
-  PatchCombobox,
-  RoleToggleGroup,
-} from '../components';
+// import { LoLChampionRole, RankTier } from '@lol-assistant/db';
+import type { ChampionCounterRow, ChampionFilterOption } from '../components';
+import { ChampionFilter, ChampionSearchBar, CounterList, PatchCombobox, RoleToggleGroup } from '../components';
 import { CounterListSkeleton } from '../components/CounterList/Skeleton';
 import type { SourceStat } from '../components/CounterList/types';
-import { trpc } from '../utils/api';
+import { LoLChampionRole, RankTier, trpc } from '../utils/api';
 
 export const PickChampPage: React.FC = () => {
   const [searchValue, setSearchValue] = React.useState('volibear');

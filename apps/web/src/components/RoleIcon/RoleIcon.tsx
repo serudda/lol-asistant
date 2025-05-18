@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { LoLChampionRole } from '@lol-assistant/db';
+import type { LoLChampionRole } from '../../utils/api';
 import { ICON_PATHS } from './catalog';
+// import { LoLChampionRole } from '@lol-assistant/db';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const svg = tv({

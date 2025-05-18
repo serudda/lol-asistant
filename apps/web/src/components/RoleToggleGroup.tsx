@@ -1,5 +1,7 @@
-import { LoLChampionRole } from '@lol-assistant/db';
+// import { LoLChampionRole } from '@lol-assistant/db';
+
 import { ToggleAppearance, ToggleGroup, ToggleSize, ToggleVariant } from '@lol-assistant/ui';
+import { LoLChampionRole } from '../utils/api';
 import { RoleIcon } from './RoleIcon/RoleIcon';
 
 interface RoleToggleGroupProps {

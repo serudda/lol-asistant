@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { RankTier } from '@lol-assistant/db';
+// import { RankTier } from '@lol-assistant/db';
 import { Combobox, TriggerSize } from '@lol-assistant/ui';
+import type { RankTier } from '../../../utils/api';
 import { rankTierOptions } from './rankTierOptions';
 import { tv } from 'tailwind-variants';
 

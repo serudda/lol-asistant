@@ -1,8 +1,11 @@
-import { LoLChampionRole, type Source } from '@lol-assistant/db';
+// import { LoLChampionRole, type Source } from '@lol-assistant/db';
+
 import { Avatar, AvatarSize } from '@lol-assistant/ui';
+import type { LoLChampionRole } from '../../utils/api';
+import { type Source } from '../../utils/api';
 import { RoleIcon } from '../RoleIcon/RoleIcon';
 import type { ChampionCounterRow } from './types';
-import { ColumnDef } from '@tanstack/react-table';
+import type { ColumnDef } from '@tanstack/react-table';
 import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react';
 
 // Assign a bg color green to the overallWinRate column when it's above 50%, and a red bg color when it's below 50%

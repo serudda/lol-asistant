@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react';
-import { type Source } from '@lol-assistant/db';
+// import { type Source } from '@lol-assistant/db';
 import { Table } from '@lol-assistant/ui';
+import { type Source } from '../../utils/api';
 import { getSourceColumns, getStaticColumns } from './columns';
 import type { ChampionCounterRow } from './types';
-import { flexRender, getCoreRowModel, getSortedRowModel, SortingState, useReactTable } from '@tanstack/react-table';
+import type { SortingState } from '@tanstack/react-table';
+import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const table = tv({

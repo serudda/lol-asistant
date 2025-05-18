@@ -1,4 +1,6 @@
-import { RankTier } from '@lol-assistant/db';
+// import { RankTier } from '@lol-assistant/db';
+
+import { RankTier } from '../../../utils/api';
 import { RankTierIcon } from '../../RankTierIcon/RankTierIcon';
 
 export const rankTierOptions = [

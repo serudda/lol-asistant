@@ -1,4 +1,6 @@
-import { LoLChampionRole } from '@lol-assistant/db';
+// import { LoLChampionRole } from '@lol-assistant/db';
+
+import { LoLChampionRole } from '../../utils/api';
 
 // ---------------------------------------------------------------------------
 // SVG definitions
