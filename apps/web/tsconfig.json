@@ -6,6 +6,6 @@
       "~/*": ["./src/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs", "src/stubs/prisma-index-browser-stub.js"],
   "exclude": ["node_modules"]
 }
