@@ -5,4 +5,5 @@ export * from './config.schema';
 export * from './patchNote.schema';
 export * from './source.schema';
 export * from './sourceMatchupStat.schema';
+export * from './types';
 export * from './user.schema';
