@@ -25,7 +25,10 @@ export const extractDataFromHtml = (html: string, role: OPGGRole, rank: OPGGRank
   const aside = $('aside')
     .filter((_, el) => $(el).find('ul > li').length > 0)
     .first();
-  if (aside.length === 0) throw new Error('[extractFromHtml] No counters section found');
+  if (aside.length === 0) {
+    console.warn('[extractFromHtml] No counters section found');
+    return [];
+  }
 
   const counters: Array<SourceCounter> = [];
   aside.find('ul > li').each((_, el) => {

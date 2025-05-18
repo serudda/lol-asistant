@@ -16,7 +16,7 @@ export const getOPGGCounters = async (slug: string, role: OPGGRole, rank: OPGGRa
   try {
     // Fetch all raw counters from OP.GG HTML page by web scraping
     console.log(`[getOPGGCounters] Web scraping counters for: ${slug} (${role}, ${rank})`);
-    const url = `${OPGG_CHAMPION_URL}/${slug}/counters?tier=${rank}&role=${role}`;
+    const url = `${OPGG_CHAMPION_URL}/${slug}/counters/${role}?tier=${rank}`;
     const html = await getHtmlFromPage(url);
 
     // Extract counters from HTML
