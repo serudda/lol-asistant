@@ -138,7 +138,8 @@ export const getSourceColumns = (sources: Array<Source>): Array<ColumnDef<Champi
     },
     cell: ({ row }) => {
       const stat = row.original.sourceStats.find((s) => s.name === source.name);
-      if (!stat) return null;
+      if (!stat) return <div className="flex flex-col text-center p-3 rounded-md">No found</div>;
+
       return (
         <a
           href={stat.sourceUrl}
