@@ -1,0 +1,10 @@
+{
+  "projects": {
+    "web": {
+      "source": "apps/web"
+    },
+    "api": {
+      "source": "packages/api"
+    }
+  }
+}
