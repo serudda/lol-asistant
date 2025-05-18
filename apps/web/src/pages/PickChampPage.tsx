@@ -8,7 +8,6 @@ import {
   ChampionSearchBar,
   CounterList,
   PatchCombobox,
-  RankTierCombobox,
   RoleToggleGroup,
 } from '../components';
 import { CounterListSkeleton } from '../components/CounterList/Skeleton';
@@ -17,7 +16,7 @@ import { trpc } from '../utils/api';
 
 export const PickChampPage: React.FC = () => {
   const [searchValue, setSearchValue] = React.useState('volibear');
-  const [rankTier, setRankTier] = React.useState<RankTier>(RankTier.iron);
+  const [rankTier] = React.useState<RankTier>(RankTier.silver);
   const [role, setRole] = React.useState<LoLChampionRole>(LoLChampionRole.jungle);
   const [patch, setPatch] = React.useState<string>('15.10.1');
   const [championFilter, setChampionFilter] = React.useState<string>('');
@@ -105,7 +104,6 @@ export const PickChampPage: React.FC = () => {
             className="max-w-52"
           />
           <RoleToggleGroup defaultValue={role} onValueChange={setRole} />
-          <RankTierCombobox defaultValue={rankTier} onChange={setRankTier} className="max-w-44" />
           <PatchCombobox defaultValue={patch} onChange={setPatch} className="max-w-24" />
         </div>
 

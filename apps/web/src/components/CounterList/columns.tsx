@@ -107,8 +107,7 @@ export const getStaticColumns = (): ColumnDef<ChampionCounterRow>[] => [
           parseFloat(row.original.overallWinRate),
         )}`}
       >
-        <span className="font-medium">{row.original.overallWinRate}% WR</span>
-        <span className="text-xs text-gray-300">{row.original.totalMatches} total games</span>
+        <span className="font-medium">{row.original.overallWinRate}%</span>
       </div>
     ),
   },
@@ -149,7 +148,6 @@ export const getSourceColumns = (sources: Array<Source>): Array<ColumnDef<Champi
           title={`See ${row.original.champion} counters on ${source.name}`}
         >
           <span className="font-medium">{stat.winRate.toFixed(2)}%</span>
-          <span className="text-xs text-gray-500">{stat.matches.toLocaleString()} games</span>
         </a>
       );
     },
