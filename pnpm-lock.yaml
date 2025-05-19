@@ -26,6 +26,9 @@ importers:
       '@manypkg/cli':
         specifier: ^0.21.4
         version: 0.21.4
+      '@trpc/server':
+        specifier: ^10.45.2
+        version: 10.45.2
       '@types/eslint':
         specifier: ^9.6.1
         version: 9.6.1
