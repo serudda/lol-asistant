@@ -23,3 +23,6 @@ export const trpcClient = trpc.createClient({
 export { type RouterInputs, type RouterOutputs } from '@lol-assistant/api';
 export * from '@lol-assistant/api/src/common';
 export * from '@lol-assistant/db/common';
+
+// This entrypoint is only used for local development (Express server).
+// In production (Vercel), the API is served via /api/trpc/[trpc].ts as serverless functions
