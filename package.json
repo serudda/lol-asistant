@@ -3,7 +3,7 @@
   "private": true,
   "packageManager": "pnpm@9.9.0",
   "engines": {
-    "node": ">=v20.13.1"
+    "node": "20.x"
   },
   "scripts": {
     "build": "turbo build",
@@ -29,6 +29,7 @@
     "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
     "@lol-assistant/eslint-config": "workspace:*",
     "@manypkg/cli": "^0.21.4",
+    "@trpc/server": "^10.45.2",
     "@types/eslint": "^9.6.1",
     "@types/node": "^22.7.4",
     "eslint": "^9.11.1",
