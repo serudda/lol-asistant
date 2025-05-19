@@ -5,11 +5,10 @@
   "type": "module",
   "exports": {
     ".": "./src/base.js",
-    "./nextjs": "./src/nextjs.js",
     "./react": "./src/react.js"
   },
   "scripts": {
-    "clean": "git clean -xdf .next .turbo node_modules dist",
+    "clean": "git clean -xdf .turbo node_modules dist",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit"
   },

@@ -712,7 +712,8 @@
     "../../../node_modules/.pnpm/typescript-eslint@8.7.0_eslint@9.11.1_jiti@2.3.3__typescript@5.6.2/node_modules/typescript-eslint/dist/config-helper.d.ts",
     "../../../node_modules/.pnpm/typescript-eslint@8.7.0_eslint@9.11.1_jiti@2.3.3__typescript@5.6.2/node_modules/typescript-eslint/dist/index.d.ts",
     "../../../tooling/eslint-config/src/base.js",
-    "../eslint.config.mjs"
+    "../eslint.config.mjs",
+    "../src/stubs/prisma-index-browser-stub.js"
   ],
   "fileIdsList": [
     [111, 153, 712],
@@ -736,7 +737,7 @@
     [111, 153, 236, 358, 428, 482, 511, 569],
     [111, 153, 224],
     [101, 102, 111, 153],
-    [111, 153, 220, 221],
+    [111, 153, 196, 220, 221],
     [104, 111, 153],
     [111, 153, 589],
     [111, 153, 231],
@@ -1737,7 +1738,10 @@
     { "version": "8f07f2b6514744ac96e51d7cb8518c0f4de319471237ea10cf688b8d0e9d0225", "impliedFormat": 1 },
     { "version": "08971f8379717d46a8a990ce9a7eed3af3e47e22c3d45c3a046054b7a2fffe7a", "impliedFormat": 99 },
     { "version": "f5e8546cfe500116aba8a6cb7ee171774b14a6db30d4bcd6e0aa5073e919e739", "impliedFormat": 1 },
-    "ad862d406fc1ef31781f613c674b6c8c0840c90ad707fb82cdc0ceec3d6bb343",
+    {
+      "version": "fb8ebd1661bda1c5ad9442b4fd057c343d927d7d551637221572779f8004f89e",
+      "signature": "4b96dd19fd2949d28ce80e913412b0026dc421e5bf6c31d87c7b5eb11b5753b4"
+    },
     {
       "version": "4025a454b1ca489b179ee8c684bdd70ff8c1967e382076ade53e7e4653e1daec",
       "affectsGlobalScope": true,
@@ -1838,7 +1842,10 @@
     "66f075ab753fac89a6434c51fb2b6b30c7f46cf03f4f9e8f814667a9504afe9a",
     "afc9e1b9fe811d018d1d2993818ce1b65c37eb2700c076415fd160391709763d",
     "829652c97d0403ff38bef06bbb0fd39d7d040d6bb0e8a38edb21bad43a48494d",
-    "1a3b49c4c92ac24d220b3f8a7293c08c7bbced7bb3b59c1896982277bd8a158c",
+    {
+      "version": "84fab2542c44823686d0ceb2df8302d315894f0d94e45a805aad87cf04448a6b",
+      "signature": "9140f4fb2ed13b966eb8186b7b39c2b605ffe0546d79e8ceb19c8fcf41fe2c6d"
+    },
     "67a5b12652ae546bfb9d2d44db21ef189bc235c316106d4c7724890b0f17fae0",
     { "version": "e7c2f40dc99121500ad108a4f86541d29cac105ed018f994c7c5a2836e77b257", "impliedFormat": 1 },
     { "version": "90e930283286ab117ab89f00589cf89ab5e9992bc57e79f303b36ee14649bdd9", "impliedFormat": 1 },
@@ -1877,10 +1884,13 @@
     { "version": "116ec624095373939de9edb03619916226f5e5b6e93cd761c4bda4efecb104fc", "impliedFormat": 1 },
     { "version": "8e6b8259bfd8c8c3d6ed79349b7f2f69476d255aede2cd6c0acb0869ad8c6fdd", "impliedFormat": 1 },
     {
-      "version": "e28893d14cdbb5c3d8e0c4c5188a57d1a15788dc9c78f34fb8fd381efecd0b24",
-      "signature": "e9724437134ef7049f8fc3542959fdba2ce929b66bf7125b38e0322657e18edc"
+      "version": "060eee9ec7047259f4d536bfa33dac1eaff3b0be86b9b731eda1cc9904262efe",
+      "signature": "fffcf6c3605b96518f4bf9befff4af02765332799d8b1b22c0a406a38fece01a"
     },
-    "09234591b2a9ab3dcd4321d478daf9bc53738543432415b10fcf40a2681bd9b3",
+    {
+      "version": "655e87f46e45b8461fdab58e4c25f25b2d1e3dfb49b2a64eb202f608e919a9ef",
+      "signature": "37b31444b22477da86d41b3c4b3b5e78f1b23fb3acd86f942000ed164f15ad20"
+    },
     "1ddd2dc5db9e3d08c49540ae4cd14ebf00d648dc31ce8a653722fc72a85a4898",
     "e403cb6a290be82d17a04afec6d454bfce19488179220e097acc43c0ad31b64c",
     "a26a2af29268e3413b6f1d22d6bc1afa608d863d0b425016c012cfb96cb614f2",
@@ -2112,18 +2122,30 @@
     { "version": "766ffc847ab2c174fdc6f9d7d54d1f6d0201d2280c8bf02579ae140b1d2200dc", "impliedFormat": 1 },
     { "version": "4c26b338077dcb3db1366f704c2cf37d7e555cbe5d09ed9bf78124c964ea8a89", "impliedFormat": 1 },
     { "version": "a6767133b112087a297e70f6490ef2d1eaa60fdd7944b0f1625a5f71f7870ede", "impliedFormat": 1 },
-    "15e5cd802ae8817759ff8fb25062ddb78e71fb21a851912cbd8cda13c63f773a",
+    {
+      "version": "e02251b7b8367a17a317eab4c3d1ab30289ae1e2c4dc8e1a345ad388ee629755",
+      "signature": "29a14a5d21ac4b54f5d28970566e67ade9451e2b29109b6429b9b50f3745bbe1"
+    },
     "7ac43710103e54c8cdc0d12bb69096cadf13c97afecc15b83ae770c34153234d",
     "2e1e4e80a7e97ba52a83734e74e0be4379a07f214dd6878fb357f3f95553eea9",
     "6cd959f305abdb69e543b583a3753fcd82734ca14004958aa62030b7b3eb7528",
-    "5406634ab2f7114ae91af2c43b0d9b493371915f9ab77ac8cdec5f560e95ed1c",
+    {
+      "version": "abef330b2cd7dfc642b862a27dca90ae2a06f8f1fb42e7eaf57632ff811c1025",
+      "signature": "428bb184f1a19a6a5c21ffbaafd096e6efc42a2a8fc48f2209f4d699fa4448c6"
+    },
     "b48af2fc845b3be693677d6a2b3e917c3393c511e6f24f5ca9c8b40fe589bf8a",
-    "31e9d430588615504c8e34d36018204e3c6fece26a742841943e525859d2ecac",
+    {
+      "version": "0ad4462105cba63ca1df8fce40d2162323fd08a176a343a5bbb3c4a0f860824c",
+      "signature": "adb22064f563ca355fb465bc64b11844e8d9784c963d757903daf5c024a06165"
+    },
     "6e65b0a44fe85fe78114383b13d4f238671d3a40eb15b72aee0208a83a31edca",
     "9d296279f4f7fa444e539ed3947a99af9d0033ee90271f798444e88f8ba90350",
     "b84b2ae52712abcbf09a99991a48c635896888f021ba1ce86e6bdf0c8c1982bc",
     "a16f4c556a531a7651cf7d36457e689d65e8c6c888a8f97c0f64bbc770c43fe0",
-    "d053cb114bb0a69fbd23625e267a2dcd8a22b7a6abc81c7a38dcabccdbd7a4fe",
+    {
+      "version": "8f474abf21f146b45525f45c9868684209f952c182f2313c42c9034f865bee21",
+      "signature": "0267a458a71c7e98dd6c07cbe67867ca76bf12dffab8eb4649cf846ff4393127"
+    },
     "6be2dc11c88b44ab37bd2db12602cb6d815714e69ae89971f4574382326972a7",
     { "version": "05321b823dd3781d0b6aac8700bfdc0c9181d56479fe52ba6a40c9196fd661a8", "impliedFormat": 1 },
     "a47560bde6c3768ed022afe4f8c3110641da5d3ce704b84fc46e7e3b75592777",
@@ -2259,9 +2281,13 @@
       "version": "69d646868a61841f7a4dc8b03e04eee8877076c9ce3af72c1b872cb0c00de022",
       "signature": "ea43af0415f52915a2a08eaced4c580a113938425735fec849ee6cdaed557f89",
       "impliedFormat": 99
+    },
+    {
+      "version": "585d9b909be7fe292cbb9b6035337317466455a17e4d12424d47c9e095ff3ed5",
+      "signature": "d889ca31ecf859432c9e675cf056009a227f839856a8cac58a70875e2d619a8b"
     }
   ],
-  "root": [103, 222, 225, [306, 308], [345, 347], [570, 582], 584, 713],
+  "root": [103, 222, 225, [306, 308], [345, 347], [570, 582], 584, 713, 714],
   "options": {
     "allowJs": true,
     "checkJs": true,
@@ -2295,6 +2321,7 @@
     [578, 16],
     [584, 17],
     [581, 18],
+    [714, 5],
     [570, 19],
     [225, 20],
     [103, 21],
@@ -2990,7 +3017,8 @@
     [102, 430]
   ],
   "affectedFilesPendingEmit": [
-    713, 582, 345, 346, 580, 308, 579, 347, 571, 577, 572, 576, 575, 573, 574, 306, 307, 578, 584, 581, 570, 103, 222
+    713, 582, 345, 346, 580, 308, 579, 347, 571, 577, 572, 576, 575, 573, 574, 306, 307, 578, 584, 581, 714, 570, 103,
+    222
   ],
   "version": "5.7.3"
 }
