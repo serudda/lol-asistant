@@ -8,6 +8,8 @@
   "types": "./src/index.ts",
   "scripts": {
     "dev": "pnpm with-env node --import tsx src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "tsx dist/index.js",
     "clean": "git clean -xdf .turbo node_modules dist",
     "lint": "eslint .",
     "lint:fix": "pnpm lint --fix",
