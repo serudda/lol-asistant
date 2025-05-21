@@ -23,6 +23,11 @@
       "cache": false,
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
+    "start": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": []
+    },
     "build": {
       "dependsOn": ["^build", "^db:generate"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
@@ -56,6 +61,7 @@
     "PREFIX",
     "SKIP_ENV_VALIDATION",
     "VERCEL_URL",
+    "VITE_API_URL",
     "WEB_URL"
   ]
 }

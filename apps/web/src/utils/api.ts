@@ -5,7 +5,7 @@ import superjson from 'superjson';
 
 export const trpc = createTRPCReact<AppRouter>();
 
-const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:4000/api/trpc';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export const trpcClient = trpc.createClient({
   transformer: superjson,
