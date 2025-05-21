@@ -1,6 +1,6 @@
 # SP Starter Kit
 
-A modern full-stack application starter kit for building web applications
+A modern full-stack application starter kit for building web applications.
 
 ## 🚀 Quick Start
 
