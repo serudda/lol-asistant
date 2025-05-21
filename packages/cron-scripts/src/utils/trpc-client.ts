@@ -7,7 +7,7 @@ import superjson from 'superjson';
  *
  * @returns TRPC client instance.
  */
-const apiUrl = process.env.API_URL ?? 'http://localhost:4000/api/trpc';
+const apiUrl = process.env.API_URL as string;
 
 export const createClient = () => {
   return createTRPCProxyClient<AppRouter>({

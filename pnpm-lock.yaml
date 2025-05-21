@@ -129,6 +129,12 @@ importers:
       autoprefixer:
         specifier: ^10.4.21
         version: 10.4.21(postcss@8.5.3)
+      dotenv:
+        specifier: ^16.0.3
+        version: 16.4.5
+      dotenv-cli:
+        specifier: ^7.4.2
+        version: 7.4.2
       eslint:
         specifier: ^9.11.1
         version: 9.23.0(jiti@2.3.3)
