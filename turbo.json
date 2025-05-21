@@ -23,6 +23,11 @@
       "cache": false,
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
+    "start": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": []
+    },
     "build": {
       "dependsOn": ["^build", "^db:generate"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
