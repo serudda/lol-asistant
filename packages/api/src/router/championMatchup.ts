@@ -1,12 +1,14 @@
 import {
   calculateChampionMatchupStatsHandler,
   createChampionMatchupHandler,
+  getAllIdsByChampionSlugHandler,
   getAllIdsByPatchVersionHandler,
   getChampionCountersHandler,
 } from '../controllers/championMatchup.controller';
 import {
   calculateChampionMatchupStatsInput,
   createChampionMatchupInput,
+  getAllIdsByChampionSlugInput,
   getAllIdsByPatchVersionInput,
   getChampionCountersInput,
 } from '../schemas/championMatchup.schema';
@@ -16,6 +18,10 @@ export const championMatchupRouter = createTRPCRouter({
   getAllIdsByPatchVersion: publicProcedure
     .input(getAllIdsByPatchVersionInput)
     .query(({ ctx, input }) => getAllIdsByPatchVersionHandler({ ctx, input })),
+
+  getAllIdsByChampionSlug: publicProcedure
+    .input(getAllIdsByChampionSlugInput)
+    .query(({ ctx, input }) => getAllIdsByChampionSlugHandler({ ctx, input })),
 
   create: publicProcedure
     .input(createChampionMatchupInput)

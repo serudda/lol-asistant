@@ -1,6 +1,7 @@
 import { ResponseStatus, type ChampionCountersResponse, type ChampionMatchupIdsResponse, type Params } from '../common';
 import type {
   CreateChampionMatchupInputType,
+  GetAllIdsByChampionSlugInputType,
   GetAllIdsByPatchVersionInputType,
   GetChampionCountersInputType,
 } from '../schemas/championMatchup.schema';
@@ -186,6 +187,50 @@ export const getAllIdsByPatchVersionHandler = async ({
 
     // Get all championMatchup IDs by patchNote ID
     const matchups = await ctx.prisma.championMatchup.findMany({ where: { patchNoteId: patchNote?.id } });
+
+    return {
+      result: {
+        status: ResponseStatus.SUCCESS,
+        championMatchupIds: matchups.map((element) => element.id),
+      },
+    };
+  } catch (error: unknown) {
+    throw handleError(domain, handlerId, error);
+  }
+};
+
+export const getAllIdsByChampionSlugHandler = async ({
+  ctx,
+  input,
+}: Params<GetAllIdsByChampionSlugInputType>): Promise<ChampionMatchupIdsResponse> => {
+  const handlerId = 'getAllIdsByChampionSlugHandler';
+  try {
+    const { championSlug, patchVersion } = input;
+
+    // Get patchNote by patchVersion
+    const patchNoteResponse = await getPatchNoteByVersionHandler({ ctx, input: { patchVersion } });
+    if (patchNoteResponse.result.status !== ResponseStatus.SUCCESS) {
+      return errorResponse(domain, handlerId, ErrorCodes.PatchNote.NotCreated, ErrorMessages.PatchNote.NotCreated);
+    }
+    const patchNote = patchNoteResponse.result.patchNote;
+
+    // Get championMatchup IDs by championSlug and patchNote ID
+    const matchups = await ctx.prisma.championMatchup.findMany({
+      where: {
+        baseChampion: { slug: championSlug },
+        patchNoteId: patchNote?.id,
+      },
+    });
+
+    // Check if there are any matchups
+    if (matchups.length === 0) {
+      return errorResponse(
+        domain,
+        handlerId,
+        ErrorCodes.ChampionMatchup.NoChampionMatchup,
+        ErrorMessages.ChampionMatchup.NoChampionMatchup,
+      );
+    }
 
     return {
       result: {
