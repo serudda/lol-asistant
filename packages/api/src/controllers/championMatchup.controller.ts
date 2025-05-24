@@ -6,6 +6,7 @@ import type {
   GetChampionCountersInputType,
 } from '../schemas/championMatchup.schema';
 import { ErrorCodes, ErrorMessages, errorResponse, handleError } from '../services';
+import { calculateWeightedWinRateWithPenalty } from '../utils';
 import { getChampionBySlugHandler } from './champion.controller';
 import { getPatchNoteByVersionHandler } from './patchNote.controller';
 
@@ -133,15 +134,20 @@ export const calculateChampionMatchupStatsHandler = async ({ ctx, input }: Param
       );
     }
 
-    // Calculate total matches
-    const totalMatches = sourceStats.reduce((sum, s) => sum + s.matches, 0);
+    // Get all matchups for the same base champion, role, rankTier, patchNote
+    const allMatchups = await ctx.prisma.championMatchup.findMany({
+      where: {
+        baseChampionId: championMatchup.baseChampionId,
+        role: championMatchup.role,
+        rankTier: championMatchup.rankTier,
+        patchNoteId: championMatchup.patchNoteId,
+      },
+      select: { totalMatches: true },
+    });
+    const allMatchupsTotalMatches = allMatchups.map((m) => m.totalMatches);
 
-    // Calculate weighted win rate
-    let weightedWinRate = 0;
-    if (totalMatches > 0) {
-      const weightedSum = sourceStats.reduce((sum, s) => sum + s.winRate * s.matches, 0);
-      weightedWinRate = weightedSum / totalMatches;
-    }
+    // Calculate weighted win rate with penalty
+    const { weightedWinRate, totalMatches } = calculateWeightedWinRateWithPenalty(sourceStats, allMatchupsTotalMatches);
 
     // Update the matchup
     const updated = await ctx.prisma.championMatchup.update({
