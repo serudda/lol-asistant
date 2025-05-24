@@ -209,7 +209,17 @@ Puntos Clave y Directorios Principales:
 
 - _Criterio de Éxito:_ Al seleccionar un campeón en el Combobox, se realiza una petición al backend que devuelve la lista de sus counter picks con estadísticas relevantes (ej. winrate, partidas, score agregado). Esta lista se muestra correctamente en la interfaz de usuario. Los errores (campeón sin datos, error de servidor) se manejan y se informa al usuario adecuadamente.
 
-**[WIP] Implement simple concurrency utility in cron-scripts - internal** - Crear `src/utils/concurrency.ts` con función `mapWithConcurrency` sin dependencias externas. - Soportar límite de concurrencia configurable y manejo de errores sin detener otros trabajos. - _Criterio de Éxito:_ Puedo importar `mapWithConcurrency` y procesar un array de 20 promesas con concurrencia 3, completando en ~n/3 tiempo sin errores de tipos.
+**[DONE] Implement simple concurrency utility in cron-scripts - internal** - Crear `src/utils/concurrency.ts` con función `mapWithConcurrency` sin dependencias externas. - Soportar límite de concurrencia configurable y manejo de errores sin detener otros trabajos. - _Criterio de Éxito:_ Puedo importar `mapWithConcurrency` y procesar un array de 20 promesas con concurrencia 3, completando en ~n/3 tiempo sin errores de tipos.
+
+**[PENDING] Ajustar penalización de score para matchups con solo una fuente - interno**
+
+- Analizar la distribución de `totalMatches` para los matchups de cada campeón (usar mediana como umbral inicial).
+- Modificar la función de cálculo de score ponderado:
+  - Si el matchup tiene solo una fuente y `totalMatches` < mediana, aplicar penalización (ej. multiplicar por 0.7).
+  - Si tiene solo una fuente pero `totalMatches` >= mediana, no penalizar.
+  - Testear el ranking con datos reales para verificar que la penalización funciona como esperado.
+  - Documentar la lógica en el código y en la sección "Lessons" del scratchpad.
+  - _Criterio de Éxito:_ Los matchups con solo una fuente y pocos matches bajan en el ranking; los de una sola fuente pero con muchos matches no son penalizados injustamente.
 
 ## Executor Comments or Assistance Requests
 
