@@ -19,9 +19,7 @@ export const calculateWeightedWinRateWithPenalty = (
   allMatchupsTotalMatches: Array<number>,
 ): { weightedWinRate: number; totalMatches: number } => {
   // Check if there are any source stats
-  if (sourceStats.length === 0) {
-    return { weightedWinRate: 0, totalMatches: 0 };
-  }
+  if (sourceStats.length === 0) return { weightedWinRate: 0, totalMatches: 0 };
 
   // Calculate weighted win rate
   const totalMatches = sourceStats.reduce((sum, s) => sum + s.matches, 0);
@@ -32,11 +30,13 @@ export const calculateWeightedWinRateWithPenalty = (
   }
 
   // Calculate median
-  const sorted = [...allMatchupsTotalMatches].sort((a, b) => a - b);
   let medianMatches = 0;
-  if (sorted.length > 0) {
-    const mid = Math.floor(sorted.length / 2);
-    medianMatches = sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+  const sorted = [...allMatchupsTotalMatches].sort((a, b) => a - b);
+  const n = sorted.length;
+  if (n > 0) {
+    const mid = Math.floor(n / 2);
+    if (n % 2 !== 0) medianMatches = sorted[mid];
+    else medianMatches = (sorted[mid - 1] + sorted[mid]) / 2;
   }
 
   // Apply penalty if only one source and matches < median
