@@ -104,11 +104,12 @@ export const getStaticColumns = (): ColumnDef<ChampionCounterRow>[] => [
     },
     cell: ({ row }) => (
       <div
-        className={`flex flex-col items-center text-center p-3 rounded-md ${getOverallWinRateBgColor(
+        className={`flex items-end justify-center gap-1 p-3 rounded-md ${getOverallWinRateBgColor(
           parseFloat(row.original.overallWinRate),
         )}`}
       >
         <span className="font-medium">{row.original.overallWinRate}%</span>
+        <span className="font-medium text-[9px] leading-relaxed tracking-tight text-gray-400 uppercase">WR</span>
       </div>
     ),
   },
@@ -147,10 +148,11 @@ export const getSourceColumns = (sources: Array<Source>): Array<ColumnDef<Champi
           href={stat.sourceUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex flex-col text-center p-3 rounded-md hover:bg-gray-500/20 cursor-pointer transition-colors"
+          className="flex justify-center items-end gap-1 p-3 rounded-md hover:bg-gray-500/20 cursor-pointer transition-colors"
           title={`See ${row.original.champion} on ${source.name}`}
         >
           <span className="font-medium">{stat.winRate.toFixed(2)}%</span>
+          <span className="font-medium text-[9px] leading-relaxed tracking-tight text-gray-500 uppercase">WR</span>
         </a>
       );
     },
