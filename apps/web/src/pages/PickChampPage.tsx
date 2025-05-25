@@ -38,7 +38,7 @@ export const PickChampPage: React.FC = () => {
         slug: stat.source.name.toLowerCase().replace(/\s+/g, '-'),
         name: stat.source.name,
         logoUrl: stat.source.logoUrl,
-        winRate: stat.winRate,
+        winRate: 100 - stat.winRate,
         matches: stat.matches,
         sourceUrl: stat.sourceUrl,
       }));
@@ -49,7 +49,7 @@ export const PickChampPage: React.FC = () => {
         imageUrl: counter.opponentChampion.imageUrl ?? '',
         role: counter.role,
         rankTier: counter.rankTier,
-        overallWinRate: counter.weightedWinRate.toFixed(2),
+        overallWinRate: (100 - counter.weightedWinRate).toFixed(2),
         totalMatches: counter.totalMatches.toLocaleString(),
         sourceStats,
       } as ChampionCounterRow;
