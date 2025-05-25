@@ -5,9 +5,10 @@ const scriptId = '🛠️  recalculateChampMatchupStats';
 
 interface RecalculateChampMatchupStatsArgs {
   patchVersion?: string;
+  champion?: string;
 }
 
-export const recalculateChampMatchupStats = async ({ patchVersion }: RecalculateChampMatchupStatsArgs) => {
+export const recalculateChampMatchupStats = async ({ patchVersion, champion }: RecalculateChampMatchupStatsArgs) => {
   // Use the centralized TRPC client
   const client = createClient();
 
@@ -16,22 +17,30 @@ export const recalculateChampMatchupStats = async ({ patchVersion }: Recalculate
     process.exit(1);
   }
 
+  if (!champion) {
+    console.error(`[${scriptId}] Please provide a champion slug as argument.`);
+    process.exit(1);
+  }
+
   console.log(`[${scriptId}] Starting recalculate champion matchup stats for version: ${patchVersion}`);
 
   // ------------------------------------------------------------
 
-  // Get all championMatchup IDs for the patchVersion
+  // Get all championMatchup IDs
   let championMatchupIds: string[] = [];
   try {
-    const response = await client.championMatchup.getAllIdsByPatchVersion.query({ patchVersion });
+    const response = await client.championMatchup.getAllIdsByChampionSlug.query({
+      patchVersion,
+      championSlug: champion,
+    });
     if (response.result.status !== ResponseStatus.SUCCESS) {
-      console.error(`[${scriptId}] Failed to fetch championMatchup IDs for patchVersion: ${patchVersion}`);
+      console.error(`[${scriptId}] Failed to fetch championMatchup IDs for championSlug: ${champion}`);
       process.exit(1);
     }
 
     championMatchupIds = Array.isArray(response.result.championMatchupIds) ? response.result.championMatchupIds : [];
     console.log(
-      `[${scriptId}] Found ${championMatchupIds.length} championMatchups to recalculate for patchVersion: ${patchVersion}.`,
+      `[${scriptId}] Found ${championMatchupIds.length} championMatchups to recalculate for championSlug: ${champion}.`,
     );
   } catch (err) {
     console.error(`[${scriptId}] Failed to fetch championMatchup IDs:`, err);
@@ -82,10 +91,10 @@ export const recalculateChampMatchupStats = async ({ patchVersion }: Recalculate
 export default recalculateChampMatchupStats;
 
 /*
-  Run the script `pnpm script:run recalculateChampMatchupStats patchVersion=<game_version>`
+  Run the script `pnpm script:run recalculateChampMatchupStats patchVersion=<game_version> champion=<champion_slug>`
  
-  Example: `pnpm script:run recalculateChampMatchupStats patchVersion=14.1.1`
+  Example: `pnpm script:run recalculateChampMatchupStats patchVersion=14.1.1 champion=aatrox`
  
   This script recalculates the stats for all champion matchups
-  for a specific patch version (weightedWinRate and totalMatches).
+  for a specific patch version and champion (weightedWinRate and totalMatches).
  */

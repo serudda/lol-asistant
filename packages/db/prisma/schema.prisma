@@ -254,7 +254,7 @@ model ChampionMatchup {
 // Raw stats by source
 model SourceMatchupStat {
     id                 String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    winRate            Float           @map("win_rate")
+    winRate            Float           @map("win_rate") // the win rate of the counter champion
     matches            Int
     sourceChampionSlug String          @map("source_champion_slug")
     sourceRankTier     String          @map("source_rank_tier")

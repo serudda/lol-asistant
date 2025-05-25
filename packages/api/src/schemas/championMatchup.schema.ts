@@ -10,6 +10,14 @@ export type GetAllIdsByPatchVersionInputType = TypeOf<typeof getAllIdsByPatchVer
 
 // ------------------------------------------------------------
 
+export const getAllIdsByChampionSlugInput = z.object({
+  championSlug: z.string(),
+  patchVersion: z.string(),
+});
+export type GetAllIdsByChampionSlugInputType = TypeOf<typeof getAllIdsByChampionSlugInput>;
+
+// ------------------------------------------------------------
+
 export const createChampionMatchupInput = z.object({
   patchNoteId: z.string(),
   baseChampionId: z.string(),
@@ -37,3 +45,13 @@ export const getChampionCountersInput = z.object({
   rankTier: rankTierEnum.optional(),
 });
 export type GetChampionCountersInputType = TypeOf<typeof getChampionCountersInput>;
+
+// ------------------------------------------------------------
+
+export const getMatchupOverviewInput = z.object({
+  baseChampionSlug: z.string(),
+  role: roleEnum,
+  rankTier: rankTierEnum,
+  patchVersion: z.string(),
+});
+export type GetMatchupOverviewInputType = TypeOf<typeof getMatchupOverviewInput>;
