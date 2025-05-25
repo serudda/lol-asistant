@@ -211,7 +211,7 @@ Puntos Clave y Directorios Principales:
 
 **[DONE] Implement simple concurrency utility in cron-scripts - internal** - Crear `src/utils/concurrency.ts` con función `mapWithConcurrency` sin dependencias externas. - Soportar límite de concurrencia configurable y manejo de errores sin detener otros trabajos. - _Criterio de Éxito:_ Puedo importar `mapWithConcurrency` y procesar un array de 20 promesas con concurrencia 3, completando en ~n/3 tiempo sin errores de tipos.
 
-**[PENDING] Ajustar penalización de score para matchups con solo una fuente - interno**
+**[DONE] Ajustar penalización de score para matchups con solo una fuente - interno**
 
 - Analizar la distribución de `totalMatches` para los matchups de cada campeón (usar mediana como umbral inicial).
 - Modificar la función de cálculo de score ponderado:
