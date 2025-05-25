@@ -2,7 +2,14 @@ import * as React from 'react';
 import { useMemo } from 'react';
 import { LoLChampionRole, RankTier } from '@lol-assistant/db';
 import type { ChampionCounterRow, ChampionFilterOption } from '../components';
-import { ChampionFilter, ChampionSearchBar, CounterList, PatchCombobox, RoleToggleGroup } from '../components';
+import {
+  ChampionFilter,
+  ChampionSearchBar,
+  CounterLegend,
+  CounterList,
+  PatchCombobox,
+  RoleToggleGroup,
+} from '../components';
 import { CounterListSkeleton } from '../components/CounterList/Skeleton';
 import type { SourceStat } from '../components/CounterList/types';
 import { trpc } from '../utils/api';
@@ -89,7 +96,7 @@ export const PickChampPage: React.FC = () => {
       <div className="flex flex-col gap-4 w-full">
         <hr className="w-full my-8 border-t border-gray-800" />
         {/* Filters */}
-        <div className="flex justify-start gap-4">
+        <div className="flex justify-start items-end gap-4">
           <ChampionFilter
             options={filterOptions}
             defaultValue={championFilter}
@@ -98,6 +105,7 @@ export const PickChampPage: React.FC = () => {
           />
           <RoleToggleGroup defaultValue={role} onValueChange={setRole} />
           <PatchCombobox defaultValue={patch} onChange={setPatch} className="max-w-24" />
+          <CounterLegend champion={searchValue} className="ml-auto" />
         </div>
 
         {/* Counters List */}

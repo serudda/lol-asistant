@@ -141,7 +141,7 @@ export const getSourceColumns = (sources: Array<Source>): Array<ColumnDef<Champi
     cell: ({ row }) => {
       const stat = row.original.sourceStats.find((s) => s.name === source.name);
       if (!stat)
-        return <div className="flex flex-col text-center text-gray-400 select-none p-3 rounded-md">No found</div>;
+        return <div className="flex flex-col text-center text-gray-500 select-none p-3 rounded-md">No found</div>;
 
       return (
         <a
