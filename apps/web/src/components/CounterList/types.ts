@@ -13,7 +13,7 @@ export type ChampionCounterRow = {
   imageUrl: string;
   role: string;
   rankTier: string;
-  overallWinRate: string;
+  overallWinRate: number;
   totalMatches: string;
   sourceStats: Array<SourceStat>;
 };

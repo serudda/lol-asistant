@@ -45,3 +45,13 @@ export const getChampionCountersInput = z.object({
   rankTier: rankTierEnum.optional(),
 });
 export type GetChampionCountersInputType = TypeOf<typeof getChampionCountersInput>;
+
+// ------------------------------------------------------------
+
+export const getMatchupOverviewInput = z.object({
+  baseChampionSlug: z.string(),
+  role: roleEnum,
+  rankTier: rankTierEnum,
+  patchVersion: z.string(),
+});
+export type GetMatchupOverviewInputType = TypeOf<typeof getMatchupOverviewInput>;

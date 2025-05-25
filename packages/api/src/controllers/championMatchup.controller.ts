@@ -1,9 +1,16 @@
-import { ResponseStatus, type ChampionCountersResponse, type ChampionMatchupIdsResponse, type Params } from '../common';
+import {
+  ResponseStatus,
+  type ChampionCountersResponse,
+  type ChampionMatchupIdsResponse,
+  type MatchupOverviewResponse,
+  type Params,
+} from '../common';
 import type {
   CreateChampionMatchupInputType,
   GetAllIdsByChampionSlugInputType,
   GetAllIdsByPatchVersionInputType,
   GetChampionCountersInputType,
+  GetMatchupOverviewInputType,
 } from '../schemas/championMatchup.schema';
 import { ErrorCodes, ErrorMessages, errorResponse, handleError } from '../services';
 import { calculateWeightedWinRateWithPenalty } from '../utils';
@@ -205,6 +212,15 @@ export const getAllIdsByPatchVersionHandler = async ({
   }
 };
 
+/**
+ * Get all championMatchup IDs by championSlug and
+ * patchVersion.
+ *
+ * @param ctx Ctx.
+ * @param input { championSlug: string, patchVersion: string
+ *   }
+ * @returns Array of championMatchup IDs.
+ */
 export const getAllIdsByChampionSlugHandler = async ({
   ctx,
   input,
@@ -332,6 +348,86 @@ export const getChampionCountersHandler = async ({
       result: {
         status: ResponseStatus.SUCCESS,
         counters,
+      },
+    };
+  } catch (error: unknown) {
+    throw handleError(domain, handlerId, error);
+  }
+};
+
+/**
+ * Get the 5 easiest and 5 hardest matchups for a champion.
+ * Returns { easiest: [...], hardest: [...] }
+ */
+export const getMatchupOverviewHandler = async ({
+  ctx,
+  input,
+}: Params<GetMatchupOverviewInputType>): Promise<MatchupOverviewResponse> => {
+  const handlerId = 'getMatchupOverviewHandler';
+  try {
+    // Get base champion
+    const championResp = await getChampionBySlugHandler({ ctx, input: { slug: input.baseChampionSlug } });
+    if (championResp.result.status !== ResponseStatus.SUCCESS || !championResp.result.champion) {
+      return errorResponse(domain, handlerId, ErrorCodes.Champion.NoChampion, ErrorMessages.Champion.NoChampion);
+    }
+    const baseChampionId = championResp.result.champion.id;
+
+    // Get all matchups for this champion/role/tier/patch
+    const matchups = await ctx.prisma.championMatchup.findMany({
+      where: {
+        baseChampionId,
+        role: input.role,
+        rankTier: input.rankTier,
+        patchNote: { patchVersion: input.patchVersion },
+      },
+      include: {
+        opponentChampion: true,
+      },
+    });
+
+    // Check if there are any matchups
+    if (matchups.length === 0) {
+      return errorResponse(
+        domain,
+        handlerId,
+        ErrorCodes.ChampionMatchup.NoChampionMatchup,
+        ErrorMessages.ChampionMatchup.NoChampionMatchup,
+      );
+    }
+
+    // Sort for easiest (highest winrate) and hardest (lowest winrate)
+    const hardest = [...matchups]
+      .sort((a, b) => b.weightedWinRate - a.weightedWinRate)
+      .slice(0, 5)
+      .map((matchup) => ({
+        opponentChampion: {
+          id: matchup.opponentChampion.id,
+          name: matchup.opponentChampion.name,
+          slug: matchup.opponentChampion.slug,
+          imageUrl: matchup.opponentChampion.imageUrl ?? null,
+        },
+        weightedWinRate: matchup.weightedWinRate,
+        totalMatches: matchup.totalMatches,
+      }));
+    const easiest = [...matchups]
+      .sort((a, b) => a.weightedWinRate - b.weightedWinRate)
+      .slice(0, 5)
+      .map((matchup) => ({
+        opponentChampion: {
+          id: matchup.opponentChampion.id,
+          name: matchup.opponentChampion.name,
+          slug: matchup.opponentChampion.slug,
+          imageUrl: matchup.opponentChampion.imageUrl ?? null,
+        },
+        weightedWinRate: matchup.weightedWinRate,
+        totalMatches: matchup.totalMatches,
+      }));
+
+    return {
+      result: {
+        status: ResponseStatus.SUCCESS,
+        easiest,
+        hardest,
       },
     };
   } catch (error: unknown) {

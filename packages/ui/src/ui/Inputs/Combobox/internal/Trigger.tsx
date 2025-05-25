@@ -26,7 +26,7 @@ const trigger = tv({
     size: {
       [TriggerSize.base]: 'h-8 pl-3.5 pr-2 text-sm',
       [TriggerSize.lg]: 'h-10 pl-3.5 pr-3 text-base',
-      [TriggerSize.xl]: 'h-14 pl-5 pr-4 text-base',
+      [TriggerSize.xl]: 'h-14 pl-5 pr-4 text-lg',
     },
   },
 });

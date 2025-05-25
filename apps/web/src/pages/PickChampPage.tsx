@@ -42,11 +42,11 @@ export const PickChampPage: React.FC = () => {
 
     return filteredCounters.map((counter, index) => {
       // Build dynamic provider columns (e.g. Mobalytics, U.GG, etc.)
-      const sourceStats: SourceStat[] = counter.sourceStats.map((stat) => ({
+      const sourceStats: Array<SourceStat> = counter.sourceStats.map((stat) => ({
         slug: stat.source.name.toLowerCase().replace(/\s+/g, '-'),
         name: stat.source.name,
         logoUrl: stat.source.logoUrl,
-        winRate: 100 - stat.winRate,
+        winRate: Number((100 - stat.winRate).toFixed(1)),
         matches: stat.matches,
         sourceUrl: stat.sourceUrl,
       }));
@@ -57,7 +57,7 @@ export const PickChampPage: React.FC = () => {
         imageUrl: counter.opponentChampion.imageUrl ?? '',
         role: counter.role,
         rankTier: counter.rankTier,
-        overallWinRate: (100 - counter.weightedWinRate).toFixed(2),
+        overallWinRate: Number((100 - counter.weightedWinRate).toFixed(1)),
         totalMatches: counter.totalMatches.toLocaleString(),
         sourceStats,
       } as ChampionCounterRow;
@@ -97,8 +97,20 @@ export const PickChampPage: React.FC = () => {
       <hr className="w-full my-8 border-t border-gray-800" />
 
       <div className="w-full flex gap-6">
-        <MatchupsOverviewCard />
-        <MatchupsOverviewCard />
+        <MatchupsOverviewCard
+          type="easiest"
+          championSlug={searchValue}
+          role={role}
+          patchVersion={patch}
+          rankTier={rankTier}
+        />
+        <MatchupsOverviewCard
+          type="hardest"
+          championSlug={searchValue}
+          role={role}
+          patchVersion={patch}
+          rankTier={rankTier}
+        />
       </div>
 
       <hr className="w-full my-8 border-t border-gray-800" />
