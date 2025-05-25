@@ -1,1 +1,1 @@
-export * from './MatchupsOverviewCard';
+export * from './MatchupsOverviewCard/MatchupsOverviewCard';

@@ -1,7 +1,8 @@
 import type { LoLChampionRole, RankTier } from '@lol-assistant/db';
 import { Avatar, AvatarSize } from '@lol-assistant/ui';
-import { trpc } from '../../utils/api';
-import { MatchupsOverviewCardGroup, type MatchupsOverviewCardGroupType } from './types';
+import { trpc } from '../../../utils/api';
+import { MatchupsOverviewCardGroup, type MatchupsOverviewCardGroupType } from '../types';
+import { MatchupsOverviewCardSkeleton } from './Skeleton';
 import { tv } from 'tailwind-variants';
 
 const Labels = {
@@ -89,7 +90,7 @@ export const MatchupsOverviewCard = ({
     patchVersion,
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <MatchupsOverviewCardSkeleton />;
   if (error ?? !data?.result) return <div>Error: {error?.message}</div>;
 
   const matchups = data.result[type];
@@ -97,7 +98,7 @@ export const MatchupsOverviewCard = ({
   return (
     <div className={classes.container}>
       <div className="flex items-center gap-3">
-        <span className="text-xl font-medium">{Labels[type].title}</span>
+        <h3 className="text-xl font-medium flex items-center gap-2">{Labels[type].title}</h3>
         <span className="text-gray-500 text-base">({Labels[type].subtitle})</span>
       </div>
       <div className={classes.card}>

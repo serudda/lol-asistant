@@ -4,7 +4,7 @@ export const CounterListSkeleton = () => {
       <div className="w-full animate-pulse">
         <div className="flex flex-col gap-3">
           <div className="flex">
-            <div className="h-14 flex-1 bg-gray-950 rounded" style={{ minWidth: 90 }} />
+            <div className="h-14 flex-1 bg-gray-700 rounded" style={{ minWidth: 90 }} />
           </div>
           {[...Array(24)].map((_, i) => (
             <div key={i} className="flex">

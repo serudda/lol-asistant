@@ -94,7 +94,7 @@ export const PickChampPage: React.FC = () => {
         <ChampionSearchBar defaultValue={searchValue} onChange={setSearchValue} />
       </div>
 
-      <hr className="w-full my-8 border-t border-gray-800" />
+      <hr className="w-full my-8 border-t border-gray-900" />
 
       <div className="w-full flex gap-6">
         <MatchupsOverviewCard
@@ -113,9 +113,15 @@ export const PickChampPage: React.FC = () => {
         />
       </div>
 
-      <hr className="w-full my-8 border-t border-gray-800" />
+      <hr className="w-full mt-8 mb-12 border-t border-gray-900" />
 
       <div className="flex flex-col gap-4 w-full">
+        {/* Title */}
+        <div className="flex items-center gap-2">
+          <h2 className="text-2xl font-bold">Matchups</h2>
+          <span className="text-gray-500 text-base">({countersData?.result?.counters?.length} champions)</span>
+        </div>
+
         {/* Filters */}
         <div className="flex justify-start items-end gap-4">
           <ChampionFilter
