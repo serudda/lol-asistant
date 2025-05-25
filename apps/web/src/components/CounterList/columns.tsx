@@ -8,8 +8,8 @@ import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react';
 
 // Assign a bg color green to the overallWinRate column when it's above 50%, and a red bg color when it's below 50%
 const getOverallWinRateBgColor = (overallWinRate: number) => {
-  if (overallWinRate > 50) return 'bg-emerald-500/10';
-  if (overallWinRate < 50) return 'bg-red-500/10';
+  if (overallWinRate > 50) return 'bg-emerald-300/20';
+  if (overallWinRate < 50) return 'bg-red-400/30';
   return 'bg-gray-500/20';
 };
 

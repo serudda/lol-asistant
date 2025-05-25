@@ -7,6 +7,7 @@ import {
   ChampionSearchBar,
   CounterLegend,
   CounterList,
+  MatchupsOverviewCard,
   PatchCombobox,
   RoleToggleGroup,
 } from '../components';
@@ -93,8 +94,16 @@ export const PickChampPage: React.FC = () => {
         <ChampionSearchBar defaultValue={searchValue} onChange={setSearchValue} />
       </div>
 
+      <hr className="w-full my-8 border-t border-gray-800" />
+
+      <div className="w-full flex gap-6">
+        <MatchupsOverviewCard />
+        <MatchupsOverviewCard />
+      </div>
+
+      <hr className="w-full my-8 border-t border-gray-800" />
+
       <div className="flex flex-col gap-4 w-full">
-        <hr className="w-full my-8 border-t border-gray-800" />
         {/* Filters */}
         <div className="flex justify-start items-end gap-4">
           <ChampionFilter
