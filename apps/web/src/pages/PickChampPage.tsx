@@ -2,7 +2,15 @@ import * as React from 'react';
 import { useMemo } from 'react';
 import { LoLChampionRole, RankTier } from '@lol-assistant/db';
 import type { ChampionCounterRow, ChampionFilterOption } from '../components';
-import { ChampionFilter, ChampionSearchBar, CounterList, PatchCombobox, RoleToggleGroup } from '../components';
+import {
+  ChampionFilter,
+  ChampionSearchBar,
+  CounterLegend,
+  CounterList,
+  MatchupsOverviewCard,
+  PatchCombobox,
+  RoleToggleGroup,
+} from '../components';
 import { CounterListSkeleton } from '../components/CounterList/Skeleton';
 import type { SourceStat } from '../components/CounterList/types';
 import { trpc } from '../utils/api';
@@ -34,11 +42,11 @@ export const PickChampPage: React.FC = () => {
 
     return filteredCounters.map((counter, index) => {
       // Build dynamic provider columns (e.g. Mobalytics, U.GG, etc.)
-      const sourceStats: SourceStat[] = counter.sourceStats.map((stat) => ({
+      const sourceStats: Array<SourceStat> = counter.sourceStats.map((stat) => ({
         slug: stat.source.name.toLowerCase().replace(/\s+/g, '-'),
         name: stat.source.name,
         logoUrl: stat.source.logoUrl,
-        winRate: 100 - stat.winRate,
+        winRate: Number((100 - stat.winRate).toFixed(1)),
         matches: stat.matches,
         sourceUrl: stat.sourceUrl,
       }));
@@ -49,7 +57,7 @@ export const PickChampPage: React.FC = () => {
         imageUrl: counter.opponentChampion.imageUrl ?? '',
         role: counter.role,
         rankTier: counter.rankTier,
-        overallWinRate: (100 - counter.weightedWinRate).toFixed(2),
+        overallWinRate: Number((100 - counter.weightedWinRate).toFixed(1)),
         totalMatches: counter.totalMatches.toLocaleString(),
         sourceStats,
       } as ChampionCounterRow;
@@ -86,10 +94,36 @@ export const PickChampPage: React.FC = () => {
         <ChampionSearchBar defaultValue={searchValue} onChange={setSearchValue} />
       </div>
 
+      <hr className="w-full my-8 border-t border-gray-900" />
+
+      <div className="w-full flex gap-6">
+        <MatchupsOverviewCard
+          type="easiest"
+          championSlug={searchValue}
+          role={role}
+          patchVersion={patch}
+          rankTier={rankTier}
+        />
+        <MatchupsOverviewCard
+          type="hardest"
+          championSlug={searchValue}
+          role={role}
+          patchVersion={patch}
+          rankTier={rankTier}
+        />
+      </div>
+
+      <hr className="w-full mt-8 mb-12 border-t border-gray-900" />
+
       <div className="flex flex-col gap-4 w-full">
-        <hr className="w-full my-8 border-t border-gray-800" />
+        {/* Title */}
+        <div className="flex items-center gap-2">
+          <h2 className="text-2xl font-bold">Matchups</h2>
+          <span className="text-gray-500 text-base">({countersData?.result?.counters?.length} champions)</span>
+        </div>
+
         {/* Filters */}
-        <div className="flex justify-start gap-4">
+        <div className="flex justify-start items-end gap-4">
           <ChampionFilter
             options={filterOptions}
             defaultValue={championFilter}
@@ -98,6 +132,7 @@ export const PickChampPage: React.FC = () => {
           />
           <RoleToggleGroup defaultValue={role} onValueChange={setRole} />
           <PatchCombobox defaultValue={patch} onChange={setPatch} className="max-w-24" />
+          <CounterLegend className="ml-auto" />
         </div>
 
         {/* Counters List */}

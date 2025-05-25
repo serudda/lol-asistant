@@ -8,7 +8,7 @@ import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const table = tv({
-  base: 'w-full table-fixed border-collapse border border-gray-800',
+  base: 'w-full table-fixed border-collapse ring-1 ring-gray-700 rounded-br-xl rounded-bl-xl',
 });
 
 interface CounterListProps extends VariantProps<typeof Table> {
@@ -53,7 +53,7 @@ export const CounterList = ({ className, data = [], sources = [] }: CounterListP
 
   return (
     <Table className={classes}>
-      <Table.Header className="sticky top-0 z-10 bg-gray-950">
+      <Table.Header className="sticky top-0 z-10 bg-gray-900">
         {counterTable.getHeaderGroups().map((headerGroup) => (
           <Table.Row key={headerGroup.id}>
             {headerGroup.headers.map((header) => (

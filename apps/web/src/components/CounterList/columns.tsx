@@ -8,8 +8,8 @@ import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react';
 
 // Assign a bg color green to the overallWinRate column when it's above 50%, and a red bg color when it's below 50%
 const getOverallWinRateBgColor = (overallWinRate: number) => {
-  if (overallWinRate > 50) return 'bg-emerald-500/10';
-  if (overallWinRate < 50) return 'bg-red-500/10';
+  if (overallWinRate > 50) return 'bg-emerald-300/20';
+  if (overallWinRate < 50) return 'bg-red-400/30';
   return 'bg-gray-500/20';
 };
 
@@ -105,7 +105,7 @@ export const getStaticColumns = (): ColumnDef<ChampionCounterRow>[] => [
     cell: ({ row }) => (
       <div
         className={`flex items-end justify-center gap-1 p-3 rounded-md ${getOverallWinRateBgColor(
-          parseFloat(row.original.overallWinRate),
+          row.original.overallWinRate,
         )}`}
       >
         <span className="font-medium">{row.original.overallWinRate}%</span>
@@ -141,7 +141,7 @@ export const getSourceColumns = (sources: Array<Source>): Array<ColumnDef<Champi
     cell: ({ row }) => {
       const stat = row.original.sourceStats.find((s) => s.name === source.name);
       if (!stat)
-        return <div className="flex flex-col text-center text-gray-400 select-none p-3 rounded-md">No found</div>;
+        return <div className="flex flex-col text-center text-gray-500 select-none p-3 rounded-md">No found</div>;
 
       return (
         <a
@@ -151,7 +151,7 @@ export const getSourceColumns = (sources: Array<Source>): Array<ColumnDef<Champi
           className="flex justify-center items-end gap-1 p-3 rounded-md hover:bg-gray-500/20 cursor-pointer transition-colors"
           title={`See ${row.original.champion} on ${source.name}`}
         >
-          <span className="font-medium">{stat.winRate.toFixed(2)}%</span>
+          <span className="font-medium">{stat.winRate}%</span>
           <span className="font-medium text-[9px] leading-relaxed tracking-tight text-gray-500 uppercase">WR</span>
         </a>
       );

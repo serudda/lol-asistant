@@ -69,6 +69,19 @@ export type ChampionCountersResponse = ApiResponse<{
   }>;
 }>;
 
+export type MatchupOverviewResponse = ApiResponse<{
+  easiest: Array<{
+    opponentChampion: BasicChampion;
+    weightedWinRate: number;
+    totalMatches: number;
+  }>;
+  hardest: Array<{
+    opponentChampion: BasicChampion;
+    weightedWinRate: number;
+    totalMatches: number;
+  }>;
+}>;
+
 // Patch Note
 export type PatchNoteResponse = ApiResponse<{ patchNote: PatchNote }>;
 export type PatchNotesResponse = ApiResponse<{ patchNotes: Array<PatchNote> }>;

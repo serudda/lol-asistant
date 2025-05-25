@@ -11,7 +11,7 @@ const trigger = tv({
     'hover:border-gray-700/20 hover:bg-gray-800',
     'font-normal leading-normal',
     'flex items-center justify-between p-2',
-    'rounded appearance-none outline-none truncate',
+    'appearance-none outline-none truncate',
     'w-full transition duration-100 ease-out',
   ],
   variants: {
@@ -19,9 +19,14 @@ const trigger = tv({
       true: 'text-white',
       false: 'text-gray-300',
     },
+    isRounded: {
+      true: 'rounded-full',
+      false: 'rounded',
+    },
     size: {
       [TriggerSize.base]: 'h-8 pl-3.5 pr-2 text-sm',
       [TriggerSize.lg]: 'h-10 pl-3.5 pr-3 text-base',
+      [TriggerSize.xl]: 'h-14 pl-5 pr-4 text-lg',
     },
   },
 });
@@ -32,6 +37,7 @@ const icon = tv({
     size: {
       [TriggerSize.base]: 'size-4',
       [TriggerSize.lg]: 'size-5',
+      [TriggerSize.xl]: 'size-6',
     },
   },
 });
@@ -57,17 +63,23 @@ export interface TriggerProps extends Omit<React.ButtonHTMLAttributes<HTMLButton
    * The placeholder of the button.
    */
   placeholder?: string;
+
+  /**
+   * Whether the button is rounded.
+   */
+  isRounded?: boolean;
 }
 
 /**
  * `Trigger` represents a trigger of the combobox.
  */
 export const Trigger = forwardRef<HTMLButtonElement, TriggerProps>(
-  ({ className, value, placeholder, size = TriggerSize.base, ...props }, ref) => {
+  ({ className, value, placeholder, size = TriggerSize.base, isRounded = false, ...props }, ref) => {
     const classes = {
       trigger: trigger({
         hasValue: !!value,
         size,
+        isRounded,
         className,
       }),
       icon: icon({ size }),
