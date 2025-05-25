@@ -105,7 +105,7 @@ export const PickChampPage: React.FC = () => {
           />
           <RoleToggleGroup defaultValue={role} onValueChange={setRole} />
           <PatchCombobox defaultValue={patch} onChange={setPatch} className="max-w-24" />
-          <CounterLegend champion={searchValue} className="ml-auto" />
+          <CounterLegend className="ml-auto" />
         </div>
 
         {/* Counters List */}

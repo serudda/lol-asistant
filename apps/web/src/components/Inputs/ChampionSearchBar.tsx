@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { Avatar, AvatarSize, Combobox, TriggerSize } from '@lol-assistant/ui';
 import { trpc } from '../../utils/api';
+import { tv } from 'tailwind-variants';
+
+const trigger = tv({
+  base: ['w-full'],
+});
 
 export interface ChampionSearchBarOption {
   value: string;
@@ -45,6 +50,7 @@ export const ChampionSearchBar = ({
   disabled = false,
   className = '',
 }: ChampionSearchBarProps) => {
+  const classes = trigger({ className });
   const { data } = trpc.champion.getAllBasic.useQuery({});
   const [open, setOpen] = React.useState(false);
 
@@ -80,9 +86,10 @@ export const ChampionSearchBar = ({
       <Combobox.Trigger
         placeholder={placeholder}
         value={triggerValue}
-        size={TriggerSize.lg}
-        className={`w-full ${className}`}
+        size={TriggerSize.xl}
+        className={classes}
         disabled={disabled}
+        isRounded
       />
       <Combobox.Content className="w-full">
         <Combobox.Search placeholder="Search a champion" />
