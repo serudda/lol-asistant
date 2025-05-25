@@ -1,6 +1,6 @@
 import type { SourceMatchupStat } from '@lol-assistant/db';
 
-const PENALTY_FACTOR = 0.7; // (configurable)
+const PENALTY_FACTOR = 0.96; // (configurable)
 
 /**
  * Calculates the weighted win rate and total matches for a
@@ -35,8 +35,13 @@ export const calculateWeightedWinRateWithPenalty = (
   const n = sorted.length;
   if (n > 0) {
     const mid = Math.floor(n / 2);
-    if (n % 2 !== 0) medianMatches = sorted[mid];
-    else medianMatches = (sorted[mid - 1] + sorted[mid]) / 2;
+    if (n % 2 !== 0) {
+      medianMatches = sorted[mid] ?? 0;
+    } else {
+      const left = sorted[mid - 1] ?? 0;
+      const right = sorted[mid] ?? 0;
+      medianMatches = (left + right) / 2;
+    }
   }
 
   // Apply penalty if only one source and matches < median
