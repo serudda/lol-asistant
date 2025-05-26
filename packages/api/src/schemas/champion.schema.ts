@@ -1,3 +1,4 @@
+import { roleEnum } from './types';
 import { z, type TypeOf } from 'zod';
 
 /*------------------------------------*/
@@ -44,6 +45,7 @@ export const updateChampionInput = z.object({
   passive: z.record(z.string(), z.any()).optional(),
   isActive: z.boolean().optional(),
   lastPatchVersion: z.string().optional(),
+  mainRoles: z.array(roleEnum).optional(),
 });
 export type UpdateChampionInputType = TypeOf<typeof updateChampionInput>;
 
