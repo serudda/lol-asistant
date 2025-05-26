@@ -3,8 +3,8 @@ import { createClient } from '../utils/trpc-client';
 import getMainRoles from './getMainRoles';
 
 const scriptId = '🛠️  getMainRolesBatch';
-const BATCH_SIZE = 170;
-const DELAY_MS = 5000;
+const BATCH_SIZE = 3;
+const DELAY_MS = 2000;
 
 interface GetMainRolesBatchArgs {
   tier: RankTier;
@@ -38,23 +38,27 @@ export const getMainRolesBatch = async ({ tier }: GetMainRolesBatchArgs): Promis
 
     // Process champions in batches
     console.log(`[${scriptId}] [Batch] Processing ${champions.length} champions...`);
+
     for (let i = 0; i < champions.length; i += BATCH_SIZE) {
       const batch = champions.slice(i, i + BATCH_SIZE);
       await Promise.all(
-        batch.map((champ) =>
-          getMainRoles({ champion: champ.slug, tier }).catch((err) => {
-            console.error(`[${scriptId}] [Batch] Error for ${champ.slug}:`, err);
-          }),
-        ),
+        batch.map(async (champion) => {
+          const ok = await getMainRoles({ champion: champion.slug, tier });
+          if (ok) {
+            console.log(`[${scriptId}] [Batch] Success for ${champion.slug}`);
+          } else {
+            console.error(`[${scriptId}] [Batch] Fail for ${champion.slug}`);
+          }
+          return ok;
+        }),
       );
-
-      // Wait before next batch
       if (i + BATCH_SIZE < champions.length) {
         console.log(`[${scriptId}] [Batch] Waiting ${DELAY_MS}ms before next batch...`);
         await new Promise((res) => setTimeout(res, DELAY_MS));
       }
     }
     console.log(`[${scriptId}] [Done] All champions processed.`);
+    process.exit(0);
   } catch (error) {
     console.error(`[${scriptId}] [Fatal] Failed to populate mainRoles for all champions:`, error);
     process.exit(1);

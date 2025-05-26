@@ -18,21 +18,20 @@ interface GetMainRolesArgs {
  *
  * @param champion - The champion to get main roles for.
  * @param tier - The tier of the champion.
- * @returns A promise that resolves to void.
+ * @returns A promise that resolves to true (success) or
+ *   false (fail).
  */
-export const getMainRoles = async ({ champion, tier }: GetMainRolesArgs): Promise<void> => {
+export const getMainRoles = async ({ champion, tier }: GetMainRolesArgs): Promise<boolean> => {
   try {
     // Scrape main roles for all champions from League of Graphs
-    console.log(`[${scriptId}] [Scraping] Fetching main roles for all champions...`);
+    console.log(`[${scriptId}] [Scraping] Scraping main roles for ${champion} (${tier})...`);
     const leagueOfGraphsChampionSlug = getChampionSlugForSource(champion, Sources.LEAGUE_OF_GRAPHS);
     const mainRolesData = await getMainRolesByChampion(leagueOfGraphsChampionSlug, tier);
 
     // Check if mainRolesData is empty
     if (mainRolesData.length === 0) {
-      console.error(
-        `[${scriptId}] [Error] No main roles data found for ${leagueOfGraphsChampionSlug} (threshold: ${THRESHOLD}%)`,
-      );
-      return;
+      console.error(`[${scriptId}] [Error] No main roles data found for ${champion} (threshold: ${THRESHOLD}%)`);
+      return false;
     }
 
     // ------------------------------------------------------------
@@ -42,13 +41,11 @@ export const getMainRoles = async ({ champion, tier }: GetMainRolesArgs): Promis
     const mainRoles = mainRolesData.filter((r) => r.popularity >= THRESHOLD).map((r) => r.role);
 
     if (mainRoles.length === 0) {
-      console.error(
-        `[${scriptId}] [Error] No main roles found for ${leagueOfGraphsChampionSlug} (threshold: ${THRESHOLD}%)`,
-      );
-      return;
+      console.error(`[${scriptId}] [Error] No main roles found for ${champion} (threshold: ${THRESHOLD}%)`);
+      return false;
     }
 
-    console.log(`[${scriptId}] Main roles for ${leagueOfGraphsChampionSlug}:`, mainRoles);
+    console.log(`[${scriptId}] Main roles for ${champion}:`, mainRoles);
 
     // ------------------------------------------------------------
 
@@ -61,15 +58,15 @@ export const getMainRoles = async ({ champion, tier }: GetMainRolesArgs): Promis
 
     // Check if the update was successful
     if (!response.id) {
-      console.error(`[${scriptId}] [Error] Failed to update mainRoles for champion ${leagueOfGraphsChampionSlug}.`);
-      return;
+      console.error(`[${scriptId}] [Error] Failed to update mainRoles for champion ${champion}.`);
+      return false;
     }
 
-    console.log(`[${scriptId}] Successfully populated mainRoles for champion ${leagueOfGraphsChampionSlug}.`);
-    process.exit(0);
+    console.log(`[${scriptId}] Successfully populated mainRoles for champion ${champion}.`);
+    return true;
   } catch (error) {
     console.error(`[${scriptId}] Failed to populate mainRoles:`, error);
-    process.exit(1);
+    return false;
   }
 };
 
