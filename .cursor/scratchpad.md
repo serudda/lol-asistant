@@ -221,6 +221,23 @@ Puntos Clave y Directorios Principales:
   - Documentar la lógica en el código y en la sección "Lessons" del scratchpad.
   - _Criterio de Éxito:_ Los matchups con solo una fuente y pocos matches bajan en el ranking; los de una sola fuente pero con muchos matches no son penalizados injustamente.
 
+**[PENDING] Optimizar scraping: solo procesar combinaciones Champion/Role donde el rol sea main para ese campeón**
+
+- Modificar el modelo Champion en schema.prisma para agregar el campo main_roles LoLChampionRole[].
+- Poblar el campo main_roles para los campeones existentes (puede ser manual, script, o import desde fuente externa). (Definir subtareas).
+- Modificar el script orchestrateMatchupStats.ts para que solo genere tareas de scraping para combinaciones donde el rol esté en main_roles del campeón.
+- Documentar la lógica de decisión de main roles (umbral, fuente, etc.) en el código y en la sección "Lessons" del scratchpad.
+- _Criterio de Éxito:_ El scraping ignora combinaciones irrelevantes (ej. Caitlyn jungla), el tiempo total de scraping se reduce significativamente, y la BD no se llena de datos basura de roles no jugados.
+
+**[PENDING] Poblar mainRoles de Champion usando League of Graphs**
+
+- Escribir un script que recorra todos los champions y scrapee la tabla de roles de League of Graphs.
+- Parsear el pickrate ("Popularity") de cada rol para cada champion.
+- Definir y aplicar el threshold de popularidad (>5%) para decidir los main roles.
+- Actualizar el campo mainRoles en la base de datos para cada champion.
+- Loggear y revisar manualmente los casos edge (campeones con roles flexibles o sin roles claros).
+- _Criterio de Éxito:_ Todos los champions tienen su campo mainRoles poblado de acuerdo a la popularidad real de sus roles en League of Graphs.
+
 **[DONE] Deploy and schedule getLatestPatchNote.ts as a Vercel Cron Job**
 
 - Preparar el script para ejecución serverless: revisar dependencias, asegurar que puede correr como endpoint en Vercel (sin estado local, export adecuado).
