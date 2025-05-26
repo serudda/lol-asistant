@@ -1,5 +1,6 @@
 import type { RankTier } from '@lol-assistant/db';
 import { saveMainRoles } from './getMainRoles/api/saveMainRoles';
+import { getChampionSlugForSource, normalizeChampionSlugFromSource, Sources } from './getMainRoles/common/constants';
 import { getMainRolesByChampion } from './getMainRoles/getMainRolesByChampion';
 
 const scriptId = '🛠️  getMainRoles';
@@ -23,11 +24,14 @@ export const getMainRoles = async ({ champion, tier }: GetMainRolesArgs): Promis
   try {
     // Scrape main roles for all champions from League of Graphs
     console.log(`[${scriptId}] [Scraping] Fetching main roles for all champions...`);
-    const mainRolesData = await getMainRolesByChampion(champion, tier);
+    const leagueOfGraphsChampionSlug = getChampionSlugForSource(champion, Sources.LEAGUE_OF_GRAPHS);
+    const mainRolesData = await getMainRolesByChampion(leagueOfGraphsChampionSlug, tier);
 
     // Check if mainRolesData is empty
     if (mainRolesData.length === 0) {
-      console.error(`[${scriptId}] [Error] No main roles data found for ${champion} (threshold: ${THRESHOLD}%)`);
+      console.error(
+        `[${scriptId}] [Error] No main roles data found for ${leagueOfGraphsChampionSlug} (threshold: ${THRESHOLD}%)`,
+      );
       return;
     }
 
@@ -38,25 +42,30 @@ export const getMainRoles = async ({ champion, tier }: GetMainRolesArgs): Promis
     const mainRoles = mainRolesData.filter((r) => r.popularity >= THRESHOLD).map((r) => r.role);
 
     if (mainRoles.length === 0) {
-      console.error(`[${scriptId}] [Error] No main roles found for ${champion} (threshold: ${THRESHOLD}%)`);
+      console.error(
+        `[${scriptId}] [Error] No main roles found for ${leagueOfGraphsChampionSlug} (threshold: ${THRESHOLD}%)`,
+      );
       return;
     }
 
-    console.log(`[${scriptId}] Main roles for ${champion}:`, mainRoles);
+    console.log(`[${scriptId}] Main roles for ${leagueOfGraphsChampionSlug}:`, mainRoles);
 
     // ------------------------------------------------------------
 
     // Save main roles to database
     console.log(`[${scriptId}] [Saving] Updating mainRoles in database...`);
-    const response = await saveMainRoles({ championSlug: champion, mainRoles });
+    const response = await saveMainRoles({
+      championSlug: normalizeChampionSlugFromSource(leagueOfGraphsChampionSlug, Sources.LEAGUE_OF_GRAPHS),
+      mainRoles,
+    });
 
     // Check if the update was successful
     if (!response.id) {
-      console.error(`[${scriptId}] [Error] Failed to update mainRoles for champion ${champion}.`);
+      console.error(`[${scriptId}] [Error] Failed to update mainRoles for champion ${leagueOfGraphsChampionSlug}.`);
       return;
     }
 
-    console.log(`[${scriptId}] Successfully populated mainRoles for champion ${champion}.`);
+    console.log(`[${scriptId}] Successfully populated mainRoles for champion ${leagueOfGraphsChampionSlug}.`);
     process.exit(0);
   } catch (error) {
     console.error(`[${scriptId}] Failed to populate mainRoles:`, error);

@@ -4,7 +4,7 @@ import getMainRoles from './getMainRoles';
 
 const scriptId = '🛠️  getMainRolesBatch';
 const BATCH_SIZE = 170;
-const DELAY_MS = 2000;
+const DELAY_MS = 5000;
 
 interface GetMainRolesBatchArgs {
   tier: RankTier;
