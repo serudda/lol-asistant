@@ -1,4 +1,5 @@
 import type { RankTier } from '@lol-assistant/db';
+import { saveMainRoles } from './getMainRoles/api/saveMainRoles';
 import { getMainRolesByChampion } from './getMainRoles/getMainRolesByChampion';
 
 const scriptId = '🛠️  getMainRoles';
@@ -11,6 +12,13 @@ interface GetMainRolesArgs {
   tier: RankTier;
 }
 
+/**
+ * Get main roles for a champion from League of Graphs.
+ *
+ * @param champion - The champion to get main roles for.
+ * @param tier - The tier of the champion.
+ * @returns A promise that resolves to void.
+ */
 export const getMainRoles = async ({ champion, tier }: GetMainRolesArgs): Promise<void> => {
   try {
     // Scrape main roles for all champions from League of Graphs
@@ -38,11 +46,18 @@ export const getMainRoles = async ({ champion, tier }: GetMainRolesArgs): Promis
 
     // ------------------------------------------------------------
 
-    // 3. Save main roles to database
+    // Save main roles to database
     console.log(`[${scriptId}] [Saving] Updating mainRoles in database...`);
-    // TODO: Implement DB update logic (saveMainRoles on api folder)
+    const response = await saveMainRoles({ championSlug: champion, mainRoles });
 
-    console.log(`[${scriptId}] Successfully populated mainRoles for all champions.`);
+    // Check if the update was successful
+    if (!response.id) {
+      console.error(`[${scriptId}] [Error] Failed to update mainRoles for champion ${champion}.`);
+      return;
+    }
+
+    console.log(`[${scriptId}] Successfully populated mainRoles for champion ${champion}.`);
+    process.exit(0);
   } catch (error) {
     console.error(`[${scriptId}] Failed to populate mainRoles:`, error);
     process.exit(1);
@@ -52,7 +67,8 @@ export const getMainRoles = async ({ champion, tier }: GetMainRolesArgs): Promis
 export default getMainRoles;
 
 /**
- * Run the script `pnpm script:run getMainRoles`
+ * Run the script `pnpm script:run getMainRoles
+ * champion=Aatrox tier=silver`
  *
  * This script fetches main roles for all champions from
  * League of Graphs and save it to the database.
