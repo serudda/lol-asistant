@@ -221,6 +221,16 @@ Puntos Clave y Directorios Principales:
   - Documentar la lógica en el código y en la sección "Lessons" del scratchpad.
   - _Criterio de Éxito:_ Los matchups con solo una fuente y pocos matches bajan en el ranking; los de una sola fuente pero con muchos matches no son penalizados injustamente.
 
+**[PENDING] Deploy and schedule getLatestPatchNote.ts as a Vercel Cron Job**
+
+- Preparar el script para ejecución serverless: revisar dependencias, asegurar que puede correr como endpoint en Vercel (sin estado local, export adecuado).
+- Crear endpoint serverless en /api/crons/getLatestPatchNote.ts: adaptar el script y exportar handler compatible con Vercel.
+- Configurar el cron job en Vercel: definir el schedule (ej. cada 2-3 días), crear el cron job en el dashboard apuntando al endpoint.
+- Testear el cron job en entorno de staging/producción: forzar ejecución manual, verificar guardado correcto y ausencia de duplicados.
+- (Opcional) Añadir notificación/alerta si se detecta un nuevo parche (webhook, email, log especial).
+- Documentar el proceso y la configuración en README o sección de cron jobs.
+- _Criterio de Éxito:_ El cron job ejecuta el script al menos una vez por semana (idealmente cada 2-3 días), detecta y guarda nuevos parches en <48h tras su publicación, no crea duplicados, logs/notificaciones claros, y la configuración es reproducible y documentada.
+
 ## Executor Comments or Assistance Requests
 
 - OP.GG fetcher ahora es robusto, extensible y alineado con el resto del sistema. El mapeo de enums internos permite agregar nuevas fuentes sin fricción. Listo para revisión/merge.
