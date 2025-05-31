@@ -1,5 +1,5 @@
 import { getChampionSlugForSource, Sources, SourceUrls, type OPGGRank } from '../../../../common';
-import { normalizeStringToSlug } from '../../../../utils/helpers';
+import { normalizeStringToSlug } from '../../../../common/helpers';
 import type { SourceCounter } from '../../common/types';
 import type { OPGGCountersOptionsData } from './types';
 

@@ -24,11 +24,13 @@ export const ChampionSlugOverrides: Record<string, Partial<Record<Sources, strin
   wukong: {
     [Sources.MOBALYTICS]: 'monkeyking',
     [Sources.OP_GG]: 'monkeyking',
+    [Sources.LEAGUE_OF_GRAPHS]: 'monkeyking',
   },
   nunuwillump: {
     [Sources.U_GG]: 'nunu',
     [Sources.OP_GG]: 'nunu',
     [Sources.MOBALYTICS]: 'nunu',
+    [Sources.LEAGUE_OF_GRAPHS]: 'nunu',
   },
 };
 
