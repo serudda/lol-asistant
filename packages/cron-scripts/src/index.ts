@@ -5,8 +5,9 @@
  */
 
 // Script exports for use in cron jobs
+export { getLatestPatchNote } from './getLatestPatchNote/cli';
 export { default as getChampionById } from './scripts/getChampionById';
-export { default as getLatestPatchNote } from './scripts/getLatestPatchNote';
+// export { default as getLatestPatchNote } from './scripts/getLatestPatchNote';
 export { default as recalculateChampMatchupStats } from './scripts/recalculateChampMatchupStats';
 export { default as syncAllChampions } from './scripts/syncAllChampions';
 export { default as updateChampionStats } from './scripts/updateChampionStats';
