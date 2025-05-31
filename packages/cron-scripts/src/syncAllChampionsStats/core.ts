@@ -1,6 +1,6 @@
 import { ResponseStatus } from '@lol-assistant/api';
-import { getChampionSlugs } from '../scripts/syncAllChampions/common/getChampionSlugs';
 import { FLOW_ID, MAX_RETRIES, RETRY_DELAY_MS } from './common/constants';
+import { getChampionSlugList } from './common/getChampionSlugList';
 import type { SyncResult } from './common/types';
 import { updateChampionStats } from './common/updateChampionStats';
 import { getLastestPatch } from './db/getLastestPatch';
@@ -60,7 +60,7 @@ export const syncAllChampionsStatsCore = async (): Promise<void> => {
 
   // 2. Fetch the list of champion slugs
   console.log(`[${FLOW_ID}] [FETCH CHAMPIONS] Fetching master champion list...`);
-  const championSlugs = await getChampionSlugs(patchVersion);
+  const championSlugs = await getChampionSlugList(patchVersion);
   if (championSlugs.length === 0) {
     throw new Error('[${FLOW_ID}] [FETCH CHAMPIONS] No champions found in the response');
   }

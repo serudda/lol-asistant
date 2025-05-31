@@ -11,7 +11,7 @@ import axios from 'axios';
  * @throws Error if the request fails or the response is
  *   invalid.
  */
-export const getChampionSlugs = async (patchVersion: string): Promise<Array<string>> => {
+export const getChampionSlugList = async (patchVersion: string): Promise<Array<string>> => {
   const url = `${DATA_DRAGON_BASE_URL}/${patchVersion}/data/${LANGUAGE}/champion.json`;
 
   try {
