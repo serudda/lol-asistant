@@ -1,8 +1,6 @@
+import { getChampionSlugForSource, Sources, U_GG_CHAMPION_URL, type UGGRank } from '../../../../common';
 import { normalizeStringToSlug } from '../../../../utils/helpers';
-import { getChampionSlugForSource, Sources } from '../../common/constants';
 import type { SourceCounter } from '../../common/types';
-import type { UGGRank } from './constants';
-import { U_GG_CHAMPION_URL } from './constants';
 import type { UGGCounterOptionsData } from './types';
 
 export const uggChampCounterDto = (item: UGGCounterOptionsData, rankTier: UGGRank, id: number): SourceCounter => {

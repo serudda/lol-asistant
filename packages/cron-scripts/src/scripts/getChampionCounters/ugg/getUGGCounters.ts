@@ -1,7 +1,6 @@
+import { U_GG_CHAMPION_URL, type UGGRank, type UGGRole } from '../../../common';
 import { getHtmlFromPage } from '../../../utils/getHtmlFromPage';
 import type { SourceCounter } from '../common/types';
-import type { UGGRank, UGGRole } from './common/constants';
-import { U_GG_CHAMPION_URL } from './common/constants';
 import { extractDataFromHtml } from './common/extractDataFromHtml';
 
 /**

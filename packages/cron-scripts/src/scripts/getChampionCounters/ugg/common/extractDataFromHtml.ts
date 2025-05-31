@@ -1,5 +1,5 @@
+import type { UGGRank, UGGRole } from '../../../../common';
 import type { SourceCounter } from '../../common/types';
-import type { UGGRank, UGGRole } from './constants';
 import { uggChampCounterDto } from './dtos';
 import * as cheerio from 'cheerio';
 

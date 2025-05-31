@@ -1,12 +1,12 @@
 import { ResponseStatus } from '@lol-assistant/api/src/common';
-import { createClient } from '../utils/trpc-client';
 import {
   getChampionSlugForSource,
   normalizeChampionSlugFromSource,
   Sources,
   toMobalyticsRank,
   toMobalyticsRole,
-} from './getChampionCounters/common/constants';
+} from '../common';
+import { createClient } from '../utils/trpc-client';
 import { createChampionMatchup } from './getChampionCounters/common/createChampionMatchup';
 import { saveSourceMatchupStats } from './getChampionCounters/common/saveSourceMatchupStats';
 import { getMobalyticsCounters } from './getChampionCounters/mobalytics/getMobalyticsCounters';

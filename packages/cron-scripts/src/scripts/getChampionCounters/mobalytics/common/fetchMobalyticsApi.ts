@@ -1,5 +1,4 @@
-import type { MobalyticsRank, MobalyticsRole } from './constants';
-import { MOBALYTICS_ENDPOINT } from './constants';
+import { MOBALYTICS_ENDPOINT, type MobalyticsRank, type MobalyticsRole } from '../../../../common';
 import type { MobalyticsCountersOptionsData } from './types';
 import axios from 'axios';
 

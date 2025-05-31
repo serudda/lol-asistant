@@ -1,8 +1,7 @@
+import type { MobalyticsRank, MobalyticsRole } from '../../../../common';
+import { getChampionSlugForSource, Sources, SourceUrls } from '../../../../common';
 import { normalizeStringToSlug } from '../../../../utils/helpers';
-import { getChampionSlugForSource, Sources } from '../../common/constants';
 import type { SourceCounter } from '../../common/types';
-import type { MobalyticsRank, MobalyticsRole } from './constants';
-import { MOBALYTICS_BASE_URL } from './constants';
 import type { MobalyticsCountersOptionsData } from './types';
 
 export const mobalyticsApiCounterDto = (
@@ -30,7 +29,7 @@ export const mobalyticsApiCounterDto = (
   return {
     rank: index + 1,
     sourceChampionSlug,
-    champUrl: `${MOBALYTICS_BASE_URL}lol/champions/${sourceChampionSlug}/build/${lowerCaseRole}?rank=${rankTier}`,
+    champUrl: `${SourceUrls[Sources.MOBALYTICS]}lol/champions/${sourceChampionSlug}/build/${lowerCaseRole}?rank=${rankTier}`,
     role: item.matchupRole,
     source: Sources.MOBALYTICS,
     sourceRankTier: rankTier,

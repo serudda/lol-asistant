@@ -1,5 +1,5 @@
+import type { MobalyticsRank, MobalyticsRole } from '../../../common';
 import type { SourceCounter } from '../common/types';
-import type { MobalyticsRank, MobalyticsRole } from './common/constants';
 import { mobalyticsApiCounterDto } from './common/dtos';
 import { fetchMobalyticsCounters } from './common/fetchMobalyticsApi';
 import type { MobalyticsCountersOptionsData } from './common/types';

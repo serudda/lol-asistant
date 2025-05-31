@@ -1,12 +1,6 @@
 import { ResponseStatus } from '@lol-assistant/api/src/common';
+import { getChampionSlugForSource, normalizeChampionSlugFromSource, Sources, toOPGGRank, toOPGGRole } from '../common';
 import { createClient } from '../utils/trpc-client';
-import {
-  getChampionSlugForSource,
-  normalizeChampionSlugFromSource,
-  Sources,
-  toOPGGRank,
-  toOPGGRole,
-} from './getChampionCounters/common/constants';
 import { createChampionMatchup } from './getChampionCounters/common/createChampionMatchup';
 import { saveSourceMatchupStats } from './getChampionCounters/common/saveSourceMatchupStats';
 import { getOPGGCounters } from './getChampionCounters/opgg/getOPGGCounters';

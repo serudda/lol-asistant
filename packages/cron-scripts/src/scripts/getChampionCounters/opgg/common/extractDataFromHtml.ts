@@ -1,5 +1,5 @@
+import type { OPGGRank, OPGGRole } from '../../../../common';
 import type { SourceCounter } from '../../common/types';
-import type { OPGGRank, OPGGRole } from './constants';
 import { opggChampCounterDto } from './dtos';
 import * as cheerio from 'cheerio';
 

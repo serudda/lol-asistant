@@ -1,7 +1,6 @@
+import { OPGG_CHAMPION_URL, type OPGGRank, type OPGGRole } from '../../../common';
 import { getHtmlFromPage } from '../../../utils/getHtmlFromPage';
 import type { SourceCounter } from '../common/types';
-import type { OPGGRank, OPGGRole } from './common/constants';
-import { OPGG_CHAMPION_URL } from './common/constants';
 import { extractDataFromHtml } from './common/extractDataFromHtml';
 
 /**
