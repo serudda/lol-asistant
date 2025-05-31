@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/packages/cron-scripts/src/getLatestPatchNote/cronjob.ts",
+      "schedule": "0 0 * * 2"
+    }
+  ]
+}
