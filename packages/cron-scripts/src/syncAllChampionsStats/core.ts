@@ -43,7 +43,7 @@ async function updateChampionWithRetry(slug: string, patchVersion: string, resul
   return false;
 }
 
-export const syncAllChampionsCore = async (): Promise<void> => {
+export const syncAllChampionsStatsCore = async (): Promise<void> => {
   console.log(`[${FLOW_ID}] [START] Process started`);
 
   // ------------------------------------------------------------

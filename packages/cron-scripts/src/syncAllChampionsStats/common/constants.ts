@@ -1,5 +1,5 @@
 // FLOW ID
-export const FLOW_ID = 'syncAllChampionStats';
+export const FLOW_ID = 'syncAllChampionsStats';
 
 // MAX RETRIES
 export const MAX_RETRIES = 3;
