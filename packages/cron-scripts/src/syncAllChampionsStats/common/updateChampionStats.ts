@@ -2,7 +2,7 @@ import { saveChampion } from '../db/saveChampion';
 import { getChampionRawData } from './getChampionRawData';
 import { parseChampionRawData } from './parseChampionRawData';
 
-const scriptId = '🛠️  updateChampionStats';
+const scriptId = 'updateChampionStats';
 
 interface UpdateChampionStatsArgs {
   patchVersion: string;
