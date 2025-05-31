@@ -28,6 +28,7 @@
     "@lol-assistant/api": "workspace:*",
     "@lol-assistant/db": "workspace:*",
     "@trpc/client": "^10.45.2",
+    "@vercel/node": "^5.2.1",
     "axios": "^1.9.0",
     "cheerio": "^1.0.0",
     "dedent": "^1.5.3",
