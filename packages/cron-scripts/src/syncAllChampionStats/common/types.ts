@@ -1,5 +1,15 @@
 import type { Champion } from '@lol-assistant/db';
 
+export interface SyncResult {
+  total: number;
+  success: number;
+  failed: Array<{
+    slug: string;
+    error: string;
+    attempts: number;
+  }>;
+}
+
 /**
  * Represents the structure of the stats object within
  * DDragon champion data.
@@ -112,7 +122,10 @@ export interface DDragonChampionData {
  * Represents the structure of a champion input for the
  * champion service.
  */
-export type ChampionSaveInput = Omit<Champion, 'id' | 'isActive' | 'createdAt' | 'updatedAt' | 'spells'> & {
+export type ChampionSaveInput = Omit<
+  Champion,
+  'id' | 'isActive' | 'createdAt' | 'updatedAt' | 'spells' | 'mainRoles'
+> & {
   // Note: spells is an array of objects, but the type is not defined in the Champion interface
   spells: Record<string, any>[];
 };
