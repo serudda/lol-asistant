@@ -221,7 +221,7 @@ Puntos Clave y Directorios Principales:
   - Documentar la lógica en el código y en la sección "Lessons" del scratchpad.
   - _Criterio de Éxito:_ Los matchups con solo una fuente y pocos matches bajan en el ranking; los de una sola fuente pero con muchos matches no son penalizados injustamente.
 
-**[PENDING] Deploy and schedule getLatestPatchNote.ts as a Vercel Cron Job**
+**[DONE] Deploy and schedule getLatestPatchNote.ts as a Vercel Cron Job**
 
 - Preparar el script para ejecución serverless: revisar dependencias, asegurar que puede correr como endpoint en Vercel (sin estado local, export adecuado).
 - Crear endpoint serverless en /api/crons/getLatestPatchNote.ts: adaptar el script y exportar handler compatible con Vercel.
