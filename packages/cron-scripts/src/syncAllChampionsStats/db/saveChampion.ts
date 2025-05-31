@@ -1,22 +1,20 @@
-import { ResponseStatus } from '@lol-assistant/api';
 import { createClient } from '../../utils/trpc-client';
 import type { ChampionSaveInput } from '../common/types';
 
-export const saveChampion = async (champion: ChampionSaveInput, patchVersion: string): Promise<void> => {
+export const saveChampion = async (
+  champion: ChampionSaveInput,
+  patchVersion: string,
+  existingChampionId?: string,
+): Promise<void> => {
   try {
     console.log(`[Saving] - Processing champion ${champion.slug} with patch ${patchVersion}...`);
     const client = createClient();
 
-    // Try to get existing champion by slug
-    const existingChampion = await client.champion.getBySlug.query({
-      slug: champion.slug,
-    });
-
     // If the champion already exists, update it
-    if (existingChampion.result.status === ResponseStatus.SUCCESS && existingChampion.result.champion) {
+    if (existingChampionId) {
       console.log(`[Saving] - Updating existing champion ${champion.slug}...`);
       await client.champion.updateChampion.mutate({
-        id: existingChampion.result.champion.id,
+        id: existingChampionId,
         stats: champion.stats as Record<string, any>,
         spells: champion.spells as unknown as Record<string, any>[],
         passive: champion.passive as Record<string, any>,

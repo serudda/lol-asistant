@@ -1,3 +1,6 @@
+import { ResponseStatus } from '@lol-assistant/api';
+import { normalizeStringToSlug } from '../../common';
+import { createClient } from '../../utils/trpc-client';
 import { saveChampion } from '../db/saveChampion';
 import { getChampionRawData } from './getChampionRawData';
 import { parseChampionRawData } from './parseChampionRawData';
@@ -17,6 +20,26 @@ export const updateChampionStats = async ({ patchVersion, championSlug }: Update
   console.log(`[${scriptId}] Starting update for version: ${patchVersion}`);
 
   try {
+    // ------------------------------------------------------------
+
+    // Check if the champion already has stats for this patch version
+    const client = createClient();
+    const existingChampion = await client.champion.getBySlug.query({
+      slug: normalizeStringToSlug(championSlug),
+    });
+    if (
+      existingChampion.result.status === ResponseStatus.SUCCESS &&
+      existingChampion.result.champion?.lastPatchVersion === patchVersion
+    ) {
+      console.log(
+        `[${scriptId}] [Skipping] Champion ${championSlug} already has stats for this patch version: ${patchVersion}`,
+      );
+      return;
+    }
+    const existingChampionId = existingChampion.result.champion?.id;
+
+    // ------------------------------------------------------------
+
     // Fetch champion data from Data Dragon API
     console.log(`[${scriptId}] [Fetching Data Dragon] Fetching data for champion: ${championSlug}`);
     const rawChampionData = await getChampionRawData(championSlug, patchVersion);
@@ -31,7 +54,7 @@ export const updateChampionStats = async ({ patchVersion, championSlug }: Update
 
     // Save champion data to database
     console.log(`[${scriptId}] [Saving Champion Data] Saving stats for ${championSlug}`);
-    await saveChampion(parsedChampion, patchVersion);
+    await saveChampion(parsedChampion, patchVersion, existingChampionId);
 
     // ------------------------------------------------------------
 
