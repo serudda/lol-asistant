@@ -1,6 +1,6 @@
 import { ResponseStatus } from '@lol-assistant/api';
+import type { Sources } from '../../../common';
 import { createClient } from '../../../utils/trpc-client';
-import type { Sources } from './constants';
 import { sourceCounterToSourceMatchupStatDto } from './dtos';
 import type { SourceCounter } from './types';
 

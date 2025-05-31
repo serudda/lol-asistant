@@ -1,7 +1,7 @@
 import { LoLChampionRole, RankTier } from '@lol-assistant/db';
 import { Sources, SourceUrls } from './constants';
 
-export const MOBALYTICS_ENDPOINT = `${SourceUrls[Sources.MOBALYTICS]}api/lol/graphql/v1/query`;
+export const MOBALYTICS_ENDPOINT = `${SourceUrls[Sources.MOBALYTICS]}/api/lol/graphql/v1/query`;
 
 export enum MobalyticsRank {
   iron = 'Iron',
