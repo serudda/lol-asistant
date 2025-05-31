@@ -43,7 +43,7 @@ export type ChampionResponse = ApiResponse<{ champion: Champion }>;
 export type ChampionsResponse = ApiResponse<{ champions: Array<Champion> }>;
 
 // Champion (basic info for lists)
-export type BasicChampion = Pick<Champion, 'id' | 'name' | 'slug' | 'imageUrl'>;
+export type BasicChampion = Pick<Champion, 'id' | 'name' | 'slug' | 'imageUrl' | 'mainRoles'>;
 export type BasicChampionsResponse = ApiResponse<{ champions: Array<BasicChampion> }>;
 
 // Champion Matchup

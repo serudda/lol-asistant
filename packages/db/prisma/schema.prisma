@@ -215,6 +215,7 @@ model Champion {
     passive            Json?
     lastPatchVersion   String?           @map("last_patch_version")
     isActive           Boolean           @default(true) @map("is_active")
+    mainRoles          LoLChampionRole[] @default([]) @map("main_roles")
     createdAt          DateTime          @default(now())
     updatedAt          DateTime          @updatedAt @map("updated_at")
     // --- Relations ---

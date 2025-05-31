@@ -1,4 +1,4 @@
-import { DATA_DRAGON_BASE_URL, LANGUAGE } from '../../../common/constants/ddragon';
+import { DATA_DRAGON_BASE_URL, LANGUAGE } from './constants';
 import type { DDragonChampionData } from './types';
 import axios from 'axios';
 

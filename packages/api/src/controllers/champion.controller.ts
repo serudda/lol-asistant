@@ -90,6 +90,7 @@ export const getAllBasicChampionsHandler = async ({
         name: true,
         slug: true,
         imageUrl: true,
+        mainRoles: true,
       },
     });
 

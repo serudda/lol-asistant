@@ -15,6 +15,7 @@
     "@eslint/js": "^9.21.0",
     "@lol-assistant/eslint-config": "workspace:*",
     "@lol-assistant/typescript-config": "workspace:*",
+    "@types/express": "^5.0.0",
     "@types/node": "^22.7.4",
     "dotenv": "^16.0.3",
     "eslint": "^9.11.1",
@@ -28,10 +29,10 @@
     "@lol-assistant/api": "workspace:*",
     "@lol-assistant/db": "workspace:*",
     "@trpc/client": "^10.45.2",
-    "@vercel/node": "^5.2.1",
     "axios": "^1.9.0",
     "cheerio": "^1.0.0",
     "dedent": "^1.5.3",
+    "express": "^4.21.0",
     "superjson": "1.9.1",
     "ts-node": "^10.9.2"
   }

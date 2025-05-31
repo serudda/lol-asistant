@@ -1,8 +1,8 @@
 import { FLOW_ID } from './common/constants';
 import { getLatestPatchNoteCore } from './core';
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+import type { Request, Response } from 'express';
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: Request, res: Response) {
   console.log(`[CRONJOB][${FLOW_ID}] Starting getLatestPatchNote process...`);
   try {
     await getLatestPatchNoteCore();

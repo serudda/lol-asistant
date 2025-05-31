@@ -1,4 +1,4 @@
-import { DATA_DRAGON_BASE_URL, LANGUAGE } from '../../../common/constants/ddragon';
+import { DATA_DRAGON_BASE_URL, LANGUAGE } from './constants';
 import axios from 'axios';
 
 /**
@@ -11,7 +11,7 @@ import axios from 'axios';
  * @throws Error if the request fails or the response is
  *   invalid.
  */
-export const getChampionSlugs = async (patchVersion: string): Promise<Array<string>> => {
+export const getChampionSlugList = async (patchVersion: string): Promise<Array<string>> => {
   const url = `${DATA_DRAGON_BASE_URL}/${patchVersion}/data/${LANGUAGE}/champion.json`;
 
   try {
@@ -21,17 +21,9 @@ export const getChampionSlugs = async (patchVersion: string): Promise<Array<stri
     // Extract slugs (IDs) from the champion data
     const slugs = Object.keys(championData as Record<string, any>);
 
-    if (slugs.length === 0) {
-      throw new Error('No champions found in the response');
-    }
-
     return slugs;
   } catch (error) {
-    // Log specific error and re-throw or handle as needed
-    console.error(
-      `[getChampionSlugs] Error fetching champion data for version ${patchVersion}:`,
-      error instanceof Error ? error.message : error,
-    );
-    throw error; // Re-throw to be caught by the main loop
+    console.error('[Getting] - Error fetching champion slugs:', error);
+    throw error;
   }
 };

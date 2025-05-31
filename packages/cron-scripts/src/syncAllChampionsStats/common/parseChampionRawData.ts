@@ -1,5 +1,5 @@
-import { DATA_DRAGON_BASE_URL } from '../../../common/constants/ddragon';
-import { normalizeStringToSlug } from '../../../utils/helpers';
+import { normalizeStringToSlug } from '../../utils/helpers';
+import { DATA_DRAGON_BASE_URL } from './constants';
 import type { ChampionSaveInput, DDragonChampionData, DDragonSpell } from './types';
 
 /**

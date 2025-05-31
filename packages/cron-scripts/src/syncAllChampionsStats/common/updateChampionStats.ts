@@ -1,6 +1,6 @@
-import { saveChampion } from './updateChampionStats/api/saveChampion';
-import { getChampionRawData } from './updateChampionStats/common/getChampionRawData';
-import { parseChampionRawData } from './updateChampionStats/common/parseChampionRawData';
+import { saveChampion } from '../db/saveChampion';
+import { getChampionRawData } from './getChampionRawData';
+import { parseChampionRawData } from './parseChampionRawData';
 
 const scriptId = '🛠️  updateChampionStats';
 
