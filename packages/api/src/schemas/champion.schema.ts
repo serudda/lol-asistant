@@ -25,7 +25,7 @@ export type GetAllBasicChampionsInputType = TypeOf<typeof getAllBasicChampionsIn
 export const createChampionInput = z.object({
   name: z.string(),
   slug: z.string(),
-  mainRoles: z.array(z.string()).default([]),
+  mainRoles: z.array(roleEnum).default([]),
   imageUrl: z.string().default(''),
   stats: z.record(z.string(), z.any()).default({}),
   spells: z.array(z.record(z.string(), z.any())).default([]),
@@ -40,14 +40,13 @@ export const updateChampionInput = z.object({
   id: z.string(),
   name: z.string().optional(),
   slug: z.string().optional(),
-  mainRoles: z.array(z.string()).optional(),
+  mainRoles: z.array(roleEnum).optional(),
   imageUrl: z.string().optional(),
   stats: z.record(z.string(), z.any()).optional(),
   spells: z.array(z.record(z.string(), z.any())).optional(),
   passive: z.record(z.string(), z.any()).optional(),
   isActive: z.boolean().optional(),
   lastPatchVersion: z.string().optional(),
-  mainRoles: z.array(roleEnum).optional(),
 });
 export type UpdateChampionInputType = TypeOf<typeof updateChampionInput>;
 
