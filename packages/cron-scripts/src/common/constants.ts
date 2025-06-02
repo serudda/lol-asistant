@@ -32,6 +32,12 @@ export const ChampionSlugOverrides: Record<string, Partial<Record<Sources, strin
     [Sources.MOBALYTICS]: 'nunu',
     [Sources.LEAGUE_OF_GRAPHS]: 'nunu',
   },
+  renataglasc: {
+    [Sources.MOBALYTICS]: 'renata',
+    [Sources.OP_GG]: 'renata',
+    [Sources.U_GG]: 'renata',
+    [Sources.LEAGUE_OF_GRAPHS]: 'renata',
+  },
 };
 
 /**

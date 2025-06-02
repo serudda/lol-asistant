@@ -1,5 +1,90 @@
 # @lol-assistant/cron-scripts
 
+## ⚡️ Requirements for Job Queue (BullMQ)
+
+To use the Job Queue (BullMQ) architecture, you need a running Redis server. The simplest and free option is to use Docker:
+
+### Run Redis with Docker (recommended for development)
+
+```bash
+docker run -d --name redis-bullmq -p 6379:6379 redis:7-alpine
+```
+
+- This creates a container named `redis-bullmq` and exposes port 6379 on your local machine.
+- You can check if it's running with:
+  ```bash
+  docker ps
+  ```
+- To stop it:
+  ```bash
+  docker stop redis-bullmq
+  ```
+- To remove it:
+  ```bash
+  docker rm redis-bullmq
+  ```
+
+---
+
+## 🗓️ Weekly Batch Scraping: Step-by-Step Guide
+
+Follow these steps every week to run the full champion counters scraping process:
+
+### 1. Start Redis in Docker (if not already running)
+
+```bash
+docker start redis-bullmq
+```
+
+- If the container does not exist, create it with:
+  ```bash
+  docker run -d --name redis-bullmq -p 6379:6379 redis:7-alpine
+  ```
+- You can check if it's running with:
+  ```bash
+  docker ps
+  ```
+
+### 2. Enqueue all champion jobs
+
+From the project root:
+
+```bash
+pnpm script:run enqueueChampionScrapeJobs
+```
+
+- This will enqueue a job for every champion in the database.
+
+### 3. Start the worker to process jobs
+
+In a new terminal (you can run multiple workers for more speed):
+
+```bash
+pnpm script:run championScrapeWorker
+```
+
+- By default, each worker processes 2 jobs in parallel.
+- To increase parallelism (e.g., 5 at a time):
+  ```bash
+  WORKER_CONCURRENCY=5 pnpm script:run championScrapeWorker
+  ```
+- You can run this on multiple machines if they all connect to the same Redis instance.
+
+### 4. Let it run!
+
+- The worker(s) will keep processing jobs until the queue is empty.
+- You can leave your PC running overnight; the system will pick up where it left off if interrupted.
+
+### 5. (Optional) Stop Redis when done
+
+```bash
+docker stop redis-bullmq
+```
+
+---
+
+**Tip:** You can automate the enqueue step with a cron job or GitHub Action if you want this to be fully hands-off.
+
 Package for managing and executing scheduled scripts, both locally and through Vercel Cron Jobs.
 
 ## Structure
