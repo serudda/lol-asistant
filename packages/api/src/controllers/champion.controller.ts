@@ -91,6 +91,7 @@ export const getAllBasicChampionsHandler = async ({
         slug: true,
         imageUrl: true,
         mainRoles: true,
+        lastPatchVersion: true,
       },
     });
 
