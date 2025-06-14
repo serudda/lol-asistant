@@ -248,6 +248,19 @@ Puntos Clave y Directorios Principales:
 - Documentar el proceso y la configuración en README o sección de cron jobs.
 - _Criterio de Éxito:_ El cron job ejecuta el script al menos una vez por semana (idealmente cada 2-3 días), detecta y guarda nuevos parches en <48h tras su publicación, no crea duplicados, logs/notificaciones claros, y la configuración es reproducible y documentada.
 
+**[DONE] Implementar arquitectura de Job Queue (BullMQ) para scraping batch de counters de campeones**
+
+- Agregar dependencias de BullMQ e ioredis en `packages/cron-scripts`. Documentar la necesidad de un servidor Redis (local, Docker o cloud).
+- Diseñar el modelo de Job: definir el payload mínimo (campeón, patchVersion, roles, tiers, etc.) y decidir si el job es por campeón, batch pequeño o combinación.
+- Crear el script de enqueue (`enqueue-champions.ts`): obtener la lista de campeones (DB o hardcode), encolar un job por campeón/batch, permitir parámetros para patchVersion, roles, tiers.
+- Crear el worker (`worker.ts`): consumir jobs de la cola y ejecutar `orchestrateMatchupStats.ts` para el campeón/batch, manejar logs, errores y reintentos automáticos, permitir concurrencia configurable.
+- Permitir ejecución distribuida: documentar cómo lanzar múltiples instancias de worker en distintas máquinas (requieren acceso a Redis).
+- (Opcional) Integrar dashboard de monitoreo (Arena o BullMQ UI) y documentar acceso.
+- Documentar cómo automatizar el enqueue con cron (ejemplo de cron semanal).
+- Configurar reintentos automáticos y (opcional) alertas para jobs fallidos tras todos los reintentos.
+- Documentar la arquitectura, uso, escalado y monitoreo en el README de cron-scripts.
+- _Criterio de Éxito:_ El sistema permite lanzar el scraping de los 170 campeones sin intervención manual, escalando a varios workers/máquinas, con reintentos automáticos, monitoreo de progreso y fácil extensión a nuevos batch jobs.
+
 ## Executor Comments or Assistance Requests
 
 - OP.GG fetcher ahora es robusto, extensible y alineado con el resto del sistema. El mapeo de enums internos permite agregar nuevas fuentes sin fricción. Listo para revisión/merge.

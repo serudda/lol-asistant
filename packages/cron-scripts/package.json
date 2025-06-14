@@ -30,9 +30,11 @@
     "@lol-assistant/db": "workspace:*",
     "@trpc/client": "^10.45.2",
     "axios": "^1.9.0",
+    "bullmq": "^5.53.1",
     "cheerio": "^1.0.0",
     "dedent": "^1.5.3",
     "express": "^4.21.0",
+    "ioredis": "^5.6.1",
     "superjson": "1.9.1",
     "ts-node": "^10.9.2"
   }

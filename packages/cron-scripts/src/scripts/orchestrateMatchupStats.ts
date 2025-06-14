@@ -117,5 +117,4 @@ export default async function orchestrateMatchupStats({
   await runTasks('U.GG', uggTasks, Number(uggConcurrency), (task) => getUGGMatchupStats(task));
 
   console.log('[orchestrator] All sources completed.');
-  process.exit(0);
 }
