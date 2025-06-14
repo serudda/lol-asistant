@@ -1,5 +1,6 @@
 import type { LoLChampionRole, RankTier } from '@lol-assistant/db';
 import { trpc } from '../../../utils/api';
+import { RoleIcon } from '../../RoleIcon/RoleIcon';
 import { MatchupsOverviewCardGroup, type MatchupsOverviewCardGroupType } from '../types';
 import { MatchupsOverviewCardSkeleton } from './Skeleton';
 import { tv } from 'tailwind-variants';
@@ -108,7 +109,10 @@ export const MatchupsOverviewCard = ({
   return (
     <div className={classes.container}>
       <div className="flex items-center gap-3">
-        <h3 className={title({ type })}>{Labels[type].title}</h3>
+        <div className="flex items-center gap-1 ml-1">
+          <RoleIcon role={role} className="size-5 text-gray-500" />
+          <h3 className={title({ type })}>{Labels[type].title}</h3>
+        </div>
         <span className="text-gray-500 text-base">({Labels[type].subtitle})</span>
       </div>
       <div className={classes.card}>
