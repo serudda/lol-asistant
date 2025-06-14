@@ -19,7 +19,7 @@ export const PickChampPage: React.FC = () => {
   const [searchValue, setSearchValue] = React.useState('volibear');
   const [rankTier] = React.useState<RankTier>(RankTier.silver);
   const [role, setRole] = React.useState<LoLChampionRole>(LoLChampionRole.jungle);
-  const [patch, setPatch] = React.useState<string>('15.10.1');
+  const [patch, setPatch] = React.useState<string>();
   const [championFilter, setChampionFilter] = React.useState<string>('');
 
   const { data: countersData, isLoading: isCountersLoading } = trpc.championMatchup.getChampionCounters.useQuery({
@@ -30,6 +30,9 @@ export const PickChampPage: React.FC = () => {
   });
 
   const { data: sourcesData, isLoading: isSourcesLoading } = trpc.source.getAll.useQuery({});
+
+  // get lastest patch
+  const { data: latestPatchData } = trpc.patchNote.getLatest.useQuery({});
 
   const tableData: Array<ChampionCounterRow> = useMemo(() => {
     // No data yet
@@ -74,6 +77,12 @@ export const PickChampPage: React.FC = () => {
     );
   }, [countersData]);
 
+  React.useEffect(() => {
+    if (latestPatchData?.result?.patchNote) {
+      setPatch(latestPatchData.result.patchNote.patchVersion);
+    }
+  }, [latestPatchData]);
+
   const renderList = () => {
     if (isCountersLoading || isSourcesLoading) return <CounterListSkeleton />;
 
@@ -94,49 +103,54 @@ export const PickChampPage: React.FC = () => {
         <ChampionSearchBar defaultValue={searchValue} onChange={setSearchValue} />
       </div>
 
-      <hr className="w-full my-8 border-t border-gray-900" />
-
-      <div className="w-full flex gap-6">
-        <MatchupsOverviewCard
-          type="easiest"
-          championSlug={searchValue}
-          role={role}
-          patchVersion={patch}
-          rankTier={rankTier}
-        />
-        <MatchupsOverviewCard
-          type="hardest"
-          championSlug={searchValue}
-          role={role}
-          patchVersion={patch}
-          rankTier={rankTier}
-        />
-      </div>
-
-      <hr className="w-full mt-8 mb-12 border-t border-gray-900" />
-
-      <div className="flex flex-col gap-4 w-full">
-        {/* Title */}
-        <div className="flex items-center gap-2">
-          <h2 className="text-2xl font-bold">Matchups</h2>
-          <span className="text-gray-500 text-base">({countersData?.result?.counters?.length} champions)</span>
-        </div>
-
-        {/* Filters */}
-        <div className="flex justify-start items-end gap-4">
-          <ChampionFilter
-            options={filterOptions}
-            defaultValue={championFilter}
-            onChange={setChampionFilter}
-            className="max-w-52"
-          />
+      <div className="flex flex-col border border-gray-800 rounded-xl p-4 mt-8">
+        <div className="flex items-center p-2 justify-between">
           <RoleToggleGroup defaultValue={role} onValueChange={setRole} />
-          <PatchCombobox defaultValue={patch} onChange={setPatch} className="max-w-24" />
-          <CounterLegend className="ml-auto" />
+          <PatchCombobox defaultValue={patch} onChange={setPatch} className="max-w-32" />
         </div>
 
-        {/* Counters List */}
-        {renderList()}
+        <hr className="w-full mt-4 mb-8 border-t border-gray-900" />
+
+        <div className="w-full flex gap-6">
+          <MatchupsOverviewCard
+            type="easiest"
+            championSlug={searchValue}
+            role={role}
+            patchVersion={patch}
+            rankTier={rankTier}
+          />
+          <MatchupsOverviewCard
+            type="hardest"
+            championSlug={searchValue}
+            role={role}
+            patchVersion={patch}
+            rankTier={rankTier}
+          />
+        </div>
+
+        <hr className="w-full my-8 border-t border-gray-900" />
+
+        <div className="flex flex-col gap-4 w-full">
+          {/* Title */}
+          <div className="flex items-center gap-2">
+            <h2 className="text-2xl font-bold">Matchups</h2>
+            <span className="text-gray-500 text-base">({countersData?.result?.counters?.length} champions)</span>
+          </div>
+
+          {/* Filters */}
+          <div className="flex justify-start items-end gap-4">
+            <ChampionFilter
+              options={filterOptions}
+              defaultValue={championFilter}
+              onChange={setChampionFilter}
+              className="max-w-52"
+            />
+            <CounterLegend className="ml-auto" />
+          </div>
+
+          {/* Counters List */}
+          {renderList()}
+        </div>
       </div>
     </div>
   );

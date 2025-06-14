@@ -27,7 +27,7 @@ export const RoleToggleGroup = ({ defaultValue, onValueChange, className }: Role
     <ToggleGroup
       variant={ToggleVariant.neutral}
       appearance={ToggleAppearance.outlined}
-      size={ToggleSize.base}
+      size={ToggleSize.lg}
       type="single"
       defaultValue={defaultValue}
       onValueChange={onValueChange}
@@ -39,7 +39,7 @@ export const RoleToggleGroup = ({ defaultValue, onValueChange, className }: Role
         aria-label="Top"
         className="rounded-l-md rounded-r-none -mr-px"
       >
-        <RoleIcon role={LoLChampionRole.top} className="size-8" />
+        <RoleIcon role={LoLChampionRole.top} className="size-86" />
       </ToggleGroup.Item>
       <ToggleGroup.Item
         key={LoLChampionRole.jungle}
@@ -47,7 +47,7 @@ export const RoleToggleGroup = ({ defaultValue, onValueChange, className }: Role
         aria-label="Jungle"
         className="rounded-none -mr-px"
       >
-        <RoleIcon role={LoLChampionRole.jungle} className="size-8" />
+        <RoleIcon role={LoLChampionRole.jungle} className="size-6" />
       </ToggleGroup.Item>
       <ToggleGroup.Item
         key={LoLChampionRole.mid}
@@ -55,7 +55,7 @@ export const RoleToggleGroup = ({ defaultValue, onValueChange, className }: Role
         aria-label="Mid"
         className="rounded-none -mr-px"
       >
-        <RoleIcon role={LoLChampionRole.mid} className="size-8" />
+        <RoleIcon role={LoLChampionRole.mid} className="size-6" />
       </ToggleGroup.Item>
       <ToggleGroup.Item
         key={LoLChampionRole.adc}
@@ -63,7 +63,7 @@ export const RoleToggleGroup = ({ defaultValue, onValueChange, className }: Role
         aria-label="ADC"
         className="rounded-none -mr-px"
       >
-        <RoleIcon role={LoLChampionRole.adc} className="size-8" />
+        <RoleIcon role={LoLChampionRole.adc} className="size-6" />
       </ToggleGroup.Item>
       <ToggleGroup.Item
         key={LoLChampionRole.support}
@@ -71,7 +71,7 @@ export const RoleToggleGroup = ({ defaultValue, onValueChange, className }: Role
         aria-label="Support"
         className="rounded-r-md rounded-l-none"
       >
-        <RoleIcon role={LoLChampionRole.support} className="size-8" />
+        <RoleIcon role={LoLChampionRole.support} className="size-6" />
       </ToggleGroup.Item>
     </ToggleGroup>
   );

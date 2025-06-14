@@ -34,7 +34,7 @@ const card = tv({
 });
 
 const winRateLabel = tv({
-  base: ['text-sm text-center'],
+  base: ['text-center'],
   variants: {
     type: {
       [MatchupsOverviewCardGroup.easiest]: ['text-emerald-400'],
@@ -62,7 +62,7 @@ export interface MatchupsOverviewCardProps {
   /**
    * Patch version.
    */
-  patchVersion: string;
+  patchVersion?: string;
 
   /**
    * Rank tier.
@@ -90,6 +90,8 @@ export const MatchupsOverviewCard = ({
     container: container({ className }),
     card: card({ className }),
   };
+
+  if (!patchVersion) return <MatchupsOverviewCardSkeleton />;
 
   const { data, isLoading, error } = trpc.championMatchup.getMatchupOverview.useQuery({
     baseChampionSlug: championSlug,
@@ -123,9 +125,12 @@ export const MatchupsOverviewCard = ({
                   src={matchup.opponentChampion.splashUrl ?? ''}
                 />
               </div>
-              <div className="flex flex-col">
-                <span className="text-sm font-medium text-center">{matchup.opponentChampion.name}</span>
-                <span className={winRateLabel({ type })}>{(100 - matchup.weightedWinRate).toFixed(1)}%</span>
+              <div className="relative flex flex-col items-center gap-0.5 w-full max-w-[75px]">
+                <span className="text-sm font-medium text-center truncate w-full">{matchup.opponentChampion.name}</span>
+                <span className={winRateLabel({ type })}>
+                  {(100 - matchup.weightedWinRate).toFixed(1)}
+                  <span className="text-xs font-medium">%</span>
+                </span>
               </div>
             </div>
           </div>

@@ -68,7 +68,7 @@ export const PatchCombobox = ({ defaultValue, disabled = false, className = '', 
     <Combobox open={open} onOpenChange={setOpen}>
       <Combobox.Trigger
         value={selectedOption?.label}
-        size={TriggerSize.base}
+        size={TriggerSize.lg}
         className={classes.trigger}
         disabled={disabled}
       />
