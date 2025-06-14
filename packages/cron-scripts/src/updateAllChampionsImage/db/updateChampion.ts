@@ -23,6 +23,8 @@ export const updateChampion = async (
       splashUrl: championImages.splashUrl ?? '',
     });
 
+    console.log('response', response);
+
     if (response.result.status !== ResponseStatus.SUCCESS) {
       console.error(`[Saving] - Error updating champion ${ddragonChampionSlug}:`, response.result.error);
       return false;
