@@ -11,13 +11,12 @@ export const updateChampion = async (
   existingChampionId?: string,
 ): Promise<boolean> => {
   try {
-    console.log(`[Saving] - Processing champion ${ddragonChampionSlug} with patch ${patchVersion}...`);
+    console.log(`[Saving] - Updating champion ${ddragonChampionSlug} with patch ${patchVersion}...`);
     const client = createClient();
 
     // Check if the champion already exists
     if (!existingChampionId) return false;
 
-    console.log(`[Saving] - Updating existing champion ${ddragonChampionSlug}...`);
     const response = await client.champion.updateChampion.mutate({
       id: existingChampionId,
       thumbnailUrl: championImages.thumbnailUrl ?? '',
@@ -29,7 +28,7 @@ export const updateChampion = async (
       return false;
     }
 
-    console.log(`[Saving] - Champion ${ddragonChampionSlug} updated successfully.`);
+    console.log(`[Saving] - Champion image for ${ddragonChampionSlug} updated successfully.`);
     return true;
   } catch (error) {
     console.error(`[Saving] - Error processing champion ${ddragonChampionSlug}:`, error);

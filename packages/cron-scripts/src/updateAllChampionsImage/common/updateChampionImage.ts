@@ -24,12 +24,10 @@ export const updateChampionImage = async (patchVersion: string, ddragonChampionS
       slug: normalizeStringToSlug(ddragonChampionSlug),
     });
     if (
-      existingChampion.result.status === ResponseStatus.SUCCESS &&
-      existingChampion.result.champion?.lastPatchVersion === patchVersion
+      existingChampion.result.status !== ResponseStatus.SUCCESS ||
+      existingChampion.result.champion?.lastPatchVersion !== patchVersion
     ) {
-      console.log(
-        `[${scriptId}] [Skipping] Champion ${ddragonChampionSlug} already has stats for this patch version: ${patchVersion}`,
-      );
+      console.log(`[${scriptId}] [Skipping] Champion ${ddragonChampionSlug} does not exist`);
       return;
     }
     const existingChampionId = existingChampion.result.champion?.id;
