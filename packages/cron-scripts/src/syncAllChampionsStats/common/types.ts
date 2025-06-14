@@ -1,15 +1,5 @@
 import type { Champion } from '@lol-assistant/db';
 
-export interface SyncResult {
-  total: number;
-  success: number;
-  failed: Array<{
-    slug: string;
-    error: string;
-    attempts: number;
-  }>;
-}
-
 /**
  * Represents the structure of the stats object within
  * DDragon champion data.

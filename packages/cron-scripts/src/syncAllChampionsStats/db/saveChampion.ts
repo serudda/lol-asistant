@@ -26,7 +26,8 @@ export const saveChampion = async (
       await client.champion.createChampion.mutate({
         name: champion.name,
         slug: champion.slug,
-        imageUrl: champion.imageUrl ?? '',
+        thumbnailUrl: champion.thumbnailUrl ?? '',
+        splashUrl: champion.splashUrl ?? '',
         stats: champion.stats as Record<string, any>,
         spells: champion.spells as unknown as Record<string, any>[],
         passive: champion.passive as Record<string, any>,
