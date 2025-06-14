@@ -1,5 +1,5 @@
 import { normalizeChampionSlugFromSource, normalizeStringToSlug, Sources } from '../../common';
-import { DATA_DRAGON_BASE_URL } from './constants';
+import { COMMUNITY_DRAGON_BASE_URL, DATA_DRAGON_BASE_URL } from './constants';
 import type { ChampionSaveInput, DDragonChampionData, DDragonSpell } from './types';
 
 /**
@@ -69,7 +69,9 @@ export const parseChampionRawData = (championData: DDragonChampionData, patchVer
     return {
       slug: normalizeChampionSlugFromSource(normalizeStringToSlug(basicInfo.id), Sources.LEAGUE_OF_GRAPHS), // Use the champion ID as the unique slug
       name: basicInfo.name,
-      imageUrl: `${DATA_DRAGON_BASE_URL}/${patchVersion}/img/champion/${basicInfo.image}`, // Construct full image URL
+      splashUrl: `${COMMUNITY_DRAGON_BASE_URL}/${patchVersion}/champion/${basicInfo.id}/splash-art/centered/skin/0`, // Construct full image URL
+      thumbnailUrl: `${DATA_DRAGON_BASE_URL}/${patchVersion}/img/champion/${basicInfo.image}`, // Construct thumbnail image URL
+      imageUrl: `${DATA_DRAGON_BASE_URL}/${patchVersion}/img/champion/${basicInfo.image}`, // Legacy property, not used
       stats: stats,
       spells: spells,
       passive: passive,

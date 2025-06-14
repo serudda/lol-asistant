@@ -106,7 +106,7 @@ export const MatchupsOverviewCard = ({
           <div key={matchup.opponentChampion.id} className="flex flex-col items-center w-full gap-4">
             <div className="flex flex-col items-center gap-2">
               <Avatar size={AvatarSize.lg}>
-                <Avatar.Image src={matchup.opponentChampion.imageUrl ?? ''} />
+                <Avatar.Image src={matchup.opponentChampion.splashUrl ?? ''} />
               </Avatar>
               <div className="flex flex-col">
                 <span className="text-sm font-medium text-center">{matchup.opponentChampion.name}</span>

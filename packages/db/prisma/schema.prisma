@@ -209,6 +209,8 @@ model Champion {
     id                 String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     name               String            @unique
     slug               String            @unique
+    thumbnailUrl       String?           @map("thumbnail_url")
+    splashUrl          String?           @map("splash_url")
     imageUrl           String?           @map("image_url")
     stats              Json?
     spells             Json?

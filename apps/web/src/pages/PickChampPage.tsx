@@ -54,7 +54,7 @@ export const PickChampPage: React.FC = () => {
       return {
         rank: index + 1,
         champion: counter.opponentChampion.name,
-        imageUrl: counter.opponentChampion.imageUrl ?? '',
+        thumbnailUrl: counter.opponentChampion.thumbnailUrl ?? '',
         role: counter.role,
         rankTier: counter.rankTier,
         overallWinRate: Number((100 - counter.weightedWinRate).toFixed(1)),
@@ -69,7 +69,7 @@ export const PickChampPage: React.FC = () => {
       countersData?.result?.counters?.map((counter) => ({
         value: counter.opponentChampion.slug,
         label: counter.opponentChampion.name,
-        imageUrl: counter.opponentChampion.imageUrl,
+        imageUrl: counter.opponentChampion.thumbnailUrl,
       })) ?? []
     );
   }, [countersData]);
