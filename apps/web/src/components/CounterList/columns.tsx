@@ -60,7 +60,7 @@ export const getStaticColumns = (): ColumnDef<ChampionCounterRow>[] => [
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <Avatar size={AvatarSize.sm}>
-          <Avatar.Image src={row.original.imageUrl} />
+          <Avatar.Image src={row.original.thumbnailUrl} />
           <Avatar.Fallback>{row.original.champion.slice(0, 1)}</Avatar.Fallback>
         </Avatar>
         <span className="text-sm font-medium">{row.original.champion}</span>

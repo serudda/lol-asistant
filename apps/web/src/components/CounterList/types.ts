@@ -10,7 +10,7 @@ export type SourceStat = {
 export type ChampionCounterRow = {
   rank: number;
   champion: string;
-  imageUrl: string;
+  thumbnailUrl: string;
   role: string;
   rankTier: string;
   overallWinRate: number;

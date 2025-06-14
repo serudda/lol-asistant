@@ -10,7 +10,7 @@ const trigger = tv({
 export interface ChampionSearchBarOption {
   value: string;
   label: string;
-  imageUrl?: string | null;
+  thumbnailUrl?: string | null;
 }
 
 interface ChampionSearchBarProps {
@@ -59,7 +59,7 @@ export const ChampionSearchBar = ({
     return data.result.champions.map((champ) => ({
       value: champ.slug,
       label: champ.name,
-      imageUrl: champ.imageUrl,
+      thumbnailUrl: champ.thumbnailUrl,
     }));
   }, [data]);
 
@@ -70,7 +70,7 @@ export const ChampionSearchBar = ({
   const triggerValue = selectedOption ? (
     <span className="flex items-center gap-2">
       <Avatar size={AvatarSize.sm}>
-        <Avatar.Image src={selectedOption.imageUrl as string} />
+        <Avatar.Image src={selectedOption.thumbnailUrl as string} />
       </Avatar>
       {selectedOption.label}
     </span>
@@ -98,7 +98,7 @@ export const ChampionSearchBar = ({
           {options.map((item) => (
             <Combobox.Item key={item.value} value={item.value} onSelect={handleSelect}>
               <Avatar size={AvatarSize.sm}>
-                <Avatar.Image src={item.imageUrl as string} />
+                <Avatar.Image src={item.thumbnailUrl as string} />
                 <Avatar.Fallback>{item.label.slice(0, 2)}</Avatar.Fallback>
               </Avatar>
               {item.label}
