@@ -22,6 +22,10 @@ export const PickChampPage: React.FC = () => {
   const [patch, setPatch] = React.useState<string>();
   const [championFilter, setChampionFilter] = React.useState<string>('');
 
+  // Get basic champion info
+  const { data: championData } = trpc.champion.getBasicBySlug.useQuery({ slug: searchValue });
+
+  // Get champion counters
   const { data: countersData, isLoading: isCountersLoading } = trpc.championMatchup.getChampionCounters.useQuery({
     opponentChampionSlug: searchValue,
     rankTier,
@@ -29,9 +33,10 @@ export const PickChampPage: React.FC = () => {
     patchVersion: patch,
   });
 
+  // Get all sources
   const { data: sourcesData, isLoading: isSourcesLoading } = trpc.source.getAll.useQuery({});
 
-  // get lastest patch
+  // Get lastest patch
   const { data: latestPatchData } = trpc.patchNote.getLatest.useQuery({});
 
   const tableData: Array<ChampionCounterRow> = useMemo(() => {
@@ -77,6 +82,10 @@ export const PickChampPage: React.FC = () => {
     );
   }, [countersData]);
 
+  const championRoles = useMemo(() => {
+    return championData?.result?.champion?.mainRoles ?? [];
+  }, [championData]);
+
   React.useEffect(() => {
     if (latestPatchData?.result?.patchNote) {
       setPatch(latestPatchData.result.patchNote.patchVersion);
@@ -104,9 +113,9 @@ export const PickChampPage: React.FC = () => {
       </div>
 
       <div className="flex flex-col border border-gray-800 rounded-xl p-4 mt-8">
-        <div className="flex items-center p-2 justify-between">
-          <RoleToggleGroup defaultValue={role} onValueChange={setRole} />
-          <PatchCombobox defaultValue={patch} onChange={setPatch} className="max-w-32" />
+        <div className="flex items-center p-2">
+          <RoleToggleGroup defaultValue={role} onValueChange={setRole} roles={championRoles} />
+          <PatchCombobox defaultValue={patch} onChange={setPatch} className="max-w-32 ml-auto" />
         </div>
 
         <hr className="w-full mt-4 mb-8 border-t border-gray-900" />
