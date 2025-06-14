@@ -1,4 +1,4 @@
-import type { LoLChampionRole } from '@lol-assistant/db';
+import { LoLChampionRole } from '@lol-assistant/db';
 import { ToggleAppearance, ToggleGroup, ToggleSize, ToggleVariant } from '@lol-assistant/ui';
 import { RoleIcon } from './RoleIcon/RoleIcon';
 import { tv, type VariantProps } from 'tailwind-variants';
@@ -43,6 +43,16 @@ interface RoleToggleGroupProps extends VariantProps<typeof toggleItem> {
 export const RoleToggleGroup = ({ defaultValue, onValueChange, className, roles = [] }: RoleToggleGroupProps) => {
   if (roles.length === 0) return null;
 
+  const roleOrder = [
+    LoLChampionRole.top,
+    LoLChampionRole.jungle,
+    LoLChampionRole.mid,
+    LoLChampionRole.adc,
+    LoLChampionRole.support,
+  ];
+
+  const sortedRoles = roles.sort((a, b) => roleOrder.indexOf(a) - roleOrder.indexOf(b));
+
   const getItemPosition = (index: number, totalItems: number) => {
     if (totalItems === 1) return 'single';
     if (index === 0) return 'first';
@@ -60,12 +70,12 @@ export const RoleToggleGroup = ({ defaultValue, onValueChange, className, roles 
       onValueChange={onValueChange}
       className={className}
     >
-      {roles.map((role, index) => (
+      {sortedRoles.map((role, index) => (
         <ToggleGroup.Item
           key={role}
           value={role}
           aria-label={role}
-          className={toggleItem({ position: getItemPosition(index, roles.length) })}
+          className={toggleItem({ position: getItemPosition(index, sortedRoles.length) })}
         >
           <RoleIcon role={role} className="size-6" />
         </ToggleGroup.Item>
