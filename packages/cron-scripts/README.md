@@ -63,12 +63,12 @@ In a new terminal (you can run multiple workers for more speed):
 pnpm script:run championScrapeWorker
 ```
 
-- By default, each worker processes 2 jobs in parallel.
-- To increase parallelism (e.g., 5 at a time):
+- **IMPORTANT:** For most setups, set concurrency to 1 to avoid saturating the database:
   ```bash
-  WORKER_CONCURRENCY=5 pnpm script:run championScrapeWorker
+  WORKER_CONCURRENCY=1 pnpm script:run championScrapeWorker
   ```
 - You can run this on multiple machines if they all connect to the same Redis instance.
+- If you have a very powerful DB server, you may experiment with higher concurrency, but 1 is safest for most dev/prod environments.
 
 ### 4. Let it run!
 
@@ -114,11 +114,11 @@ In a new terminal:
 pnpm script:run recalculateWorker
 ```
 
-- To increase parallelism (e.g., 10 jobs at a time):
+- **IMPORTANT:** Set concurrency to 1 to avoid database connection timeouts and server saturation:
   ```bash
-  WORKER_CONCURRENCY=10 pnpm script:run recalculateWorker
+  WORKER_CONCURRENCY=1 pnpm script:run recalculateWorker
   ```
-- You can run multiple workers simultaneously for even faster processing
+- You can run multiple workers simultaneously for even faster processing, but only if your DB can handle it. For most setups, keep concurrency at 1.
 
 ### 4. Monitor progress
 
