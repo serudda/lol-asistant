@@ -40,6 +40,7 @@ export const getLatestPatchNoteCore = async (): Promise<void> => {
     console.log(`[${FLOW_ID}] [CHECK] Patch already exists in DB: ${patchVersion}`);
     return;
   }
+  console.log(`[${FLOW_ID}] [CHECK] Patch not found in DB: ${patchVersion}`);
 
   // ------------------------------------------------------------
 
