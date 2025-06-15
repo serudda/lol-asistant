@@ -29,7 +29,7 @@ export const mobalyticsApiCounterDto = (
   return {
     rank: index + 1,
     sourceChampionSlug,
-    champUrl: `${SourceUrls[Sources.MOBALYTICS]}lol/champions/${sourceChampionSlug}/build/${lowerCaseRole}?rank=${rankTier}`,
+    champUrl: `${SourceUrls[Sources.MOBALYTICS]}/lol/champions/${sourceChampionSlug}/build/${lowerCaseRole}?rank=${rankTier}`,
     role: item.matchupRole,
     source: Sources.MOBALYTICS,
     sourceRankTier: rankTier,
