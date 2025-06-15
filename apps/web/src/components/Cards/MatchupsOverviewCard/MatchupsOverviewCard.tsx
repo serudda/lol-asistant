@@ -1,5 +1,6 @@
 import type { LoLChampionRole, RankTier } from '@lol-assistant/db';
 import { trpc } from '../../../utils/api';
+import { RoleIcon } from '../../RoleIcon/RoleIcon';
 import { MatchupsOverviewCardGroup, type MatchupsOverviewCardGroupType } from '../types';
 import { MatchupsOverviewCardSkeleton } from './Skeleton';
 import { tv } from 'tailwind-variants';
@@ -34,7 +35,7 @@ const card = tv({
 });
 
 const winRateLabel = tv({
-  base: ['text-sm text-center'],
+  base: ['text-center'],
   variants: {
     type: {
       [MatchupsOverviewCardGroup.easiest]: ['text-emerald-400'],
@@ -62,7 +63,7 @@ export interface MatchupsOverviewCardProps {
   /**
    * Patch version.
    */
-  patchVersion: string;
+  patchVersion?: string;
 
   /**
    * Rank tier.
@@ -91,6 +92,8 @@ export const MatchupsOverviewCard = ({
     card: card({ className }),
   };
 
+  if (!patchVersion) return <MatchupsOverviewCardSkeleton />;
+
   const { data, isLoading, error } = trpc.championMatchup.getMatchupOverview.useQuery({
     baseChampionSlug: championSlug,
     role,
@@ -106,7 +109,10 @@ export const MatchupsOverviewCard = ({
   return (
     <div className={classes.container}>
       <div className="flex items-center gap-3">
-        <h3 className={title({ type })}>{Labels[type].title}</h3>
+        <div className="flex items-center gap-1 ml-1">
+          <RoleIcon role={role} className="size-5 text-gray-500" />
+          <h3 className={title({ type })}>{Labels[type].title}</h3>
+        </div>
         <span className="text-gray-500 text-base">({Labels[type].subtitle})</span>
       </div>
       <div className={classes.card}>
@@ -123,9 +129,12 @@ export const MatchupsOverviewCard = ({
                   src={matchup.opponentChampion.splashUrl ?? ''}
                 />
               </div>
-              <div className="flex flex-col">
-                <span className="text-sm font-medium text-center">{matchup.opponentChampion.name}</span>
-                <span className={winRateLabel({ type })}>{(100 - matchup.weightedWinRate).toFixed(1)}%</span>
+              <div className="relative flex flex-col items-center gap-0.5 w-full max-w-[75px]">
+                <span className="text-sm font-medium text-center truncate w-full">{matchup.opponentChampion.name}</span>
+                <span className={winRateLabel({ type })}>
+                  {(100 - matchup.weightedWinRate).toFixed(1)}
+                  <span className="text-xs font-medium">%</span>
+                </span>
               </div>
             </div>
           </div>

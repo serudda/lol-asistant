@@ -47,6 +47,7 @@ export type BasicChampion = Pick<
   Champion,
   'id' | 'name' | 'slug' | 'thumbnailUrl' | 'splashUrl' | 'mainRoles' | 'lastPatchVersion'
 >;
+export type BasicChampionResponse = ApiResponse<{ champion: BasicChampion }>;
 export type BasicChampionsResponse = ApiResponse<{ champions: Array<BasicChampion> }>;
 
 // Champion Matchup
