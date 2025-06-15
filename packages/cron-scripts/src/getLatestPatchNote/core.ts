@@ -1,4 +1,5 @@
-import { riotToPatchVersion } from '@lol-assistant/api';
+import { ResponseStatus, riotToPatchVersion } from '@lol-assistant/api';
+import { getLastestPatch } from '../db/getLastestPatch';
 import { summarizePatchHandler } from './ai/summarizePatch/handler';
 import { FLOW_ID, PATCH_TAG_URL } from './common/constants';
 import { scrapLatestPatchNotes } from './common/scrapLatestPatchNote';
@@ -32,7 +33,18 @@ export const getLatestPatchNoteCore = async (): Promise<void> => {
   }
   // ------------------------------------------------------------
 
-  // 3. Summarize patch notes
+  // 3. Check if patch already exists
+  console.log(`[${FLOW_ID}] [CHECK] Checking if patch already exists...`);
+  const response = await getLastestPatch();
+  if (response.result.status === ResponseStatus.SUCCESS && response.result.patchNote?.patchVersion === patchVersion) {
+    console.log(`[${FLOW_ID}] [CHECK] Patch already exists in DB: ${patchVersion}`);
+    return;
+  }
+  console.log(`[${FLOW_ID}] [CHECK] Patch not found in DB: ${patchVersion}`);
+
+  // ------------------------------------------------------------
+
+  // 4. Summarize patch notes
   console.log(`[${FLOW_ID}] [AI] Summarizing patch notes...`);
   let summary: string;
   try {
@@ -45,7 +57,7 @@ export const getLatestPatchNoteCore = async (): Promise<void> => {
 
   // ------------------------------------------------------------
 
-  // 4. Save to DB
+  // 5. Save to DB
   console.log(`[${FLOW_ID}] [DB] Saving patch notes to database...`);
   try {
     await saveNewPatch(summary, patchVersion, patchNotes.patchVersion, patchNotes.publishedDate);
