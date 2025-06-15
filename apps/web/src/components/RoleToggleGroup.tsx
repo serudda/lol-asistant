@@ -27,9 +27,9 @@ interface RoleToggleGroupProps extends VariantProps<typeof toggleItem> {
   roles: Array<LoLChampionRole>;
 
   /**
-   * The value of the champion.
+   * The value of the selected role.
    */
-  defaultValue?: LoLChampionRole;
+  value: LoLChampionRole;
 
   /**
    * The function to call when the value changes.
@@ -40,7 +40,7 @@ interface RoleToggleGroupProps extends VariantProps<typeof toggleItem> {
 /**
  * A toggle group for selecting a role.
  */
-export const RoleToggleGroup = ({ defaultValue, onValueChange, className, roles = [] }: RoleToggleGroupProps) => {
+export const RoleToggleGroup = ({ value, onValueChange, className, roles = [] }: RoleToggleGroupProps) => {
   if (roles.length === 0) return null;
 
   const roleOrder = [
@@ -66,7 +66,7 @@ export const RoleToggleGroup = ({ defaultValue, onValueChange, className, roles 
       appearance={ToggleAppearance.outlined}
       size={ToggleSize.lg}
       type="single"
-      defaultValue={defaultValue}
+      value={value}
       onValueChange={onValueChange}
       className={className}
     >

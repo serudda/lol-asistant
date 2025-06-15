@@ -86,6 +86,15 @@ export const PickChampPage: React.FC = () => {
     return championData?.result?.champion?.mainRoles ?? [];
   }, [championData]);
 
+  // Ensure the selected role is always valid for the current champion
+  React.useEffect(() => {
+    // Filter out possible undefined in championRoles
+    const validRoles = championRoles.filter(Boolean);
+    if (validRoles.length > 0 && !validRoles.includes(role)) {
+      if (validRoles[0]) setRole(validRoles[0]);
+    }
+  }, [championRoles, role]);
+
   React.useEffect(() => {
     if (latestPatchData?.result?.patchNote) {
       setPatch(latestPatchData.result.patchNote.patchVersion);
@@ -114,7 +123,7 @@ export const PickChampPage: React.FC = () => {
 
       <div className="flex flex-col border border-gray-800 rounded-xl p-4 mt-8">
         <div className="flex items-center p-2">
-          <RoleToggleGroup defaultValue={role} onValueChange={setRole} roles={championRoles} />
+          <RoleToggleGroup value={role} onValueChange={setRole} roles={championRoles} />
           <PatchCombobox defaultValue={patch} onChange={setPatch} className="max-w-32 ml-auto" />
         </div>
 
