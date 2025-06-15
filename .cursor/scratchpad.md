@@ -261,12 +261,24 @@ Puntos Clave y Directorios Principales:
 - Documentar la arquitectura, uso, escalado y monitoreo en el README de cron-scripts.
 - _Criterio de Éxito:_ El sistema permite lanzar el scraping de los 170 campeones sin intervención manual, escalando a varios workers/máquinas, con reintentos automáticos, monitoreo de progreso y fácil extensión a nuevos batch jobs.
 
+**[DONE] Implementar Job Queue para recálculo paralelo de Champion Matchup Stats**
+
+- Crear `enqueueRecalculateJobs.ts`: script para encolar jobs de recálculo, uno por campeón, obteniendo automáticamente el último patch de la BD.
+- Crear `recalculateWorker.ts`: worker que procesa jobs de recálculo ejecutando la lógica extraída de `recalculateChampMatchupStats.ts`.
+- Extraer y adaptar la lógica core de `recalculateChampMatchupStats.ts` para funcionar dentro del worker system.
+- Configurar concurrencia por worker (variable `WORKER_CONCURRENCY`, default: 5).
+- Implementar manejo de errores, reintentos automáticos y logging detallado por campeón.
+- Documentar el nuevo sistema en el README de cron-scripts con ejemplos de uso y monitoreo via Redis CLI.
+- Agregar sección completa de monitoreo con Redis CLI: comandos para revisar estado de colas, jobs completados, fallidos, en espera, detalles de jobs individuales y limpieza.
+- _Criterio de Éxito:_ ✅ Completado. Es posible ejecutar `enqueueRecalculateJobs` seguido de `recalculateWorker` para procesar el recálculo de stats de todos los campeones en paralelo. Sistema verificado con 170 jobs encolados correctamente, monitoreables via Redis CLI.
+
 ## Executor Comments or Assistance Requests
 
 - OP.GG fetcher ahora es robusto, extensible y alineado con el resto del sistema. El mapeo de enums internos permite agregar nuevas fuentes sin fricción. Listo para revisión/merge.
 - **Task LOL-35 (U.GG):** Necesito ayuda con el primer paso: investigar la fuente de datos de U.GG (API interna o scraping) para obtener los datos de counters. Por favor, proporciona la URL, método, headers (si aplica) y estructura de la respuesta encontrada. -> Scraping HTML confirmado.
 - **Progress (08-May):** Started implementation of sub-task 1 – created tRPC endpoint (`sourceMatchupStat.create`) with schema, controller, service (`upsertSourceMatchupStat`) and router; added to root router. Next: DTO definitions per source + save functions.
 - **Progress (09-May):** User has implemented direct API endpoints for `Source` (CRUD) and `SourceMatchupStat` (`create` taking IDs). This completes a revised version of sub-task 1. The logic for resolving/creating dependencies (`Champion`, `PatchNote`, `ChampionMatchup`) is now planned to be handled within the `save<Source>Matchups` functions in `cron-scripts`.
+- **Complete (18-Jan):** Job Queue para recálculo paralelo implementado exitosamente. Sistema verificado con 170 jobs encolados correctamente usando `enqueueRecalculateJobs.ts`. Redis CLI funcionando perfectamente para monitoreo en tiempo real. README actualizado con sección completa de monitoreo que incluye todos los comandos necesarios para inspeccionar estado de colas, jobs completados/fallidos/en espera, detalles individuales de jobs y comandos de limpieza. El sistema está listo para procesamiento paralelo masivo de recálculo de stats.
 
 ## Lessons
 

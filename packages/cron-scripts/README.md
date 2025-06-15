@@ -83,7 +83,166 @@ docker stop redis-bullmq
 
 ---
 
+## ⚡ Champion Matchup Stats Recalculation: Parallel Processing
+
+For recalculating champion matchup stats across all champions in parallel:
+
+### 1. Start Redis (if not already running)
+
+```bash
+docker start redis-bullmq
+# or create new container:
+# docker run -d --name redis-bullmq -p 6379:6379 redis:7-alpine
+```
+
+### 2. Enqueue recalculation jobs for all champions
+
+From the project root:
+
+```bash
+pnpm script:run enqueueRecalculateJobs
+```
+
+- This automatically detects the latest patch version from the database
+- Enqueues one job per champion (typically ~170 jobs)
+
+### 3. Start recalculation worker(s)
+
+In a new terminal:
+
+```bash
+pnpm script:run recalculateWorker
+```
+
+- To increase parallelism (e.g., 10 jobs at a time):
+  ```bash
+  WORKER_CONCURRENCY=10 pnpm script:run recalculateWorker
+  ```
+- You can run multiple workers simultaneously for even faster processing
+
+### 4. Monitor progress
+
+Use Redis CLI to track progress:
+
+```bash
+# Check remaining jobs
+redis-cli LLEN bull:recalculate-stats:wait
+
+# Check completed jobs
+redis-cli LLEN bull:recalculate-stats:completed
+
+# Real-time monitoring
+watch -n 2 'redis-cli LLEN bull:recalculate-stats:wait'
+```
+
+---
+
 **Tip:** You can automate the enqueue step with a cron job or GitHub Action if you want this to be fully hands-off.
+
+## 🔍 Monitoring Job Queues with Redis CLI
+
+You can inspect the status of your job queues directly using Redis CLI commands:
+
+### Check if Redis is running
+
+```bash
+redis-cli ping
+# Should return: PONG
+```
+
+### View all BullMQ queues
+
+```bash
+redis-cli KEYS "bull:*"
+```
+
+### Check queue status
+
+#### Recalculate Stats Queue
+
+```bash
+# Jobs waiting to be processed
+redis-cli LLEN bull:recalculate-stats:wait
+
+# Jobs currently being processed
+redis-cli LLEN bull:recalculate-stats:active
+
+# Jobs completed successfully
+redis-cli LLEN bull:recalculate-stats:completed
+
+# Jobs that failed
+redis-cli LLEN bull:recalculate-stats:failed
+```
+
+#### Champion Scraping Queue
+
+```bash
+# Jobs waiting to be processed
+redis-cli LLEN bull:champion-scrape:wait
+
+# Jobs currently being processed
+redis-cli LLEN bull:champion-scrape:active
+
+# Jobs completed successfully
+redis-cli LLEN bull:champion-scrape:completed
+
+# Jobs that failed
+redis-cli LLEN bull:champion-scrape:failed
+```
+
+### View job details
+
+```bash
+# See next 5 jobs waiting in recalculate queue
+redis-cli LRANGE bull:recalculate-stats:wait 0 4
+
+# See all jobs waiting in champion scrape queue
+redis-cli LRANGE bull:champion-scrape:wait 0 -1
+
+# View details of a specific job (replace 123 with job ID)
+redis-cli HGETALL bull:recalculate-stats:123
+```
+
+### Monitor progress in real-time
+
+You can create a simple monitoring loop:
+
+```bash
+# Watch recalculate queue progress
+watch -n 2 'echo "=== RECALCULATE STATS QUEUE ===" && echo "Waiting: $(redis-cli LLEN bull:recalculate-stats:wait)" && echo "Active: $(redis-cli LLEN bull:recalculate-stats:active)" && echo "Completed: $(redis-cli LLEN bull:recalculate-stats:completed)" && echo "Failed: $(redis-cli LLEN bull:recalculate-stats:failed)"'
+```
+
+### Clear completed jobs (cleanup)
+
+```bash
+# Clear completed jobs from recalculate queue
+redis-cli DEL bull:recalculate-stats:completed
+
+# Clear completed jobs from champion scrape queue
+redis-cli DEL bull:champion-scrape:completed
+
+# Clear failed jobs (if you want to retry them)
+redis-cli DEL bull:recalculate-stats:failed
+redis-cli DEL bull:champion-scrape:failed
+```
+
+### Example monitoring workflow
+
+```bash
+# 1. Check initial queue state
+redis-cli LLEN bull:recalculate-stats:wait
+# Output: (integer) 170
+
+# 2. Start your worker
+pnpm script:run recalculateWorker
+
+# 3. Monitor progress (in another terminal)
+redis-cli LLEN bull:recalculate-stats:wait     # Should decrease
+redis-cli LLEN bull:recalculate-stats:completed # Should increase
+
+# 4. Check for failures
+redis-cli LLEN bull:recalculate-stats:failed
+```
 
 Package for managing and executing scheduled scripts, both locally and through Vercel Cron Jobs.
 
