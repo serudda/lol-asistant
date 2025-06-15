@@ -45,7 +45,9 @@ const enqueueChampionScrapeJobs = async () => {
       tiers: DEFAULT_TIERS,
     };
     await queue.add('scrape', job);
-    console.log(`[enqueue] Enqueued job for ${champ.slug} (${champ.mainRoles.join(', ')})`);
+    console.log(
+      `[enqueue] Enqueued job for ${champ.slug} (${champ.mainRoles.join(', ')}) for ${champ.lastPatchVersion}`,
+    );
   }
 
   // ------------------------------------------------------------
