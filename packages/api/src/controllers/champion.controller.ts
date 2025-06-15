@@ -167,7 +167,8 @@ export const getBasicChampionBySlugHandler = async ({
  * Get all champions (basic info).
  *
  * @param ctx Ctx.
- * @returns List of champions (id, name, slug, imageUrl).
+ * @returns List of champions (id, name, slug, thumbnailUrl,
+ *   splashUrl, mainRoles, lastPatchVersion).
  */
 export const getAllBasicChampionsHandler = async ({
   ctx,

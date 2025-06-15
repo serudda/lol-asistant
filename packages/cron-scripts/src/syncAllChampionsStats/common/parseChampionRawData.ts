@@ -70,7 +70,6 @@ export const parseChampionRawData = (championData: DDragonChampionData, patchVer
       name: basicInfo.name,
       splashUrl: `${SourceUrls[Sources.COMMUNITY_DRAGON]}/${patchVersion}/champion/${basicInfo.id}/splash-art/centered/skin/0`, // Construct full image URL
       thumbnailUrl: `${SourceUrls[Sources.DATA_DRAGON]}/${patchVersion}/img/champion/${basicInfo.image}`, // Construct thumbnail image URL
-      imageUrl: `${SourceUrls[Sources.DATA_DRAGON]}/${patchVersion}/img/champion/${basicInfo.image}`, // Legacy property, not used
       stats: stats,
       spells: spells,
       passive: passive,

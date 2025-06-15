@@ -211,7 +211,6 @@ model Champion {
     slug               String            @unique
     thumbnailUrl       String?           @map("thumbnail_url")
     splashUrl          String?           @map("splash_url")
-    imageUrl           String?           @map("image_url")
     stats              Json?
     spells             Json?
     passive            Json?
