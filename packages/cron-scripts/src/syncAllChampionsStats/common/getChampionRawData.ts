@@ -1,4 +1,4 @@
-import { DATA_DRAGON_BASE_URL, LANGUAGE } from './constants';
+import { Sources, SourceUrls } from '../../common';
 import type { DDragonChampionData } from './types';
 import axios from 'axios';
 
@@ -10,7 +10,7 @@ import axios from 'axios';
  * @param patchVersion - The game version (e.g., '14.1.1').
  */
 export const getChampionRawData = async (championId: string, patchVersion: string): Promise<DDragonChampionData> => {
-  const url = `${DATA_DRAGON_BASE_URL}/${patchVersion}/data/${LANGUAGE}/champion/${championId}.json`;
+  const url = `${SourceUrls[Sources.DATA_DRAGON]}/cdn/${patchVersion}/data/en_US/champion/${championId}.json`;
   console.log(`[getChampionRawData] Fetching data from: ${url}`);
 
   try {

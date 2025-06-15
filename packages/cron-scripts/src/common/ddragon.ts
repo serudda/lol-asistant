@@ -1,4 +1,4 @@
-import { DATA_DRAGON_BASE_URL, LANGUAGE } from './constants';
+import { Sources, SourceUrls } from './constants';
 import axios from 'axios';
 
 /**
@@ -12,7 +12,7 @@ import axios from 'axios';
  *   invalid.
  */
 export const getChampionSlugList = async (patchVersion: string): Promise<Array<string>> => {
-  const url = `${DATA_DRAGON_BASE_URL}/${patchVersion}/data/${LANGUAGE}/champion.json`;
+  const url = `${SourceUrls[Sources.DATA_DRAGON]}/cdn/${patchVersion}/data/en_US/champion.json`;
 
   try {
     const response = await axios.get(url);

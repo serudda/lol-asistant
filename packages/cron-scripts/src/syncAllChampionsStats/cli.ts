@@ -12,3 +12,8 @@ export const syncAllChampionsStats = async (): Promise<void> => {
     process.exit(1);
   }
 };
+
+/**
+ * The entry point for this script is in
+ * `src/scripts/syncAllChampionsStats.entry.ts`
+ */

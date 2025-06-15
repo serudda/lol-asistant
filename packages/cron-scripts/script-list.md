@@ -49,3 +49,25 @@ pnpm script:run recalculateChampMatchupStats patchVersion=<game_version>
 
 This script recalculates the stats for all champion matchups
 for a specific patch version (weightedWinRate and totalMatches).
+
+---
+
+## Update All Champions Images
+
+```
+pnpm script:run updateAllChampionsImage
+```
+
+This script updates the splash and thumbnail images for all champions using the latest patch version. It fetches images from:
+
+- Data Dragon (for thumbnails)
+- Community Dragon (for splash arts)
+
+The script will:
+
+1. Get the latest patch version
+2. Fetch all champion slugs
+3. Update each champion's image URLs in the database
+4. Skip champions that are already up to date
+
+---

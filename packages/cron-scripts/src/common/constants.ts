@@ -3,6 +3,8 @@ export enum Sources {
   OP_GG = 'op.gg',
   U_GG = 'u.gg',
   LEAGUE_OF_GRAPHS = 'leagueofgraphs',
+  DATA_DRAGON = 'ddragon',
+  COMMUNITY_DRAGON = 'communitydragon',
 }
 
 export const SourceUrls = {
@@ -10,6 +12,8 @@ export const SourceUrls = {
   [Sources.OP_GG]: 'https://op.gg',
   [Sources.U_GG]: 'https://u.gg',
   [Sources.LEAGUE_OF_GRAPHS]: 'https://www.leagueofgraphs.com',
+  [Sources.DATA_DRAGON]: 'https://ddragon.leagueoflegends.com',
+  [Sources.COMMUNITY_DRAGON]: 'https://cdn.communitydragon.org',
 };
 
 /**
@@ -31,6 +35,12 @@ export const ChampionSlugOverrides: Record<string, Partial<Record<Sources, strin
     [Sources.OP_GG]: 'nunu',
     [Sources.MOBALYTICS]: 'nunu',
     [Sources.LEAGUE_OF_GRAPHS]: 'nunu',
+  },
+  renataglasc: {
+    [Sources.MOBALYTICS]: 'renata',
+    [Sources.OP_GG]: 'renata',
+    [Sources.U_GG]: 'renata',
+    [Sources.LEAGUE_OF_GRAPHS]: 'renata',
   },
 };
 

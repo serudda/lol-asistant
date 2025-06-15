@@ -1,7 +1,7 @@
 import { ResponseStatus } from '@lol-assistant/api';
+import { getChampionSlugList } from '../common/ddragon';
+import type { SyncChampionResult } from '../common/types';
 import { FLOW_ID, MAX_RETRIES, RETRY_DELAY_MS } from './common/constants';
-import { getChampionSlugList } from './common/getChampionSlugList';
-import type { SyncResult } from './common/types';
 import { updateChampionStats } from './common/updateChampionStats';
 import { getLastestPatch } from './db/getLastestPatch';
 
@@ -10,7 +10,11 @@ import { getLastestPatch } from './db/getLastestPatch';
  *
  * @returns true if successful, false if all retries failed.
  */
-async function updateChampionWithRetry(slug: string, patchVersion: string, result: SyncResult): Promise<boolean> {
+async function updateChampionWithRetry(
+  slug: string,
+  patchVersion: string,
+  result: SyncChampionResult,
+): Promise<boolean> {
   let attempts = 0;
   let lastError: Error | null = null;
 
@@ -70,7 +74,7 @@ export const syncAllChampionsStatsCore = async (): Promise<void> => {
   // 3. Process each champion
   // Process each champion
   console.log(`[${FLOW_ID}] [PROCESSING] Processing ${championSlugs.length} champions...`);
-  const result: SyncResult = {
+  const result: SyncChampionResult = {
     total: championSlugs.length,
     success: 0,
     failed: [],

@@ -1,4 +1,10 @@
-import { ResponseStatus, type BasicChampionsResponse, type ChampionResponse, type Params } from '../common';
+import {
+  ResponseStatus,
+  type BasicChampionResponse,
+  type BasicChampionsResponse,
+  type ChampionResponse,
+  type Params,
+} from '../common';
 import type {
   CreateChampionInputType,
   GetAllBasicChampionsInputType,
@@ -27,6 +33,48 @@ export const getChampionByIdHandler = async ({
     const { id } = input;
     const champion = await ctx.prisma.champion.findUnique({ where: { id } });
 
+    if (!champion)
+      return errorResponse(domain, handlerId, ErrorCodes.Champion.NoChampion, ErrorMessages.Champion.NoChampion);
+
+    return {
+      result: {
+        status: ResponseStatus.SUCCESS,
+        champion,
+      },
+    };
+  } catch (error: unknown) {
+    throw handleError(domain, handlerId, error);
+  }
+};
+
+/**
+ * Get champion by ID (basic info).
+ *
+ * @param ctx Ctx.
+ * @param input GetChampionByIdInputType.
+ * @returns Champion.
+ */
+export const getBasicChampionByIdHandler = async ({
+  ctx,
+  input,
+}: Params<GetChampionByIdInputType>): Promise<BasicChampionResponse> => {
+  const handlerId = 'getChampionBasicByIdHandler';
+  try {
+    const { id } = input;
+    const champion = await ctx.prisma.champion.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        thumbnailUrl: true,
+        splashUrl: true,
+        mainRoles: true,
+        lastPatchVersion: true,
+      },
+    });
+
+    // If the champion does not exist, return an error
     if (!champion)
       return errorResponse(domain, handlerId, ErrorCodes.Champion.NoChampion, ErrorMessages.Champion.NoChampion);
 
@@ -73,6 +121,49 @@ export const getChampionBySlugHandler = async ({
 };
 
 /**
+ * Get champion by slug (basic info).
+ *
+ * @param ctx Ctx.
+ * @param input GetChampionBySlugInputType.
+ * @returns Champion.
+ */
+export const getBasicChampionBySlugHandler = async ({
+  ctx,
+  input,
+}: Params<GetChampionBySlugInputType>): Promise<BasicChampionResponse> => {
+  const handlerId = 'getChampionBasicBySlugHandler';
+
+  try {
+    const { slug } = input;
+    const champion = await ctx.prisma.champion.findUnique({
+      where: { slug },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        thumbnailUrl: true,
+        splashUrl: true,
+        mainRoles: true,
+        lastPatchVersion: true,
+      },
+    });
+
+    // If the champion does not exist, return an error
+    if (!champion)
+      return errorResponse(domain, handlerId, ErrorCodes.Champion.NoChampion, ErrorMessages.Champion.NoChampion);
+
+    return {
+      result: {
+        status: ResponseStatus.SUCCESS,
+        champion,
+      },
+    };
+  } catch (error: unknown) {
+    throw handleError(domain, handlerId, error);
+  }
+};
+
+/**
  * Get all champions (basic info).
  *
  * @param ctx Ctx.
@@ -89,8 +180,10 @@ export const getAllBasicChampionsHandler = async ({
         id: true,
         name: true,
         slug: true,
-        imageUrl: true,
+        thumbnailUrl: true,
+        splashUrl: true,
         mainRoles: true,
+        lastPatchVersion: true,
       },
     });
 
