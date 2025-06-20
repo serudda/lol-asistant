@@ -272,6 +272,18 @@ Puntos Clave y Directorios Principales:
 - Agregar sección completa de monitoreo con Redis CLI: comandos para revisar estado de colas, jobs completados, fallidos, en espera, detalles de jobs individuales y limpieza.
 - _Criterio de Éxito:_ ✅ Completado. Es posible ejecutar `enqueueRecalculateJobs` seguido de `recalculateWorker` para procesar el recálculo de stats de todos los campeones en paralelo. Sistema verificado con 170 jobs encolados correctamente, monitoreables via Redis CLI.
 
+**[PENDING] Implementar Sistema de Rutas con TanStack Router para Páginas de Campeones - https://linear.app/lol-assistant/issue/LOL-71/implement-routing-for-champion-pages**
+
+- Instalar `@tanstack/react-router` y `@tanstack/router-vite-plugin` en el workspace `apps/web`.
+- Configurar el plugin de Vite para el router en `apps/web/vite.config.ts`.
+- Crear la estructura de archivos para las rutas file-based (ej. `apps/web/src/routes/`).
+- Definir la ruta raíz en `apps/web/src/routes/index.tsx` y mover el contenido de `PickChampPage` a este nuevo archivo.
+- Crear un layout para las rutas de campeones en `apps/web/src/routes/champions.tsx`.
+- Crear la ruta dinámica para campeones en `apps/web/src/routes/champions/$championName.tsx`.
+- Implementar un componente básico en la ruta dinámica que muestre el nombre del campeón obtenido de los parámetros de la ruta.
+- Refactorizar `main.tsx` y `App.tsx` para inicializar y renderizar el nuevo sistema de enrutamiento.
+- _Criterio de Éxito:_ La aplicación compila correctamente. Navegar a `/` muestra la página de selección de campeones. Navegar a `/champions/neeko` muestra una página que indica "Champion: neeko". La navegación entre páginas funciona sin recargar la página completa.
+
 ## Executor Comments or Assistance Requests
 
 - OP.GG fetcher ahora es robusto, extensible y alineado con el resto del sistema. El mapeo de enums internos permite agregar nuevas fuentes sin fricción. Listo para revisión/merge.
