@@ -9,55 +9,58 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ChampionsRouteImport } from './routes/champions'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ChampionsIndexRouteImport } from './routes/champions/index'
+import { Route as ChampionsChampionNameRouteImport } from './routes/champions/$championName'
 
-const ChampionsRoute = ChampionsRouteImport.update({
-  id: '/champions',
-  path: '/champions',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChampionsIndexRoute = ChampionsIndexRouteImport.update({
+  id: '/champions/',
+  path: '/champions/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChampionsChampionNameRoute = ChampionsChampionNameRouteImport.update({
+  id: '/champions/$championName',
+  path: '/champions/$championName',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/champions': typeof ChampionsRoute
+  '/champions/$championName': typeof ChampionsChampionNameRoute
+  '/champions': typeof ChampionsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/champions': typeof ChampionsRoute
+  '/champions/$championName': typeof ChampionsChampionNameRoute
+  '/champions': typeof ChampionsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/champions': typeof ChampionsRoute
+  '/champions/$championName': typeof ChampionsChampionNameRoute
+  '/champions/': typeof ChampionsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/champions'
+  fullPaths: '/' | '/champions/$championName' | '/champions'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/champions'
-  id: '__root__' | '/' | '/champions'
+  to: '/' | '/champions/$championName' | '/champions'
+  id: '__root__' | '/' | '/champions/$championName' | '/champions/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ChampionsRoute: typeof ChampionsRoute
+  ChampionsChampionNameRoute: typeof ChampionsChampionNameRoute
+  ChampionsIndexRoute: typeof ChampionsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/champions': {
-      id: '/champions'
-      path: '/champions'
-      fullPath: '/champions'
-      preLoaderRoute: typeof ChampionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -65,12 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/champions/': {
+      id: '/champions/'
+      path: '/champions'
+      fullPath: '/champions'
+      preLoaderRoute: typeof ChampionsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/champions/$championName': {
+      id: '/champions/$championName'
+      path: '/champions/$championName'
+      fullPath: '/champions/$championName'
+      preLoaderRoute: typeof ChampionsChampionNameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ChampionsRoute: ChampionsRoute,
+  ChampionsChampionNameRoute: ChampionsChampionNameRoute,
+  ChampionsIndexRoute: ChampionsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useMemo } from 'react';
 import { LoLChampionRole, RankTier } from '@lol-assistant/db';
-import type { ChampionCounterRow, ChampionFilterOption } from '../components';
+import type { ChampionCounterRow, ChampionFilterOption } from '../../components';
 import {
   ChampionFilter,
   ChampionSearchBar,
@@ -10,10 +10,10 @@ import {
   MatchupsOverviewCard,
   PatchCombobox,
   RoleToggleGroup,
-} from '../components';
-import { CounterListSkeleton } from '../components/CounterList/Skeleton';
-import type { SourceStat } from '../components/CounterList/types';
-import { trpc } from '../utils/api';
+} from '../../components';
+import { CounterListSkeleton } from '../../components/CounterList/Skeleton';
+import type { SourceStat } from '../../components/CounterList/types';
+import { trpc } from '../../utils/api';
 import { createFileRoute } from '@tanstack/react-router';
 
 function ChampionsPage() {
@@ -175,6 +175,6 @@ function ChampionsPage() {
   );
 }
 
-export const Route = createFileRoute('/champions')({
+export const Route = createFileRoute('/champions/')({
   component: ChampionsPage,
 });
