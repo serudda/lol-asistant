@@ -1,3 +1,8 @@
 import baseConfig from '@lol-assistant/eslint-config';
 
-export default [...baseConfig];
+export default [
+  ...baseConfig,
+  {
+    ignores: ['**/routeTree.gen.ts'],
+  },
+];
