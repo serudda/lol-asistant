@@ -13,15 +13,26 @@ import {
 import { CounterListSkeleton } from '../../components/CounterList/Skeleton';
 import type { SourceStat } from '../../components/CounterList/types';
 import { trpc } from '../../utils/api';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate, useSearch } from '@tanstack/react-router';
+import { z } from 'zod';
 
 const ChampionDetailPage = () => {
   const { championName } = Route.useParams();
+  const search = useSearch({ from: '/champions/$championName' });
+  const navigate = useNavigate({ from: '/champions/$championName' });
+
+  // Use role from search params, fallback to 'jungle' as default
   const [searchValue, setSearchValue] = useState(championName);
   const [rankTier] = useState<RankTier>(RankTier.silver);
-  const [role, setRole] = useState<LoLChampionRole>(LoLChampionRole.jungle);
+  const [role, setRole] = useState<LoLChampionRole>((search.role as LoLChampionRole) || LoLChampionRole.jungle);
   const [patch, setPatch] = useState<string>();
   const [championFilter, setChampionFilter] = useState<string>('');
+
+  // Update search param when role changes
+  useEffect(() => {
+    if (search.role === role) return;
+    void navigate({ search: { ...search, role } });
+  }, [role, search.role]);
 
   // Get basic champion info
   const { data: championData } = trpc.champion.getBasicBySlug.useQuery({ slug: searchValue });
@@ -94,7 +105,7 @@ const ChampionDetailPage = () => {
     if (validRoles.length > 0 && !validRoles.includes(role)) {
       if (validRoles[0]) setRole(validRoles[0]);
     }
-  }, [championRoles, role]);
+  }, [championRoles]);
 
   useEffect(() => {
     if (latestPatchData?.result?.patchNote) {
@@ -176,5 +187,9 @@ const ChampionDetailPage = () => {
 };
 
 export const Route = createFileRoute('/champions/$championName')({
+  validateSearch: z.object({
+    role: z.string().optional(),
+    tier: z.string().optional(),
+  }),
   component: ChampionDetailPage,
 });
