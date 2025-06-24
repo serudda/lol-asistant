@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 
-function HomePage() {
+const HomePage = () => {
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-96">
       <h1 className="text-4xl font-bold text-center mb-8">Welcome to LoL Assistant</h1>
@@ -15,7 +15,7 @@ function HomePage() {
       </Link>
     </div>
   );
-}
+};
 
 export const Route = createFileRoute('/')({
   component: HomePage,
