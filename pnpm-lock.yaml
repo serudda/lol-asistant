@@ -113,6 +113,9 @@ importers:
       tailwind-variants:
         specifier: ^1.0.0
         version: 1.0.0(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.7.4)(typescript@5.7.3)))
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.67
     devDependencies:
       '@eslint/js':
         specifier: ^9.21.0
@@ -228,10 +231,10 @@ importers:
     dependencies:
       '@langchain/core':
         specifier: ^0.3.49
-        version: 0.3.49(openai@4.96.0(ws@8.18.1)(zod@3.23.8))
+        version: 0.3.49(openai@4.96.0(ws@8.18.1)(zod@3.25.67))
       '@langchain/openai':
         specifier: ^0.5.7
-        version: 0.5.7(@langchain/core@0.3.49(openai@4.96.0(ws@8.18.1)(zod@3.23.8)))(ws@8.18.1)
+        version: 0.5.7(@langchain/core@0.3.49(openai@4.96.0(ws@8.18.1)(zod@3.25.67)))(ws@8.18.1)
       '@lol-assistant/api':
         specifier: workspace:*
         version: link:../api
@@ -6854,30 +6857,30 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@langchain/core@0.3.49(openai@4.96.0(ws@8.18.1)(zod@3.23.8))':
+  '@langchain/core@0.3.49(openai@4.96.0(ws@8.18.1)(zod@3.25.67))':
     dependencies:
       '@cfworker/json-schema': 4.1.1
       ansi-styles: 5.2.0
       camelcase: 6.3.0
       decamelize: 1.2.0
       js-tiktoken: 1.0.20
-      langsmith: 0.3.22(openai@4.96.0(ws@8.18.1)(zod@3.23.8))
+      langsmith: 0.3.22(openai@4.96.0(ws@8.18.1)(zod@3.25.67))
       mustache: 4.2.0
       p-queue: 6.6.2
       p-retry: 4.6.2
       uuid: 10.0.0
-      zod: 3.23.8
-      zod-to-json-schema: 3.24.5(zod@3.23.8)
+      zod: 3.25.67
+      zod-to-json-schema: 3.24.5(zod@3.25.67)
     transitivePeerDependencies:
       - openai
 
-  '@langchain/openai@0.5.7(@langchain/core@0.3.49(openai@4.96.0(ws@8.18.1)(zod@3.23.8)))(ws@8.18.1)':
+  '@langchain/openai@0.5.7(@langchain/core@0.3.49(openai@4.96.0(ws@8.18.1)(zod@3.25.67)))(ws@8.18.1)':
     dependencies:
-      '@langchain/core': 0.3.49(openai@4.96.0(ws@8.18.1)(zod@3.23.8))
+      '@langchain/core': 0.3.49(openai@4.96.0(ws@8.18.1)(zod@3.25.67))
       js-tiktoken: 1.0.20
-      openai: 4.96.0(ws@8.18.1)(zod@3.23.8)
-      zod: 3.23.8
-      zod-to-json-schema: 3.24.5(zod@3.23.8)
+      openai: 4.96.0(ws@8.18.1)(zod@3.25.67)
+      zod: 3.25.67
+      zod-to-json-schema: 3.24.5(zod@3.25.67)
     transitivePeerDependencies:
       - encoding
       - ws
@@ -10063,7 +10066,7 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  langsmith@0.3.22(openai@4.96.0(ws@8.18.1)(zod@3.23.8)):
+  langsmith@0.3.22(openai@4.96.0(ws@8.18.1)(zod@3.25.67)):
     dependencies:
       '@types/uuid': 10.0.0
       chalk: 4.1.2
@@ -10073,7 +10076,7 @@ snapshots:
       semver: 7.6.3
       uuid: 10.0.0
     optionalDependencies:
-      openai: 4.96.0(ws@8.18.1)(zod@3.23.8)
+      openai: 4.96.0(ws@8.18.1)(zod@3.25.67)
 
   language-subtag-registry@0.3.23: {}
 
@@ -10588,7 +10591,7 @@ snapshots:
       is-docker: 2.2.1
       is-wsl: 2.2.0
 
-  openai@4.96.0(ws@8.18.1)(zod@3.23.8):
+  openai@4.96.0(ws@8.18.1)(zod@3.25.67):
     dependencies:
       '@types/node': 18.19.87
       '@types/node-fetch': 2.6.12
@@ -10599,7 +10602,7 @@ snapshots:
       node-fetch: 2.7.0
     optionalDependencies:
       ws: 8.18.1
-      zod: 3.23.8
+      zod: 3.25.67
     transitivePeerDependencies:
       - encoding
 
@@ -11885,9 +11888,9 @@ snapshots:
 
   yocto-queue@1.1.1: {}
 
-  zod-to-json-schema@3.24.5(zod@3.23.8):
+  zod-to-json-schema@3.24.5(zod@3.25.67):
     dependencies:
-      zod: 3.23.8
+      zod: 3.25.67
 
   zod@3.23.8: {}
 
