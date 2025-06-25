@@ -39,6 +39,15 @@ const ChampionDetailPage = () => {
     void navigate({ search: { ...search, role } });
   }, [role, search.role]);
 
+  // Handle champion search bar change - navigate to new champion
+  const handleChampionChange = (newChampionSlug: string) => {
+    void navigate({
+      to: '/champions/$championName',
+      params: { championName: newChampionSlug },
+      search: { ...search },
+    });
+  };
+
   // Get basic champion info
   const { data: championData } = trpc.champion.getBasicBySlug.useQuery({ slug: searchValue });
 
@@ -136,7 +145,7 @@ const ChampionDetailPage = () => {
       <h1 className="text-3xl text-left font-bold mb-4">Pick a Champ</h1>
 
       <div className="w-full">
-        <ChampionSearchBar defaultValue={searchValue} onChange={setSearchValue} />
+        <ChampionSearchBar defaultValue={searchValue} onChange={handleChampionChange} />
       </div>
 
       <div className="flex flex-col border border-gray-800 rounded-xl p-4 mt-8">
