@@ -1,4 +1,5 @@
 import { fileURLToPath } from 'url';
+import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
@@ -17,7 +18,13 @@ const prismaNodeModulesPath = `${getModulePath('@prisma/client')}/node_modules`;
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    tanstackRouter({
+      target: 'react',
+      autoCodeSplitting: true,
+    }),
+    react(),
+  ],
   resolve: {
     alias: {
       '.prisma/client/index-browser': `${prismaNodeModulesPath}/.prisma/client/index-browser.js`,

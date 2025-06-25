@@ -2,6 +2,7 @@
   "extends": "@lol-assistant/typescript-config/bot.json",
   "compilerOptions": {
     "module": "esnext",
+    "moduleResolution": "bundler",
     "paths": {
       "~/*": ["./src/*"]
     }

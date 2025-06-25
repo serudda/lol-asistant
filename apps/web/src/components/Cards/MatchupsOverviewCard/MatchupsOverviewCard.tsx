@@ -3,6 +3,7 @@ import { trpc } from '../../../utils/api';
 import { RoleIcon } from '../../RoleIcon/RoleIcon';
 import { MatchupsOverviewCardGroup, type MatchupsOverviewCardGroupType } from '../types';
 import { MatchupsOverviewCardSkeleton } from './Skeleton';
+import { Link } from '@tanstack/react-router';
 import { tv } from 'tailwind-variants';
 
 const Labels = {
@@ -32,6 +33,10 @@ const title = tv({
 
 const card = tv({
   base: ['flex items-center gap-1', 'ring-1 ring-gray-800 bg-gray-900 rounded-lg', 'w-full p-6 overflow-hidden'],
+});
+
+const matchupItem = tv({
+  base: ['group flex flex-col items-center w-full gap-4', 'cursor-pointer'],
 });
 
 const winRateLabel = tv({
@@ -117,15 +122,21 @@ export const MatchupsOverviewCard = ({
       </div>
       <div className={classes.card}>
         {matchups?.map((matchup) => (
-          <div key={matchup.opponentChampion.id} className="flex flex-col items-center w-full gap-4">
+          <Link
+            key={matchup.opponentChampion.id}
+            to="/champions/$championName"
+            params={{ championName: matchup.opponentChampion.slug }}
+            search={{ role }}
+            className={matchupItem()}
+          >
             <div className="flex flex-col items-center gap-2">
-              <div className="overflow-hidden rounded h-[181px] w-[75px] relative ring-1 ring-gray-800 group">
+              <div className="overflow-hidden rounded h-[181px] w-[75px] relative ring-1 ring-gray-800 group-hover:ring-gray-600">
                 <img
                   alt={matchup.opponentChampion.name}
                   loading="lazy"
                   decoding="async"
                   data-nimg="fill"
-                  className="h-full w-full scale-110 bg-cover relative bg-center bg-no-repeat object-cover"
+                  className="h-full w-full scale-110 bg-cover relative bg-center bg-no-repeat object-cover group-hover:scale-105 transition-all duration-500"
                   src={matchup.opponentChampion.splashUrl ?? ''}
                 />
               </div>
@@ -137,7 +148,7 @@ export const MatchupsOverviewCard = ({
                 </span>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
