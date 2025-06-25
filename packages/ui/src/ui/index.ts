@@ -1,6 +1,7 @@
 export * from './Avatar/Avatar';
 export * from './Buttons';
 export * from './Command/Command';
+export * from './Image/Image';
 export * from './Inputs';
 export * from './Overlays';
 export * from './Spinner/Spinner';
