@@ -28,6 +28,11 @@ const ChampionDetailPage = () => {
   const [patch, setPatch] = useState<string>();
   const [championFilter, setChampionFilter] = useState<string>('');
 
+  // Sync searchValue with championName parameter when it changes
+  useEffect(() => {
+    setSearchValue(championName);
+  }, [championName]);
+
   // Update search param when role changes
   useEffect(() => {
     if (search.role === role) return;
