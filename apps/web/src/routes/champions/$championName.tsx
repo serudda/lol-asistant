@@ -78,7 +78,8 @@ const ChampionDetailPage = () => {
 
       return {
         rank: index + 1,
-        champion: counter.opponentChampion.name,
+        championName: counter.opponentChampion.name,
+        championSlug: counter.opponentChampion.slug,
         thumbnailUrl: counter.opponentChampion.thumbnailUrl ?? '',
         role: counter.role,
         rankTier: counter.rankTier,
