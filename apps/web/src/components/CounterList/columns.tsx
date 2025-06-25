@@ -3,6 +3,7 @@ import { type Source } from '@lol-assistant/db';
 import { Avatar, AvatarSize } from '@lol-assistant/ui';
 import { RoleIcon } from '../RoleIcon/RoleIcon';
 import type { ChampionCounterRow } from './types';
+import { Link } from '@tanstack/react-router';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react';
 
@@ -58,13 +59,18 @@ export const getStaticColumns = (): ColumnDef<ChampionCounterRow>[] => [
       );
     },
     cell: ({ row }) => (
-      <div className="flex items-center gap-2">
+      <Link
+        to="/champions/$championName"
+        params={{ championName: row.original.championSlug }}
+        search={{ role: row.original.role as LoLChampionRole }}
+        className="flex items-center gap-2 rounded-md hover:bg-gray-500/20 cursor-pointer transition-colors p-3"
+      >
         <Avatar size={AvatarSize.sm}>
           <Avatar.Image src={row.original.thumbnailUrl} />
-          <Avatar.Fallback>{row.original.champion.slice(0, 1)}</Avatar.Fallback>
+          <Avatar.Fallback>{row.original.championName.slice(0, 1)}</Avatar.Fallback>
         </Avatar>
-        <span className="text-sm font-medium">{row.original.champion}</span>
-      </div>
+        <span className="text-sm font-medium">{row.original.championName}</span>
+      </Link>
     ),
   },
   {
@@ -149,7 +155,7 @@ export const getSourceColumns = (sources: Array<Source>): Array<ColumnDef<Champi
           target="_blank"
           rel="noopener noreferrer"
           className="flex justify-center items-end gap-1 p-3 rounded-md hover:bg-gray-500/20 cursor-pointer transition-colors"
-          title={`See ${row.original.champion} on ${source.name}`}
+          title={`See ${row.original.championName} on ${source.name}`}
         >
           <span className="font-medium">{stat.winRate}%</span>
           <span className="font-medium text-[9px] leading-relaxed tracking-tight text-gray-500 uppercase">WR</span>

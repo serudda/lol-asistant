@@ -1,7 +1,6 @@
-import * as React from 'react';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { LoLChampionRole, RankTier } from '@lol-assistant/db';
-import type { ChampionCounterRow, ChampionFilterOption } from '../components';
+import type { ChampionCounterRow, ChampionFilterOption } from '../../components';
 import {
   ChampionFilter,
   ChampionSearchBar,
@@ -10,17 +9,44 @@ import {
   MatchupsOverviewCard,
   PatchCombobox,
   RoleToggleGroup,
-} from '../components';
-import { CounterListSkeleton } from '../components/CounterList/Skeleton';
-import type { SourceStat } from '../components/CounterList/types';
-import { trpc } from '../utils/api';
+} from '../../components';
+import { CounterListSkeleton } from '../../components/CounterList/Skeleton';
+import type { SourceStat } from '../../components/CounterList/types';
+import { trpc } from '../../utils/api';
+import { createFileRoute, useNavigate, useSearch } from '@tanstack/react-router';
+import { z } from 'zod';
 
-export const PickChampPage: React.FC = () => {
-  const [searchValue, setSearchValue] = React.useState('volibear');
-  const [rankTier] = React.useState<RankTier>(RankTier.silver);
-  const [role, setRole] = React.useState<LoLChampionRole>(LoLChampionRole.jungle);
-  const [patch, setPatch] = React.useState<string>();
-  const [championFilter, setChampionFilter] = React.useState<string>('');
+const ChampionDetailPage = () => {
+  const { championName } = Route.useParams();
+  const search = useSearch({ from: '/champions/$championName' });
+  const navigate = useNavigate({ from: '/champions/$championName' });
+
+  // Use role from search params, fallback to 'jungle' as default
+  const [searchValue, setSearchValue] = useState(championName);
+  const [rankTier] = useState<RankTier>(RankTier.silver);
+  const [role, setRole] = useState<LoLChampionRole>((search.role as LoLChampionRole) || LoLChampionRole.jungle);
+  const [patch, setPatch] = useState<string>();
+  const [championFilter, setChampionFilter] = useState<string>('');
+
+  // Sync searchValue with championName parameter when it changes
+  useEffect(() => {
+    setSearchValue(championName);
+  }, [championName]);
+
+  // Update search param when role changes
+  useEffect(() => {
+    if (search.role === role) return;
+    void navigate({ search: { ...search, role } });
+  }, [role, search.role]);
+
+  // Handle champion search bar change - navigate to new champion
+  const handleChampionChange = (newChampionSlug: string) => {
+    void navigate({
+      to: '/champions/$championName',
+      params: { championName: newChampionSlug },
+      search: { ...search },
+    });
+  };
 
   // Get basic champion info
   const { data: championData } = trpc.champion.getBasicBySlug.useQuery({ slug: searchValue });
@@ -88,15 +114,15 @@ export const PickChampPage: React.FC = () => {
   }, [championData]);
 
   // Ensure the selected role is always valid for the current champion
-  React.useEffect(() => {
+  useEffect(() => {
     // Filter out possible undefined in championRoles
     const validRoles = championRoles.filter(Boolean);
     if (validRoles.length > 0 && !validRoles.includes(role)) {
       if (validRoles[0]) setRole(validRoles[0]);
     }
-  }, [championRoles, role]);
+  }, [championRoles]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (latestPatchData?.result?.patchNote) {
       setPatch(latestPatchData.result.patchNote.patchVersion);
     }
@@ -119,7 +145,7 @@ export const PickChampPage: React.FC = () => {
       <h1 className="text-3xl text-left font-bold mb-4">Pick a Champ</h1>
 
       <div className="w-full">
-        <ChampionSearchBar defaultValue={searchValue} onChange={setSearchValue} />
+        <ChampionSearchBar defaultValue={searchValue} onChange={handleChampionChange} />
       </div>
 
       <div className="flex flex-col border border-gray-800 rounded-xl p-4 mt-8">
@@ -174,3 +200,11 @@ export const PickChampPage: React.FC = () => {
     </div>
   );
 };
+
+export const Route = createFileRoute('/champions/$championName')({
+  validateSearch: z.object({
+    role: z.string().optional(),
+    tier: z.string().optional(),
+  }),
+  component: ChampionDetailPage,
+});
