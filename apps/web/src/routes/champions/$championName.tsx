@@ -3,7 +3,6 @@ import { LoLChampionRole, RankTier } from '@lol-assistant/db';
 import type { ChampionCounterRow, ChampionFilterOption } from '../../components';
 import {
   ChampionFilter,
-  ChampionSearchBar,
   CounterLegend,
   CounterList,
   MatchupsOverviewCard,
@@ -13,6 +12,7 @@ import {
 import { CounterListSkeleton } from '../../components/CounterList/Skeleton';
 import type { SourceStat } from '../../components/CounterList/types';
 import { trpc } from '../../utils/api';
+import { ChampionBanner } from './internals';
 import { createFileRoute, useNavigate, useSearch } from '@tanstack/react-router';
 import { z } from 'zod';
 
@@ -21,17 +21,10 @@ const ChampionDetailPage = () => {
   const search = useSearch({ from: '/champions/$championName' });
   const navigate = useNavigate({ from: '/champions/$championName' });
 
-  // Use role from search params, fallback to 'jungle' as default
-  const [searchValue, setSearchValue] = useState(championName);
   const [rankTier] = useState<RankTier>(RankTier.silver);
   const [role, setRole] = useState<LoLChampionRole>((search.role as LoLChampionRole) || LoLChampionRole.jungle);
   const [patch, setPatch] = useState<string>();
   const [championFilter, setChampionFilter] = useState<string>('');
-
-  // Sync searchValue with championName parameter when it changes
-  useEffect(() => {
-    setSearchValue(championName);
-  }, [championName]);
 
   // Update search param when role changes
   useEffect(() => {
@@ -39,21 +32,12 @@ const ChampionDetailPage = () => {
     void navigate({ search: { ...search, role } });
   }, [role, search.role]);
 
-  // Handle champion search bar change - navigate to new champion
-  const handleChampionChange = (newChampionSlug: string) => {
-    void navigate({
-      to: '/champions/$championName',
-      params: { championName: newChampionSlug },
-      search: { ...search },
-    });
-  };
-
   // Get basic champion info
-  const { data: championData } = trpc.champion.getBasicBySlug.useQuery({ slug: searchValue });
+  const { data: championData } = trpc.champion.getBasicBySlug.useQuery({ slug: championName });
 
   // Get champion counters
   const { data: countersData, isLoading: isCountersLoading } = trpc.championMatchup.getChampionCounters.useQuery({
-    opponentChampionSlug: searchValue,
+    opponentChampionSlug: championName,
     rankTier,
     role,
     patchVersion: patch,
@@ -142,13 +126,10 @@ const ChampionDetailPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col max-w-5xl">
-      <h1 className="text-3xl text-left font-bold mb-4">Pick a Champ</h1>
+      {/* Champion Banner */}
+      <ChampionBanner champion={championData?.result?.champion} />
 
-      <div className="w-full">
-        <ChampionSearchBar defaultValue={searchValue} onChange={handleChampionChange} />
-      </div>
-
-      <div className="flex flex-col border border-gray-800 rounded-xl p-4 mt-8">
+      <div className="flex flex-col border border-gray-900 bg-gray-950 rounded-xl p-4 mt-8">
         <div className="flex items-center p-2">
           <RoleToggleGroup value={role} onValueChange={setRole} roles={championRoles} />
           <PatchCombobox defaultValue={patch} onChange={setPatch} className="max-w-32 ml-auto" />
@@ -159,14 +140,14 @@ const ChampionDetailPage = () => {
         <div className="w-full flex gap-6">
           <MatchupsOverviewCard
             type="easiest"
-            championSlug={searchValue}
+            championSlug={championName}
             role={role}
             patchVersion={patch}
             rankTier={rankTier}
           />
           <MatchupsOverviewCard
             type="hardest"
-            championSlug={searchValue}
+            championSlug={championName}
             role={role}
             patchVersion={patch}
             rankTier={rankTier}
