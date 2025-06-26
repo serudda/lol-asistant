@@ -24,6 +24,7 @@ export const getLatestPatchNoteHandler = async ({
   try {
     const patchNote = await ctx.prisma.patchNote.findFirst({
       orderBy: { publishedDate: 'desc' },
+      where: { isActive: true },
     });
 
     if (!patchNote)
@@ -112,7 +113,11 @@ export const getLastTwoPatchNotesHandler = async ({
 }: Params<GetLastTwoPatchNotesInputType>): Promise<LastTwoPatchNotesResponse> => {
   const handlerId = 'getLastTwoPatchNotesHandler';
   try {
-    const patchNotes = await ctx.prisma.patchNote.findMany({ orderBy: { publishedDate: 'desc' }, take: 2 });
+    const patchNotes = await ctx.prisma.patchNote.findMany({
+      orderBy: { publishedDate: 'desc' },
+      take: 2,
+      where: { isActive: true },
+    });
     return { result: { status: ResponseStatus.SUCCESS, patchNotes } };
   } catch (error: unknown) {
     throw handleError(domain, handlerId, error);
