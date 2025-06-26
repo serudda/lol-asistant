@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Navbar } from '../components';
 import { createRootRoute, Outlet, useRouterState } from '@tanstack/react-router';
 
 const RootComponent = () => {
@@ -10,7 +11,8 @@ const RootComponent = () => {
   }, [routerState.location.pathname]);
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white p-8">
+    <div className="min-h-screen bg-gray-950 text-white">
+      <Navbar />
       <Outlet />
     </div>
   );

@@ -2,5 +2,7 @@ export * from './Cards';
 export * from './CounterLegend';
 export * from './CounterList/CounterList';
 export * from './Inputs';
+export * from './Logo/Logo';
+export * from './Navbar/Navbar';
 export * from './RoleIcon/RoleIcon';
 export * from './RoleToggleGroup';

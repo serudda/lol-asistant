@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Avatar, AvatarSize, Combobox, TriggerSize } from '@lol-assistant/ui';
+import { Avatar, AvatarSize, Combobox, TriggerSize, type TriggerSizeType } from '@lol-assistant/ui';
 import { trpc } from '../../utils/api';
 import { tv } from 'tailwind-variants';
 
@@ -25,6 +25,11 @@ interface ChampionSearchBarProps {
   defaultValue: string;
 
   /**
+   * The size of the combobox.
+   */
+  size?: TriggerSizeType;
+
+  /**
    * The function to call when the value changes.
    */
   onChange: (value: string) => void;
@@ -47,6 +52,7 @@ export const ChampionSearchBar = ({
   defaultValue,
   onChange,
   placeholder = 'Select a champion',
+  size = TriggerSize.xl,
   disabled = false,
   className = '',
 }: ChampionSearchBarProps) => {
@@ -86,7 +92,7 @@ export const ChampionSearchBar = ({
       <Combobox.Trigger
         placeholder={placeholder}
         value={triggerValue}
-        size={TriggerSize.xl}
+        size={size}
         className={classes}
         disabled={disabled}
         isRounded
