@@ -148,7 +148,7 @@ const ChampionDetailPage = () => {
         <ChampionSearchBar defaultValue={searchValue} onChange={handleChampionChange} />
       </div>
 
-      <div className="flex flex-col border border-gray-800 rounded-xl p-4 mt-8">
+      <div className="flex flex-col border border-gray-900 bg-gray-950 rounded-xl p-4 mt-8">
         <div className="flex items-center p-2">
           <RoleToggleGroup value={role} onValueChange={setRole} roles={championRoles} />
           <PatchCombobox defaultValue={patch} onChange={setPatch} className="max-w-32 ml-auto" />
