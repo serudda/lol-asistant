@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 
 const ChampionsPage = () => {
   return (
@@ -9,5 +9,13 @@ const ChampionsPage = () => {
 };
 
 export const Route = createFileRoute('/champions/')({
+  beforeLoad: () => {
+    // Redirect to a default champion
+    // eslint-disable-next-line @typescript-eslint/only-throw-error
+    throw redirect({
+      to: '/champions/$championName',
+      params: { championName: 'volibear' },
+    });
+  },
   component: ChampionsPage,
 });
