@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import { LoLChampionRole, RankTier } from '@lol-assistant/db';
-import { Image } from '@lol-assistant/ui';
 import type { ChampionCounterRow, ChampionFilterOption } from '../../components';
 import {
   ChampionFilter,
@@ -13,6 +12,7 @@ import {
 import { CounterListSkeleton } from '../../components/CounterList/Skeleton';
 import type { SourceStat } from '../../components/CounterList/types';
 import { trpc } from '../../utils/api';
+import { ChampionBanner } from './internals';
 import { createFileRoute, useNavigate, useSearch } from '@tanstack/react-router';
 import { z } from 'zod';
 
@@ -127,39 +127,7 @@ const ChampionDetailPage = () => {
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col max-w-5xl">
       {/* Champion Banner */}
-      {championData?.result?.champion && (
-        <div className="relative w-full h-64 rounded-xl overflow-hidden mb-8">
-          {/* Splash Background */}
-          <div className="absolute inset-0">
-            <Image
-              src={championData.result.champion.splashUrl ?? ''}
-              alt={`${championData.result.champion.name} splash`}
-              className="w-full h-full object-cover object-[0rem_-3rem]"
-              hasMaxWidth={false}
-            />
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
-          </div>
-
-          {/* Champion Info */}
-          <div className="relative z-10 flex items-center h-full px-8">
-            <div className="flex flex-col text-white">
-              <h1 className="text-5xl font-bold mb-2 drop-shadow-lg">{championData.result.champion.name}</h1>
-              <div className="flex items-center gap-2">
-                {championData.result.champion.mainRoles?.map((championRole, index) => (
-                  <span
-                    key={championRole}
-                    className="px-3 py-1 bg-blue-600/80 rounded-full text-sm font-medium capitalize backdrop-blur-sm"
-                  >
-                    {championRole.toLowerCase()}
-                    {index < (championData.result.champion?.mainRoles?.length ?? 0) - 1 && ''}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <ChampionBanner champion={championData?.result?.champion} />
 
       <div className="flex flex-col border border-gray-900 bg-gray-950 rounded-xl p-4 mt-8">
         <div className="flex items-center p-2">
