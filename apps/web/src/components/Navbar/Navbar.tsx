@@ -1,7 +1,7 @@
 import { Button, ButtonVariant, TriggerSize } from '@lol-assistant/ui';
 import { ChampionSearchBar } from '../Inputs';
 import { Logo, LogoAppearance, LogoSize, LogoVariant } from '../Logo/Logo';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { tv } from 'tailwind-variants';
 
 const container = tv({
@@ -20,6 +20,16 @@ export interface NavbarProps {
  */
 export const Navbar = ({ className }: NavbarProps) => {
   const classes = container({ className });
+  const search = useSearch({ from: '/champions/$championName' });
+  const navigate = useNavigate({ from: '/champions/$championName' });
+
+  const handleChampionChange = (newChampionSlug: string) => {
+    void navigate({
+      to: '/champions/$championName',
+      params: { championName: newChampionSlug },
+      search: { ...search },
+    });
+  };
 
   return (
     <nav className={classes}>
@@ -29,7 +39,7 @@ export const Navbar = ({ className }: NavbarProps) => {
           <span className="text-gray-500">beta</span>
         </Link>
         <span className="text-gray-600 text-xl">/</span>
-        <ChampionSearchBar defaultValue="" onChange={() => console.log('test')} size={TriggerSize.base} />
+        <ChampionSearchBar defaultValue="" onChange={handleChampionChange} size={TriggerSize.base} />
       </div>
       <div className="flex items-center gap-4">
         <Button variant={ButtonVariant.primary}>Feedback</Button>

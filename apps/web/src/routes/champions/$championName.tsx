@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { LoLChampionRole, RankTier } from '@lol-assistant/db';
+import { Image } from '@lol-assistant/ui';
 import type { ChampionCounterRow, ChampionFilterOption } from '../../components';
 import {
   ChampionFilter,
-  ChampionSearchBar,
   CounterLegend,
   CounterList,
   MatchupsOverviewCard,
@@ -21,17 +21,10 @@ const ChampionDetailPage = () => {
   const search = useSearch({ from: '/champions/$championName' });
   const navigate = useNavigate({ from: '/champions/$championName' });
 
-  // Use role from search params, fallback to 'jungle' as default
-  const [searchValue, setSearchValue] = useState(championName);
   const [rankTier] = useState<RankTier>(RankTier.silver);
   const [role, setRole] = useState<LoLChampionRole>((search.role as LoLChampionRole) || LoLChampionRole.jungle);
   const [patch, setPatch] = useState<string>();
   const [championFilter, setChampionFilter] = useState<string>('');
-
-  // Sync searchValue with championName parameter when it changes
-  useEffect(() => {
-    setSearchValue(championName);
-  }, [championName]);
 
   // Update search param when role changes
   useEffect(() => {
@@ -39,21 +32,12 @@ const ChampionDetailPage = () => {
     void navigate({ search: { ...search, role } });
   }, [role, search.role]);
 
-  // Handle champion search bar change - navigate to new champion
-  const handleChampionChange = (newChampionSlug: string) => {
-    void navigate({
-      to: '/champions/$championName',
-      params: { championName: newChampionSlug },
-      search: { ...search },
-    });
-  };
-
   // Get basic champion info
-  const { data: championData } = trpc.champion.getBasicBySlug.useQuery({ slug: searchValue });
+  const { data: championData } = trpc.champion.getBasicBySlug.useQuery({ slug: championName });
 
   // Get champion counters
   const { data: countersData, isLoading: isCountersLoading } = trpc.championMatchup.getChampionCounters.useQuery({
-    opponentChampionSlug: searchValue,
+    opponentChampionSlug: championName,
     rankTier,
     role,
     patchVersion: patch,
@@ -142,11 +126,40 @@ const ChampionDetailPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col max-w-5xl">
-      <h1 className="text-3xl text-left font-bold mb-4">Pick a Champ</h1>
+      {/* Champion Banner */}
+      {championData?.result?.champion && (
+        <div className="relative w-full h-64 rounded-xl overflow-hidden mb-8">
+          {/* Splash Background */}
+          <div className="absolute inset-0">
+            <Image
+              src={championData.result.champion.splashUrl ?? ''}
+              alt={`${championData.result.champion.name} splash`}
+              className="w-full h-full object-cover object-[0rem_-3rem]"
+              hasMaxWidth={false}
+            />
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+          </div>
 
-      <div className="w-full">
-        <ChampionSearchBar defaultValue={searchValue} onChange={handleChampionChange} />
-      </div>
+          {/* Champion Info */}
+          <div className="relative z-10 flex items-center h-full px-8">
+            <div className="flex flex-col text-white">
+              <h1 className="text-5xl font-bold mb-2 drop-shadow-lg">{championData.result.champion.name}</h1>
+              <div className="flex items-center gap-2">
+                {championData.result.champion.mainRoles?.map((championRole, index) => (
+                  <span
+                    key={championRole}
+                    className="px-3 py-1 bg-blue-600/80 rounded-full text-sm font-medium capitalize backdrop-blur-sm"
+                  >
+                    {championRole.toLowerCase()}
+                    {index < (championData.result.champion?.mainRoles?.length ?? 0) - 1 && ''}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="flex flex-col border border-gray-900 bg-gray-950 rounded-xl p-4 mt-8">
         <div className="flex items-center p-2">
@@ -159,14 +172,14 @@ const ChampionDetailPage = () => {
         <div className="w-full flex gap-6">
           <MatchupsOverviewCard
             type="easiest"
-            championSlug={searchValue}
+            championSlug={championName}
             role={role}
             patchVersion={patch}
             rankTier={rankTier}
           />
           <MatchupsOverviewCard
             type="hardest"
-            championSlug={searchValue}
+            championSlug={championName}
             role={role}
             patchVersion={patch}
             rankTier={rankTier}
