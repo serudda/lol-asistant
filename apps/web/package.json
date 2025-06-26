@@ -11,6 +11,7 @@
     "with-env": "dotenv -e ../../.env.${NODE_ENV:-local} --"
   },
   "dependencies": {
+    "@feedback-fish/react": "^1.2.2",
     "@lol-assistant/api": "workspace:*",
     "@lol-assistant/db": "workspace:*",
     "@lol-assistant/ui": "workspace:*",
