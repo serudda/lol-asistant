@@ -68,6 +68,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@feedback-fish/react':
+        specifier: ^1.2.2
+        version: 1.2.2(react@18.3.1)
       '@lol-assistant/api':
         specifier: workspace:*
         version: link:../../packages/api
@@ -1273,6 +1276,12 @@ packages:
   '@eslint/plugin-kit@0.2.8':
     resolution: {integrity: sha512-ZAoA40rNMPwSm+AeHpCq8STiNAwzWLJuP8Xv4CHIc9wv/PSuExjMrmjfYNj682vW0OOiZ1HKxzvjQr9XZIisQA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@feedback-fish/react@1.2.2':
+    resolution: {integrity: sha512-T6VxMM8nNsD3b5ulVsrcvcrNDAc4d73RLYK8Iw+6PFPIdMU2I/mOiuAHvfGauBVIWYHflja4VOdjm3z4CtlvYQ==}
+    engines: {node: '>=10.16.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
 
   '@floating-ui/core@1.6.9':
     resolution: {integrity: sha512-uMXCuQ3BItDUbAMhIXw7UPXRfAlOAvZzdK9BWpE60MCn+Svt3aLn9jsPTi/WNGlRUu2uI0v5S7JiIUsbsvh3fw==}
@@ -6770,6 +6779,10 @@ snapshots:
     dependencies:
       '@eslint/core': 0.13.0
       levn: 0.4.1
+
+  '@feedback-fish/react@1.2.2(react@18.3.1)':
+    dependencies:
+      react: 18.3.1
 
   '@floating-ui/core@1.6.9':
     dependencies:
