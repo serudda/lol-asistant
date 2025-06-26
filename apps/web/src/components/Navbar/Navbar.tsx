@@ -1,6 +1,7 @@
 import { Button, ButtonVariant, TriggerSize } from '@lol-assistant/ui';
 import { ChampionSearchBar } from '../Inputs';
 import { Logo, LogoAppearance, LogoSize, LogoVariant } from '../Logo/Logo';
+import { FeedbackFish } from '@feedback-fish/react';
 import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { tv } from 'tailwind-variants';
 
@@ -42,7 +43,9 @@ export const Navbar = ({ className }: NavbarProps) => {
         <ChampionSearchBar defaultValue="" onChange={handleChampionChange} size={TriggerSize.base} />
       </div>
       <div className="flex items-center gap-4">
-        <Button variant={ButtonVariant.primary}>Feedback</Button>
+        <FeedbackFish projectId="8be7540cd843a8">
+          <Button variant={ButtonVariant.primary}>Feedback</Button>
+        </FeedbackFish>
       </div>
     </nav>
   );
