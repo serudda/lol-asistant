@@ -1,4 +1,5 @@
 import type { LoLChampionRole, RankTier } from '@lol-assistant/db';
+import { Image } from '@lol-assistant/ui';
 import { trpc } from '../../../utils/api';
 import { RoleIcon } from '../../RoleIcon/RoleIcon';
 import { MatchupsOverviewCardGroup, type MatchupsOverviewCardGroupType } from '../types';
@@ -130,12 +131,9 @@ export const MatchupsOverviewCard = ({
             className={matchupItem()}
           >
             <div className="flex flex-col items-center gap-2">
-              <div className="overflow-hidden rounded h-[181px] w-[75px] relative ring-1 ring-gray-800 group-hover:ring-gray-600">
-                <img
+              <div className="overflow-hidden rounded h-[181px] w-[75px] relative ring-1 ring-gray-800 bg-gray-800 group-hover:ring-gray-600">
+                <Image
                   alt={matchup.opponentChampion.name}
-                  loading="lazy"
-                  decoding="async"
-                  data-nimg="fill"
                   className="h-full w-full scale-110 bg-cover relative bg-center bg-no-repeat object-cover group-hover:scale-105 transition-all duration-500"
                   src={matchup.opponentChampion.splashUrl ?? ''}
                 />
