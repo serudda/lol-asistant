@@ -25,8 +25,8 @@ export const createPatchNoteInput = z.object({
   riotPatch: z.string(),
   publishedDate: z.string(),
   embedding: z.array(z.number()),
+  isActive: z.boolean().optional(),
 });
-
 export type CreatePatchNoteInputType = TypeOf<typeof createPatchNoteInput>;
 
 /*------------------------------------*/
