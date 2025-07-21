@@ -1,4 +1,4 @@
-import type { ChampionScrapeJob } from './enqueueChampionScrapeJobs';
+import type { ChampionScrapeJob } from './enqueueChampionScrape.core';
 import orchestrateMatchupStats from './orchestrateMatchupStats';
 import { Worker } from 'bullmq';
 import Redis from 'ioredis';
