@@ -19,6 +19,7 @@ const worker = new Worker<ChampionScrapeJob>(
         champions: championSlug,
         roles: roles.join(','),
         tiers: tiers.join(','),
+        allowUpdate: true,
       });
       console.log(`[worker] Done: ${championSlug}`);
     } catch (err) {
