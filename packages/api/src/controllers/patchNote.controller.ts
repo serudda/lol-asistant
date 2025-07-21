@@ -49,7 +49,7 @@ export const createPatchNoteHandler = async ({
 }: Params<CreatePatchNoteInputType>): Promise<PatchNoteResponse> => {
   const handlerId = 'createPatchNoteHandler';
   try {
-    const { summary, patchVersion, riotPatch, publishedDate, embedding } = input;
+    const { summary, patchVersion, riotPatch, publishedDate, embedding, isActive } = input;
 
     // Start transaction
     return await ctx.prisma.$transaction(async (tx) => {
@@ -60,6 +60,7 @@ export const createPatchNoteHandler = async ({
           patchVersion,
           riotPatch,
           publishedDate,
+          isActive,
         },
       });
 

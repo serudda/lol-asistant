@@ -21,6 +21,7 @@ export const saveNewPatch = async (
       riotPatch,
       publishedDate,
       embedding,
+      isActive: false,
     });
 
     console.log('[Saving] - Patch inserted correctly with embedding.');
