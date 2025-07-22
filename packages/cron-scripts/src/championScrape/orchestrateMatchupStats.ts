@@ -23,6 +23,7 @@ interface OrchestrateMatchupStatsArgs {
   mobalyticsConcurrency?: string; // parseInt
   opggConcurrency?: string;
   uggConcurrency?: string;
+  allowUpdate?: boolean;
 }
 
 interface TaskInput {
@@ -30,6 +31,7 @@ interface TaskInput {
   championSlug: string;
   role: LoLChampionRole;
   rankTier: RankTier;
+  allowUpdate?: boolean;
 }
 
 const DEFAULT_ROLES: Array<LoLChampionRole> = ['top', 'jungle', 'mid', 'adc', 'support'];
@@ -43,6 +45,7 @@ export default async function orchestrateMatchupStats({
   mobalyticsConcurrency = '3',
   opggConcurrency = '3',
   uggConcurrency = '3',
+  allowUpdate = false,
 }: OrchestrateMatchupStatsArgs) {
   if (!patchVersion) throw new Error('patchVersion is required');
 
@@ -51,8 +54,8 @@ export default async function orchestrateMatchupStats({
   if (championList.length === 0) {
     throw new Error('At least one champion slug must be provided via "champions" param');
   }
-  const roleList: LoLChampionRole[] = roles ? (roles.split(',') as LoLChampionRole[]) : DEFAULT_ROLES;
-  const tierList: RankTier[] = tiers ? (tiers.split(',') as RankTier[]) : DEFAULT_TIERS;
+  const roleList: Array<LoLChampionRole> = roles ? (roles.split(',') as Array<LoLChampionRole>) : DEFAULT_ROLES;
+  const tierList: Array<RankTier> = tiers ? (tiers.split(',') as Array<RankTier>) : DEFAULT_TIERS;
 
   // --- NEW: Fetch all champions and their mainRoles ---
   const client = createClient();
@@ -64,8 +67,8 @@ export default async function orchestrateMatchupStats({
   });
 
   // Create task arrays per source, filtering by mainRoles
-  const buildTasks = (): TaskInput[] => {
-    const tasks: TaskInput[] = [];
+  const buildTasks = (): Array<TaskInput> => {
+    const tasks: Array<TaskInput> = [];
     for (const champion of championList) {
       const mainRoles = mainRolesMap.get(champion) ?? [];
       for (const role of roleList) {
@@ -74,7 +77,7 @@ export default async function orchestrateMatchupStats({
           continue;
         }
         for (const tier of tierList) {
-          tasks.push({ patchVersion, championSlug: champion, role, rankTier: tier });
+          tasks.push({ patchVersion, championSlug: champion, role, rankTier: tier, allowUpdate });
         }
       }
     }
@@ -92,7 +95,7 @@ export default async function orchestrateMatchupStats({
   // Helper to run tasks with concurrency and log progress
   const runTasks = async (
     source: string,
-    tasks: TaskInput[],
+    tasks: Array<TaskInput>,
     concurrency: number,
     runner: (input: TaskInput) => Promise<void>,
   ) => {
