@@ -9,11 +9,12 @@ export interface ChampionScrapeJob {
   patchVersion: string;
   roles: LoLChampionRole[];
   tiers: RankTier[];
+  allowUpdate: boolean;
 }
 
 const QUEUE_NAME = 'champion-scrape';
 
-export const enqueueChampionScrapeCore = async () => {
+export const enqueueChampionScrapeCore = async ({ allowUpdate }: { allowUpdate: boolean }) => {
   // ------------------------------------------------------------
 
   // 1. Connect to Redis
@@ -43,6 +44,7 @@ export const enqueueChampionScrapeCore = async () => {
       patchVersion: champ.lastPatchVersion,
       roles: champ.mainRoles,
       tiers: DEFAULT_TIERS,
+      allowUpdate,
     };
     await queue.add('scrape', job);
     console.log(
