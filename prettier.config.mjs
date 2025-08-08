@@ -17,18 +17,7 @@ const config = {
   singleQuote: true,
   tabWidth: 2,
   trailingComma: 'all',
-  plugins: ['prettier-plugin-astro', '@ianvs/prettier-plugin-sort-imports', 'prettier-plugin-jsdoc'],
-
-  /** JSdoc Plugin Config. */
-  jsdocPrintWidth: 60,
-  tsdoc: true,
-  jsdocDescriptionWithDot: true,
-  jsdocCapitalizeDescription: false,
-  jsdocCommentLineStrategy: 'keep',
-  jsdocSeparateReturnsFromParam: false,
-  jsdocSeparateTagGroups: false,
-  jsdocPreferCodeFences: false,
-  jsdocLineWrappingStyle: 'greedy',
+  plugins: ['prettier-plugin-astro', '@ianvs/prettier-plugin-sort-imports'],
 
   /** Sort Imports Plugin Config. */
   importOrder: [
@@ -58,6 +47,5 @@ export default config;
 /**
  * @reference
  * https://github.com/tailwindlabs/prettier-plugin-tailwindcss
- * https://www.npmjs.com/package/prettier-plugin-jsdoc
  * https://www.npmjs.com/package/@ianvs/prettier-plugin-sort-imports
  */
