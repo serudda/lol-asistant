@@ -205,6 +205,12 @@ You can create a simple monitoring loop:
 watch -n 2 'echo "=== RECALCULATE STATS QUEUE ===" && echo "Waiting: $(redis-cli LLEN bull:recalculate-stats:wait)" && echo "Active: $(redis-cli LLEN bull:recalculate-stats:active)" && echo "Completed: $(redis-cli LLEN bull:recalculate-stats:completed)" && echo "Failed: $(redis-cli LLEN bull:recalculate-stats:failed)"'
 ```
 
+### Clear all redis DB data
+
+```bash
+redis-cli FLUSHDB
+```
+
 ### Clear completed jobs (cleanup)
 
 ```bash
