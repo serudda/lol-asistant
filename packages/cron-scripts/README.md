@@ -50,25 +50,18 @@ docker start redis-bullmq
 From the project root:
 
 ```bash
-pnpm script:run enqueueChampionScrapeJobs
+pnpm script:run enqueueChampionScrape.entry --allowUpdate=true
 ```
 
-- This will enqueue a job for every champion in the database.
+- This will enqueue a job for every champion in the database. Include "allowUpdate=true" if you want to allow the script to update recent created registers.
 
 ### 3. Start the worker to process jobs
 
 In a new terminal (you can run multiple workers for more speed):
 
 ```bash
-pnpm script:run championScrapeWorker
+WORKER_CONCURRENCY=10 pnpm script:run championScrapeWorker.entry
 ```
-
-- **IMPORTANT:** For most setups, set concurrency to 1 to avoid saturating the database:
-  ```bash
-  WORKER_CONCURRENCY=1 pnpm script:run championScrapeWorker
-  ```
-- You can run this on multiple machines if they all connect to the same Redis instance.
-- If you have a very powerful DB server, you may experiment with higher concurrency, but 1 is safest for most dev/prod environments.
 
 ### 4. Let it run!
 
@@ -210,6 +203,12 @@ You can create a simple monitoring loop:
 ```bash
 # Watch recalculate queue progress
 watch -n 2 'echo "=== RECALCULATE STATS QUEUE ===" && echo "Waiting: $(redis-cli LLEN bull:recalculate-stats:wait)" && echo "Active: $(redis-cli LLEN bull:recalculate-stats:active)" && echo "Completed: $(redis-cli LLEN bull:recalculate-stats:completed)" && echo "Failed: $(redis-cli LLEN bull:recalculate-stats:failed)"'
+```
+
+### Clear all redis DB data
+
+```bash
+redis-cli FLUSHDB
 ```
 
 ### Clear completed jobs (cleanup)

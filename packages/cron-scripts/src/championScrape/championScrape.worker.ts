@@ -1,4 +1,4 @@
-import type { ChampionScrapeJob } from './enqueueChampionScrapeJobs';
+import type { ChampionScrapeJob } from './enqueueChampionScrape.core';
 import orchestrateMatchupStats from './orchestrateMatchupStats';
 import { Worker } from 'bullmq';
 import Redis from 'ioredis';
@@ -11,7 +11,7 @@ const redis = new Redis({ maxRetriesPerRequest: null });
 const worker = new Worker<ChampionScrapeJob>(
   QUEUE_NAME,
   async (job) => {
-    const { championSlug, patchVersion, roles, tiers } = job.data;
+    const { championSlug, patchVersion, roles, tiers, allowUpdate } = job.data;
     console.log(`[worker] Processing ${championSlug} (roles: ${roles.join(', ')}, patch: ${patchVersion})`);
     try {
       await orchestrateMatchupStats({
@@ -19,6 +19,7 @@ const worker = new Worker<ChampionScrapeJob>(
         champions: championSlug,
         roles: roles.join(','),
         tiers: tiers.join(','),
+        allowUpdate,
       });
       console.log(`[worker] Done: ${championSlug}`);
     } catch (err) {

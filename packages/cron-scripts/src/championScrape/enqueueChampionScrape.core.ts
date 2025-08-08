@@ -9,11 +9,12 @@ export interface ChampionScrapeJob {
   patchVersion: string;
   roles: LoLChampionRole[];
   tiers: RankTier[];
+  allowUpdate: boolean;
 }
 
 const QUEUE_NAME = 'champion-scrape';
 
-const enqueueChampionScrapeJobs = async () => {
+export const enqueueChampionScrapeCore = async ({ allowUpdate }: { allowUpdate: boolean }) => {
   // ------------------------------------------------------------
 
   // 1. Connect to Redis
@@ -43,6 +44,7 @@ const enqueueChampionScrapeJobs = async () => {
       patchVersion: champ.lastPatchVersion,
       roles: champ.mainRoles,
       tiers: DEFAULT_TIERS,
+      allowUpdate,
     };
     await queue.add('scrape', job);
     console.log(
@@ -60,12 +62,7 @@ const enqueueChampionScrapeJobs = async () => {
   // ------------------------------------------------------------
 };
 
-// Allow running as a script
-if (process.argv[1] === import.meta.url) {
-  enqueueChampionScrapeJobs().catch((err) => {
-    console.error('[enqueue] Fatal error:', err);
-    process.exit(1);
-  });
-}
-
-export default enqueueChampionScrapeJobs;
+/**
+ * The entry point for this script is in
+ * `src/scripts/enqueueChampionScrape.entry.ts`
+ */

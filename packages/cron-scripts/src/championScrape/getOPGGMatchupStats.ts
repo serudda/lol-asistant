@@ -14,6 +14,7 @@ interface GetChampionCountersArgs {
   championSlug: string;
   role: LoLChampionRole;
   rankTier: RankTier;
+  allowUpdate?: boolean;
 }
 
 /**
@@ -25,6 +26,7 @@ export const getOPGGMatchupStats = async ({
   championSlug,
   role,
   rankTier,
+  allowUpdate = false,
 }: GetChampionCountersArgs): Promise<void> => {
   console.log(`[${scriptId}] Starting get champion matchup stats for version: ${patchVersion}`);
 
@@ -35,22 +37,24 @@ export const getOPGGMatchupStats = async ({
     // Use the centralized TRPC client
     const client = createClient();
 
-    // Early skip if already exists this matchup stat
-    const skipResp = await client.sourceMatchupStat.alreadyExists.query({
-      baseChampionSlug: championSlug,
-      role,
-      rankTier,
-      patchVersion,
-      sourceSlug: Sources.OP_GG,
-    });
-    if (skipResp.result.status === ResponseStatus.SUCCESS && skipResp.result.exists) {
-      console.log(
-        dedent`
+    if (!allowUpdate) {
+      // Early skip if already exists this matchup stat
+      const skipResp = await client.sourceMatchupStat.alreadyExists.query({
+        baseChampionSlug: championSlug,
+        role,
+        rankTier,
+        patchVersion,
+        sourceSlug: Sources.OP_GG,
+      });
+      if (skipResp.result.status === ResponseStatus.SUCCESS && skipResp.result.exists) {
+        console.log(
+          dedent`
         ********* SKIPPING *********
         [${scriptId}] Stats already present for ** ${championSlug}, ${role}, ${rankTier}, ${patchVersion} **, skipping.
         ****************************`,
-      );
-      return;
+        );
+        return;
+      }
     }
 
     // ----------------------------
