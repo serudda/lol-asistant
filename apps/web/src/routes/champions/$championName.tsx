@@ -118,7 +118,7 @@ const ChampionDetailPage = () => {
     if (!countersData || !sourcesData) return null;
 
     return (
-      <div className="w-full">
+      <div className="w-full overflow-x-auto">
         <CounterList data={tableData} sources={sourcesData.result.sources} />
       </div>
     );
@@ -164,14 +164,14 @@ const ChampionDetailPage = () => {
           </div>
 
           {/* Filters */}
-          <div className="flex justify-start items-end gap-4">
+          <div className="flex flex-col lg:flex-row lg:justify-start lg:items-end gap-4">
             <ChampionFilter
               options={filterOptions}
               defaultValue={championFilter}
               onChange={setChampionFilter}
-              className="max-w-52"
+              className="lg:max-w-52"
             />
-            <CounterLegend className="ml-auto" />
+            <CounterLegend className="lg:ml-auto" />
           </div>
 
           {/* Counters List */}

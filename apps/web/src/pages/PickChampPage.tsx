@@ -157,7 +157,7 @@ export const PickChampPage: React.FC = () => {
           </div>
 
           {/* Filters */}
-          <div className="flex justify-start items-end gap-4">
+          <div className="flex flex-col lg:flex-row justify-start items-end gap-4">
             <ChampionFilter
               options={filterOptions}
               defaultValue={championFilter}
