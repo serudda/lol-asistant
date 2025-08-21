@@ -33,15 +33,19 @@ const title = tv({
 });
 
 const card = tv({
-  base: ['flex items-center gap-1', 'ring-1 ring-gray-800 bg-gray-900 rounded-lg', 'w-full p-6 overflow-hidden'],
+  base: [
+    'flex items-center gap-3 lg:gap-1',
+    'ring-1 ring-gray-800 bg-gray-900 rounded-lg',
+    'w-full p-2 lg:p-6 overflow-x-auto',
+  ],
 });
 
 const matchupItem = tv({
-  base: ['group flex flex-col items-center w-full gap-4', 'cursor-pointer'],
+  base: ['group flex flex-col items-center w-[50px] lg:w-full gap-4', 'cursor-pointer'],
 });
 
 const winRateLabel = tv({
-  base: ['text-center'],
+  base: ['text-center text-xs lg:text-base'],
   variants: {
     type: {
       [MatchupsOverviewCardGroup.easiest]: ['text-emerald-400'],
@@ -131,15 +135,17 @@ export const MatchupsOverviewCard = ({
             className={matchupItem()}
           >
             <div className="flex flex-col items-center gap-2">
-              <div className="overflow-hidden rounded h-[181px] w-[75px] relative ring-1 ring-gray-800 bg-gray-800 group-hover:ring-gray-600">
+              <div className="overflow-hidden rounded h-[181px] w-[50px] lg:w-[75px] relative ring-1 ring-gray-800 bg-gray-800 group-hover:ring-gray-600">
                 <Image
                   alt={matchup.opponentChampion.name}
                   className="h-full w-full scale-110 bg-cover relative bg-center bg-no-repeat object-cover group-hover:scale-105 transition-all duration-500"
                   src={matchup.opponentChampion.splashUrl ?? ''}
                 />
               </div>
-              <div className="relative flex flex-col items-center gap-0.5 w-full max-w-[75px]">
-                <span className="text-sm font-medium text-center truncate w-full">{matchup.opponentChampion.name}</span>
+              <div className="relative flex flex-col items-center gap-0.5 w-full max-w-[50px] lg:max-w-[75px]">
+                <span className="text-xs lg:text-sm font-medium text-center truncate w-full">
+                  {matchup.opponentChampion.name}
+                </span>
                 <span className={winRateLabel({ type })}>
                   {(100 - matchup.weightedWinRate).toFixed(1)}
                   <span className="text-xs font-medium">%</span>

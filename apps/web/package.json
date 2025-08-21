@@ -21,6 +21,8 @@
     "@tanstack/react-table": "^8.21.3",
     "@trpc/client": "^10.45.2",
     "@trpc/react-query": "^10.45.2",
+    "@types/lodash.throttle": "^4.1.7",
+    "lodash.throttle": "^4.1.1",
     "lucide-react": "^0.503.0",
     "posthog-js": "^1.252.0",
     "react": "18.3.1",

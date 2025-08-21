@@ -2,7 +2,7 @@ import { Logo, LogoAppearance, LogoSize, LogoVariant } from '../Logo/Logo';
 import { tv } from 'tailwind-variants';
 
 const container = tv({
-  base: ['flex p-20 justify-between border-t border-gray-900'],
+  base: ['flex flex-col lg:flex-row p-8 lg:p-20 gap-8 lg:gap-0 lg:justify-between border-t border-gray-900'],
 });
 
 const logoContainer = tv({
@@ -52,7 +52,7 @@ export const Footer = ({ className }: FooterProps) => {
         </p>
       </div>
 
-      <div className="flex flex-col gap-1 self-end">
+      <div className="flex flex-col gap-1 lg:self-end">
         <div className={attribution()}>
           <span>Made by a LoL fan</span>
           <span className={heart()}>♥</span>
