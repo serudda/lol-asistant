@@ -6,13 +6,13 @@ export const ChampionBanner = ({ champion }: { champion?: BasicChampion }) => {
   if (!champion) return <ChampionBannerSkeleton />;
 
   return (
-    <div className="relative w-full h-64 rounded-xl overflow-hidden">
+    <div className="relative w-full h-52 lg:h-64 rounded-xl overflow-hidden">
       {/* Splash Background */}
       <div className="absolute inset-0">
         <Image
           src={champion.splashUrl ?? ''}
           alt={`${champion.name} splash`}
-          className="w-full h-full object-cover object-[0rem_-3rem]"
+          className="w-full h-full object-cover object-[0rem_-0.5rem] lg:object-[0rem_-3rem]"
           hasMaxWidth={false}
         />
         {/* Gradient Overlay */}
