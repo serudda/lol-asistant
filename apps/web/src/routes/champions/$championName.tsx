@@ -118,14 +118,14 @@ const ChampionDetailPage = () => {
     if (!countersData || !sourcesData) return null;
 
     return (
-      <div className="w-full">
+      <div className="w-full overflow-x-auto">
         <CounterList data={tableData} sources={sourcesData.result.sources} />
       </div>
     );
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col max-w-5xl">
+    <div className="container mx-auto px-4 py-4 lg:py-8 flex flex-col max-w-5xl">
       {/* Champion Banner */}
       <ChampionBanner champion={championData?.result?.champion} />
 
@@ -137,7 +137,7 @@ const ChampionDetailPage = () => {
 
         <hr className="w-full mt-4 mb-8 border-t border-gray-900" />
 
-        <div className="w-full flex gap-6">
+        <div className="w-full flex flex-col lg:flex-row gap-6">
           <MatchupsOverviewCard
             type="easiest"
             championSlug={championName}
@@ -164,14 +164,14 @@ const ChampionDetailPage = () => {
           </div>
 
           {/* Filters */}
-          <div className="flex justify-start items-end gap-4">
+          <div className="flex flex-col lg:flex-row lg:justify-start lg:items-end gap-4">
             <ChampionFilter
               options={filterOptions}
               defaultValue={championFilter}
               onChange={setChampionFilter}
-              className="max-w-52"
+              className="lg:max-w-52"
             />
-            <CounterLegend className="ml-auto" />
+            <CounterLegend className="lg:ml-auto" />
           </div>
 
           {/* Counters List */}

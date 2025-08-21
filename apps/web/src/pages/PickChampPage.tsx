@@ -130,7 +130,7 @@ export const PickChampPage: React.FC = () => {
 
         <hr className="w-full mt-4 mb-8 border-t border-gray-900" />
 
-        <div className="w-full flex gap-6">
+        <div className="w-full flex flex-col lg:flex-row gap-6">
           <MatchupsOverviewCard
             type="easiest"
             championSlug={searchValue}
@@ -157,7 +157,7 @@ export const PickChampPage: React.FC = () => {
           </div>
 
           {/* Filters */}
-          <div className="flex justify-start items-end gap-4">
+          <div className="flex flex-col lg:flex-row justify-start items-end gap-4">
             <ChampionFilter
               options={filterOptions}
               defaultValue={championFilter}

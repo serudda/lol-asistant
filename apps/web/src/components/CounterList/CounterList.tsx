@@ -8,7 +8,7 @@ import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const table = tv({
-  base: 'w-full table-fixed border-collapse ring-1 ring-gray-700 rounded-br-xl rounded-bl-xl',
+  base: 'w-full lg:table-fixed border-collapse ring-1 ring-gray-700 rounded-br-xl rounded-bl-xl',
 });
 
 interface CounterListProps extends VariantProps<typeof Table> {
