@@ -1,4 +1,11 @@
-import { getChampionSlugForSource, normalizeStringToSlug, Sources, toMobalyticsRank } from '@lol-assistant/common';
+import {
+  getChampionSlugForSource,
+  normalizeStringToSlug,
+  Sources,
+  toMobalyticsRank,
+  toOPGGRank,
+  toUGGRank,
+} from '@lol-assistant/common';
 import type { LoLChampionRole, RankTier, Source } from '@lol-assistant/db';
 import { tv } from 'tailwind-variants';
 
@@ -47,12 +54,18 @@ export const SourceFloatBox = ({ className, championSlug, role, rankTier, source
         const sourceChampionSlug = getChampionSlugForSource(normalizeStringToSlug(championSlug), Sources.MOBALYTICS);
         return `${source.baseUrl}lol/champions/${sourceChampionSlug}/build/${lowerCaseRole}?rank=${mobalyticsRank}`;
       }
-
-      case Sources.OP_GG:
-        return `${source.baseUrl}/champions/${championSlug}/matchups/${role}/${rankTier}`;
-      case Sources.U_GG:
-        return `${source.baseUrl}/champions/${championSlug}/matchups/${role}/${rankTier}`;
-
+      case Sources.OP_GG: {
+        const lowerCaseRole = role.toLowerCase();
+        const opggRank = toOPGGRank(rankTier);
+        const sourceChampionSlug = getChampionSlugForSource(normalizeStringToSlug(championSlug), Sources.OP_GG);
+        return `${source.baseUrl}lol/champions/${sourceChampionSlug}/build/${lowerCaseRole}?tier=${opggRank}`;
+      }
+      case Sources.U_GG: {
+        const lowerCaseRole = role.toLowerCase();
+        const uggRank = toUGGRank(rankTier);
+        const sourceChampionSlug = getChampionSlugForSource(normalizeStringToSlug(championSlug), Sources.U_GG);
+        return `${source.baseUrl}lol/champions/${sourceChampionSlug}/build/${lowerCaseRole}?rank=${uggRank}`;
+      }
       default:
         return '';
     }
