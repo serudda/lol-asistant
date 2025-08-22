@@ -1,5 +1,5 @@
-import { getChampionSlugForSource, Sources, U_GG_CHAMPION_URL, type UGGRank } from '../../../../common';
-import { normalizeStringToSlug } from '../../../../common/helpers';
+import { getChampionSlugForSource, Sources } from '@lol-assistant/common';
+import { normalizeStringToSlug, U_GG_CHAMPION_URL, type UGGRank } from '../../../../common';
 import type { SourceCounter } from '../../common/types';
 import type { UGGCounterOptionsData } from './types';
 

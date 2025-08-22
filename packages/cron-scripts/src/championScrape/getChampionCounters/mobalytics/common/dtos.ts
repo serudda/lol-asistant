@@ -1,5 +1,5 @@
+import { getChampionSlugForSource, Sources, SourceUrls } from '@lol-assistant/common';
 import type { MobalyticsRank, MobalyticsRole } from '../../../../common';
-import { getChampionSlugForSource, Sources, SourceUrls } from '../../../../common';
 import { normalizeStringToSlug } from '../../../../common/helpers';
 import type { SourceCounter } from '../../common/types';
 import type { MobalyticsCountersOptionsData } from './types';

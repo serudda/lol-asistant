@@ -1,0 +1,21 @@
+{
+  "name": "@lol-assistant/common",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "Serudda",
+  "type": "module",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@lol-assistant/db": "workspace:*",
+    "@lol-assistant/eslint-config": "workspace:*",
+    "@lol-assistant/typescript-config": "workspace:*",
+    "dotenv-cli": "^7.4.2",
+    "typescript": "^5.6.2"
+  }
+}
