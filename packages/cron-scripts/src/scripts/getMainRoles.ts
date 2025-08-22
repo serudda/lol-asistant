@@ -1,6 +1,6 @@
+import { getChampionSlugForSource, normalizeChampionSlugFromSource, Sources } from '@lol-assistant/common';
 import type { RankTier } from '@lol-assistant/db';
 import { saveMainRoles } from './getMainRoles/api/saveMainRoles';
-import { getChampionSlugForSource, normalizeChampionSlugFromSource, Sources } from './getMainRoles/common/constants';
 import { getMainRolesByChampion } from './getMainRoles/getMainRolesByChampion';
 
 const scriptId = '🛠️  getMainRoles';

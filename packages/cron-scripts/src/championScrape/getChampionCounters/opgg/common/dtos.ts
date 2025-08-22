@@ -1,5 +1,5 @@
-import { getChampionSlugForSource, Sources, SourceUrls, type OPGGRank } from '../../../../common';
-import { normalizeStringToSlug } from '../../../../common/helpers';
+import { getChampionSlugForSource, Sources, SourceUrls } from '@lol-assistant/common';
+import { normalizeStringToSlug, type OPGGRank } from '../../../../common';
 import type { SourceCounter } from '../../common/types';
 import type { OPGGCountersOptionsData } from './types';
 
