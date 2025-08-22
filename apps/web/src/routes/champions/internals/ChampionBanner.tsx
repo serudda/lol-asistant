@@ -1,8 +1,11 @@
 import { type BasicChampion } from '@lol-assistant/api';
+import type { LoLChampionRole } from '@lol-assistant/db';
+import { RankTier, type Source } from '@lol-assistant/db';
 import { Image } from '@lol-assistant/ui';
+import { SourceFloatBox } from '../../../components';
 import { ChampionBannerSkeleton } from './Skeleton';
 
-export const ChampionBanner = ({ champion }: { champion?: BasicChampion }) => {
+export const ChampionBanner = ({ champion, sources }: { champion?: BasicChampion; sources: Source[] }) => {
   if (!champion) return <ChampionBannerSkeleton />;
 
   return (
@@ -35,6 +38,14 @@ export const ChampionBanner = ({ champion }: { champion?: BasicChampion }) => {
             ))}
           </div>
         </div>
+
+        <SourceFloatBox
+          className="absolute right-2 top-2"
+          championSlug={champion.slug}
+          role={champion.mainRoles?.[0] as LoLChampionRole}
+          rankTier={RankTier.silver}
+          sources={sources}
+        />
       </div>
     </div>
   );

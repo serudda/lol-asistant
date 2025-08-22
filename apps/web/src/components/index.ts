@@ -7,3 +7,4 @@ export * from './Logo/Logo';
 export * from './Navbar/Navbar';
 export * from './RoleIcon/RoleIcon';
 export * from './RoleToggleGroup';
+export * from './SourceFloatBox';
