@@ -127,7 +127,11 @@ const ChampionDetailPage = () => {
   return (
     <div className="container mx-auto px-4 py-4 lg:py-8 flex flex-col max-w-5xl">
       {/* Champion Banner */}
-      <ChampionBanner champion={championData?.result?.champion} />
+      <ChampionBanner
+        champion={championData?.result?.champion}
+        selectedRole={role}
+        sources={sourcesData?.result?.sources ?? []}
+      />
 
       <div className="flex flex-col border border-gray-900 bg-gray-950 rounded-xl p-4 mt-8">
         <div className="flex items-center p-2">
