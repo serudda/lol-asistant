@@ -74,6 +74,9 @@ importers:
       '@lol-assistant/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@lol-assistant/common':
+        specifier: workspace:*
+        version: link:../../packages/common
       '@lol-assistant/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -238,6 +241,9 @@ importers:
 
   packages/common:
     devDependencies:
+      '@lol-assistant/db':
+        specifier: workspace:*
+        version: link:../db
       '@lol-assistant/eslint-config':
         specifier: workspace:*
         version: link:../../tooling/eslint-config

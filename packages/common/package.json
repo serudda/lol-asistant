@@ -12,6 +12,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@lol-assistant/db": "workspace:*",
     "@lol-assistant/eslint-config": "workspace:*",
     "@lol-assistant/typescript-config": "workspace:*",
     "dotenv-cli": "^7.4.2",

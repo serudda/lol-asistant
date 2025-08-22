@@ -5,7 +5,13 @@ import { Image } from '@lol-assistant/ui';
 import { SourceFloatBox } from '../../../components';
 import { ChampionBannerSkeleton } from './Skeleton';
 
-export const ChampionBanner = ({ champion, sources }: { champion?: BasicChampion; sources: Source[] }) => {
+interface ChampionBannerProps {
+  champion?: BasicChampion;
+  selectedRole: LoLChampionRole;
+  sources: Array<Source>;
+}
+
+export const ChampionBanner = ({ champion, selectedRole, sources }: ChampionBannerProps) => {
   if (!champion) return <ChampionBannerSkeleton />;
 
   return (
@@ -42,7 +48,7 @@ export const ChampionBanner = ({ champion, sources }: { champion?: BasicChampion
         <SourceFloatBox
           className="absolute right-2 top-2"
           championSlug={champion.slug}
-          role={champion.mainRoles?.[0] as LoLChampionRole}
+          role={selectedRole}
           rankTier={RankTier.silver}
           sources={sources}
         />
